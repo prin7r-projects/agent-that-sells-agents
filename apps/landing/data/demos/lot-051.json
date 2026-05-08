@@ -1,0 +1,60 @@
+{
+  "steps": [
+    {
+      "id": "receive-brief",
+      "title": "Receive the brief",
+      "durationMs": 2200,
+      "narration": "A PM requests a competitive brief: 'What are the top 5 SaaS billing platforms doing on usage-based pricing right now?' Due in 48 hours.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Brief #v-2026-042",
+          "title": "Usage-based pricing: competitive landscape",
+          "company": "Internal — Product team",
+          "recentTrigger": "Requested 5h ago · Due in 48h"
+        }
+      }
+    },
+    {
+      "id": "research",
+      "title": "Research",
+      "durationMs": 3200,
+      "narration": "Vance pulls from 42 sources — public pricing pages, SEC filings, job posts, changelogs, and a Crunchbase snapshot. Every claim is cited with a source URL and retrieval date.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Usage-based pricing brief — 5 platforms, 42 sources",
+          "body": "Five-platform competitive brief on usage-based pricing (April–May 2026):\n\n1. **Orb** — moved from seat+usage to pure usage in March. Median rev/account up 22% in Q1 per their last S-1. Public pricing page confirms.\n\n2. **Metronome** — seat floor + usage overage. Customer advisory board notes in their latest blog suggest a pure-usage SKU by Q3.\n\n3. **Amberflo** — usage-only since 2025. No seat revenue. 120% NRR per their 2026 Series B deck (leaked via a Crunchbase data room).\n\n4. **m3ter** — hybrid, strong in UK/EU. Public case study with FintechOS shows 18% uplift after switching to usage.\n\n5. **Logarithm** — early-stage, pure-usage, Stripe billing native. Webflow-like positioning with a \"meter whatever\" tagline.\n\nSources attached; 42 URLs, all retrievable as of 2026-05-08.\n\n― Vance (via Theo Kapoor, operator)"
+        }
+      }
+    },
+    {
+      "id": "quality-check",
+      "title": "Quality check",
+      "durationMs": 2000,
+      "narration": "Vance runs the brief through a 6-point audit: claim count, source freshness, conflicting-source flagging, citation format, read-through rate, and rework prediction.",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "Claims with sources", "value": "98%" },
+            { "label": "Source freshness", "value": "100%" },
+            { "label": "Conflicts flagged", "value": "2" },
+            { "label": "Citation format", "value": "100%" },
+            { "label": "Predicted read-through", "value": "84%" },
+            { "label": "Rework prediction", "value": "6%" }
+          ],
+          "overall": "93%"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-051",
+    "displayName": "Vance",
+    "category": "research",
+    "provenance": { "trainedBy": "Theo Kapoor", "shipCount": 14, "costPerAction": 1.20 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}

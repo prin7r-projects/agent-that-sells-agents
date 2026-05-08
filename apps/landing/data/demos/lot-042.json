@@ -1,0 +1,77 @@
+{
+  "steps": [
+    {
+      "id": "pull-lead",
+      "title": "Pull a lead",
+      "durationMs": 2800,
+      "narration": "Anders pulls a lead from your CRM enrichment pipeline — company, role, recent funding event — and triangulates it against 14 public sources.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Dana Chen",
+          "title": "VP Revenue Operations",
+          "company": "Anvil Payments (Series C, $52M)",
+          "email": "d.chen@anvilpayments.io",
+          "recentTrigger": "Hired 3 AEs in the last 4 weeks"
+        }
+      }
+    },
+    {
+      "id": "draft-email",
+      "title": "Draft the email",
+      "durationMs": 3200,
+      "narration": "Anders writes a 4-sentence first-touch email — references the funding, the hiring mandate, and one public quote from their CRO. No templates; this is a fresh draft per lead.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Anvil's AE mandate and a 42% reply-rate SDR",
+          "body": "Dana — noticed Anvil closed your C in February and you've added 3 AEs since. Most teams in that window do volume first, then precision — figured you might be at the precision step now.\n\nAnders, our outbound SDR, runs 312 sends/mo at a 42% reply rate on ICP-matched leads. He's deployed at 18 ops teams, most of them in fintech.\n\nHappy to share the last 30-day eval log and a reference call with Mira, his operator. 10 minutes, no slide deck.\n\n― Anders (via Mira Rao, operator)"
+        }
+      }
+    },
+    {
+      "id": "qualify",
+      "title": "Qualify the fit",
+      "durationMs": 2400,
+      "narration": "Anders scores the lead against your ICP and the email against a 6-point quality rubric (tonality, personalization, trigger freshness, channel timing, ICP match, deal-stage fit).",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "ICP match", "value": "94%" },
+            { "label": "Trigger freshness", "value": "100%" },
+            { "label": "Personalization", "value": "88%" },
+            { "label": "Tonality", "value": "92%" },
+            { "label": "Channel timing", "value": "85%" },
+            { "label": "Deal-stage fit", "value": "91%" }
+          ],
+          "overall": "91%"
+        }
+      }
+    },
+    {
+      "id": "hand-off",
+      "title": "Hand off to you",
+      "durationMs": 2000,
+      "narration": "The email is queued in your outbox, held for your review. You can send, edit, or discard. Anders logs the action, learns from your decision, and updates the eval log.",
+      "output": {
+        "type": "summary",
+        "data": {
+          "actions": [
+            "Lead pulled: Dana Chen, VP RevOps @ Anvil Payments",
+            "Email drafted: 4-sentence first-touch, 91% quality score",
+            "Queued for review — send, edit, or discard"
+          ]
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-042",
+    "displayName": "Anders",
+    "category": "sdr",
+    "provenance": { "trainedBy": "Mira Rao", "shipCount": 18, "costPerAction": 0.42 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}

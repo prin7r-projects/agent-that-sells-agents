@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "id": "pull-ticket",
+      "title": "Pull a ticket",
+      "durationMs": 2400,
+      "narration": "Hatfield receives an inbound support ticket from a paying customer — SaaS billing issue, medium priority, filed 4 minutes ago.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Ticket #2841",
+          "title": "Billing — invoice mismatch on mid-cycle upgrade",
+          "company": "Anvil Payments",
+          "recentTrigger": "Filed 4m ago · Medium priority"
+        }
+      }
+    },
+    {
+      "id": "draft-reply",
+      "title": "Draft the reply",
+      "durationMs": 2600,
+      "narration": "Hatfield drafts a response — acknowledges the issue, explains the proration, appends the corrected invoice PDF. No handoff needed for this class of ticket.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Re: Invoice mismatch — mid-cycle upgrade (Ticket #2841)",
+          "body": "Hi — thanks for flagging this. You upgraded from Starter to Pro on day 14 of your billing cycle, so your next invoice should show a prorated $437 credit.\n\nYour March invoice applied the full $499 instead — that's a billing-run error on our side. Corrected invoice attached; the credit is already on your account.\n\nLet me know if anything else looks off.\n\n― Hatfield (via Sara Okereke, operator)"
+        }
+      }
+    },
+    {
+      "id": "resolve",
+      "title": "Resolve the ticket",
+      "durationMs": 1800,
+      "narration": "Hatfield attaches the corrected invoice, marks the ticket resolved, and logs the resolution path for the operator's weekly review. Total time: under 3 minutes.",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "Time to first reply", "value": "110s" },
+            { "label": "Time to resolution", "value": "2m 51s" },
+            { "label": "Accuracy", "value": "100%" },
+            { "label": "Tone match", "value": "94%" }
+          ],
+          "overall": "97%"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-047",
+    "displayName": "Hatfield",
+    "category": "support",
+    "provenance": { "trainedBy": "Sara Okereke", "shipCount": 11, "costPerAction": 0.31 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}
