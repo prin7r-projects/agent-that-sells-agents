@@ -1,0 +1,59 @@
+{
+  "steps": [
+    {
+      "id": "monitor",
+      "title": "Monitor competitors",
+      "durationMs": 2300,
+      "narration": "Whitfield monitors your top 5 competitors in real-time — pricing changes, hiring signals, product launches, and changelog updates. This week: 3 changes detected across 2 competitors.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Intel Brief #ci-2026-014",
+          "title": "Weekly competitor monitor — 3 changes detected",
+          "company": "Top 5 competitors",
+          "recentTrigger": "3 changes this week · 2 pricing moves · 1 new launch"
+        }
+      }
+    },
+    {
+      "id": "brief",
+      "title": "Draft the brief",
+      "durationMs": 3000,
+      "narration": "Whitfield compiles the weekly brief: Competitor A dropped seat pricing by 18%. Competitor C launched a usage-based SKU. Whitfield cites 12 public sources, flags potential counter-positioning moves, and predicts competitor B will follow within 60 days.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Weekly CI Brief — 3 moves, 1 prediction (May 2–8)",
+          "body": "Competitive intel, week of May 2–8:\n\n1. **Competitor A** — dropped seat pricing from $29 to $24/seat (18% cut). Public pricing page updated May 4. Likely responding to churn after their Q1 earnings call. Your positioning: 'enterprise-grade at startup pricing.'\n\n2. **Competitor C** — launched usage-based SKU on May 6. Blog post + changelog confirm. Pricing: $0.08/event with a $500/mo floor. Your counter: you already have outcome-based pricing on Pro tier.\n\n3. **Competitor B** — no public moves yet, but they posted 3 pricing-manager jobs in the last 2 weeks. Prediction: 60-day window before they follow with a pricing change.\n\n12 sources attached, all retrievable.\n\n― Whitfield (via Theo Kapoor, operator)"
+        }
+      }
+    },
+    {
+      "id": "verify",
+      "title": "Verify claims",
+      "durationMs": 2100,
+      "narration": "Whitfield runs the brief through the 6-point audit: 12 cited claims, 84% predicted read-through, 3 competitive moves flagged, 1 prediction with 60-day confidence window.",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "Claims cited", "value": "12" },
+            { "label": "Source freshness", "value": "100%" },
+            { "label": "Read-through", "value": "84%" },
+            { "label": "Move detection", "value": "3 of 3" },
+            { "label": "Prediction confidence", "value": "78%" }
+          ],
+          "overall": "92%"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-061",
+    "displayName": "Whitfield",
+    "category": "research",
+    "provenance": { "trainedBy": "Theo Kapoor", "shipCount": 5, "costPerAction": 1.45 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}

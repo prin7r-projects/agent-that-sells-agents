@@ -4,7 +4,12 @@
 
 - Production: https://agent-that-sells-agents.prin7r.com
 - Notion opportunity: https://www.notion.so/Agent-that-sells-agents-3543ceec2619812aacc6f17c90c0dd17
-- Wave: Prin7r Wave 2 · Stack: SaaS · Stage: Qualified
+- Wave: Prin7r Wave 2 (landing) → Wave 3 (implementation) · Stack: SaaS · Stage: Qualified
+
+## Spec docs
+
+- [docs/12 — Technical Specification](docs/12-technical-specification.md) — API contracts, DB schema, auth, security
+- [docs/13 — Implementation Plan](docs/13-implementation-plan.md) — Phased delivery plan (Phase 0–6)
 
 ## What this is
 
@@ -14,42 +19,82 @@ A working storefront where each AI agent carries a stamp the way fine art does: 
 
 ```
 /DESIGN.md                        canonical 15-section design spec (root)
-/docs/                            10 strategy docs + screenshots
-  01-brand-identity.md
-  02-architecture.md
-  03-user-journeys.md
-  04-pain-points.md
-  05-audience-profile.md
-  06-sales-channels.md
-  07-sales-strategy.md
-  08-marketing-strategy.md
-  09-go-to-market.md
-  10-pitch-deck.md
-  pitch-deck.html
-  screenshots/
-    landing-desktop.png           1440 x 900
-    landing-mobile.png            390  x 844
+/docs/                            13 strategy + spec docs
+  01-brand-identity.md            through 13-implementation-plan.md
 /apps/
   landing/                        Next.js 15 + ShadCN + Tailwind, NOWPayments hosted invoice
+    app/api/catalog/              → GET /api/catalog/agents (public, no auth)
+    app/api/checkout/             → POST /api/checkout/nowpayments
+    app/api/webhooks/             → POST /api/webhooks/nowpayments (HMAC-SHA512)
+    app/api/admin/                → POST /api/admin/invoices (Bearer admin)
+    app/api/internal/             → POST /api/internal/ipn (internal only)
+    e2e/                          → Playwright test suite (7 API, 6 browser)
   app/                            stub for future SaaS dashboard (open-saas)
+    src/db/schema.ts              → Drizzle ORM schema (reference)
+/data/seed/                       seed data (agents.json, evals.json)
 /Dockerfile.landing               multistage standalone Next build
-/docker-compose.yml               Traefik labels, env_file: .env, expose: 3000
-/patches/                         deploy patch packages (per CLAUDE.md policy)
+/docker-compose.yml               Postgres 16 + Next.js + Traefik labels
 /.env.example                     env names only — never commit live values
 ```
 
 ## Local dev
 
 ```bash
+# 1. Install dependencies
 cd apps/landing
 pnpm install
-cp ../../.env.example .env.local   # fill NOWPAYMENTS_API_KEY
+
+# 2. Set up environment
+cp ../../.env.example .env.local
+# Edit .env.local — fill NOWPAYMENTS_API_KEY (optional for local dev)
+
+# 3. (Optional) Start PostgreSQL for DB-backed features
+docker compose up -d postgres
+
+# 4. Start dev server
 pnpm dev                           # http://localhost:3000
+```
+
+## Run tests
+
+```bash
+# API + browser tests (browser tests need libglib on host)
+pnpm test:e2e
+
+# Against live deploy
+PLAYWRIGHT_BASE_URL=https://agent-that-sells-agents.prin7r.com pnpm test:e2e
 ```
 
 ## Deploy
 
-The deploy host is `storage-contabo` (`161.97.99.120`). The compose file uses host-mode Traefik (no `dokploy-network`). After cloning into `/opt/prin7r-deploys/agent-that-sells-agents/`, drop a server-only `.env` file (NOWPAYMENTS keys, copied from a sibling project), then `docker compose up -d --build`. Traefik picks up the labels and issues a Let's Encrypt cert for the host rule.
+The deploy host is the Prin7r VPS (`144.91.94.91`). The compose file uses host-mode Traefik.
+After cloning into `/opt/prin7r-deploys/agent-that-sells-agents/`:
+
+```bash
+# Create .env with live secrets
+cp .env.example .env
+# Fill required: NEXT_PUBLIC_APP_URL, NOWPAYMENTS_API_KEY, NOWPAYMENTS_IPN_SECRET, DB_PASSWORD, ADMIN_API_KEY
+
+# Build and start
+docker compose up -d --build
+```
+
+Traefik picks up the labels and issues a Let's Encrypt cert for the host rule.
+
+## Environment variables
+
+| Variable | Required | Used for |
+|----------|----------|----------|
+| `NEXT_PUBLIC_APP_URL` | Yes | Callback URLs, CORS origin |
+| `NOWPAYMENTS_API_KEY` | Yes* | Hosted invoice creation |
+| `NOWPAYMENTS_IPN_SECRET` | Yes* | Webhook HMAC verification |
+| `DB_PASSWORD` | Phase 3+ | PostgreSQL password |
+| `DATABASE_URL` | Phase 3+ | PostgreSQL connection (auto-set in docker-compose) |
+| `ADMIN_API_KEY` | Phase 3+ | Bearer auth for /api/admin/* |
+| `POSTMARK_API_KEY` | Phase 3+ | Transactional email |
+| `NOTION_TOKEN` | Phase 3+ | Order sync to Notion |
+
+*Not required for local dev — checkout returns 503 without them.
 
 ## Screenshots
 

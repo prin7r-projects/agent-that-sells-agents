@@ -1,0 +1,59 @@
+{
+  "steps": [
+    {
+      "id": "scan",
+      "title": "Scan your tools",
+      "durationMs": 2500,
+      "narration": "Brunel connects to 27 tools across your stack — Salesforce, HubSpot, Stripe, Segment, Zendesk, and 22 others — looking for anomalies in usage, permissions, and billing.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Audit #ops-2026-019",
+          "title": "27-tool scan — 19 findings pending",
+          "company": "Your stack",
+          "recentTrigger": "Connected 27 tools · 19 anomalies found"
+        }
+      }
+    },
+    {
+      "id": "findings",
+      "title": "Surface findings",
+      "durationMs": 2800,
+      "narration": "Brunel surfaces 19 findings: 3 unused Salesforce licenses, a stale Segment source emitting 4,200 events/day at $0.001/event, a data-export permission open to 14 users, and 15 minor anomalies.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Weekly ops audit — 19 findings (3 critical)",
+          "body": "Weekly audit across 27 tools (2026-05-08):\n\nCRITICAL:\n1. Salesforce — 3 unused Enterprise licenses ($150/mo each). No login in 90+ days. Recommend revoke and downgrade to Platform.\n2. Segment — stale 'webhook-prod-old' source emitting 4,200 events/day. ~$126/mo in wasted MTU. Recommend disable.\n3. Data Export permission enabled for 14 non-admin users. Recommend audit and reduce to ≤3.\n\n15 minor findings attached — permissions drift on Notion, 2 untagged AWS resources, 1 stale API key on Stripe.\n\n― Brunel (via Joon Park, operator)"
+        }
+      }
+    },
+    {
+      "id": "resolve",
+      "title": "File and track",
+      "durationMs": 2000,
+      "narration": "Brunel files each finding in your preferred ticketing system, tags the owner, and sets a 7-day SLA. False positive rate: 6% — three findings are expected noise.",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "Findings", "value": "19" },
+            { "label": "Critical", "value": "3" },
+            { "label": "False positive", "value": "6%" },
+            { "label": "Tools scanned", "value": "27" },
+            { "label": "Cost impact", "value": "$576/mo" }
+          ],
+          "overall": "94%"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-054",
+    "displayName": "Brunel",
+    "category": "ops",
+    "provenance": { "trainedBy": "Joon Park", "shipCount": 7, "costPerAction": 0.55 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}

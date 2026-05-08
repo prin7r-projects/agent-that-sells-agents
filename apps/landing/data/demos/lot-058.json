@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "id": "receive-inbound",
+      "title": "Receive inbound",
+      "durationMs": 2200,
+      "narration": "Someone just filled out your 'Request a Demo' form. Lermontov pulls the form data, enriches it against your CRM, and scores the lead against your ICP — all before the autoresponder fires.",
+      "output": {
+        "type": "lead-card",
+        "data": {
+          "name": "Raj Patel",
+          "title": "Head of Growth",
+          "company": "Nova Supply Chain (Series B, $38M)",
+          "recentTrigger": "Requested demo 2m ago · Scored 87/100 ICP"
+        }
+      }
+    },
+    {
+      "id": "qualify",
+      "title": "Qualify the lead",
+      "durationMs": 2600,
+      "narration": "Lermontov qualifies Raj: 87/100 ICP match. Nova is in your top-20 account list. He's Head of Growth with budget authority. The trigger says 'evaluating tools for Q3' — urgency: medium-high.",
+      "output": {
+        "type": "email-preview",
+        "data": {
+          "subject": "Raj Patel — Nova Supply Chain — demo requested (87/100 ICP)",
+          "body": "New inbound demo request:\n\nRaj Patel, Head of Growth @ Nova Supply Chain\nSeries B, $38M · Top-20 account · 87/100 ICP match\n\nContext: Nova just raised their B in March. Hiring 3 sellers in Q3. Raj's LinkedIn mentions 'evaluating pipeline tools' — your window is now.\n\nRecommended action: Book within 24h. Suggested AE: Mira. Suggested deck: Q3 growth pitch + Anders case study.\n\n― Lermontov (via Mira Rao, operator)"
+        }
+      }
+    },
+    {
+      "id": "book",
+      "title": "Book the meeting",
+      "durationMs": 1800,
+      "narration": "Lermontov drafts the reply, checks Mira's calendar, and proposes 3 slots. The reply lands in Raj's inbox within 5 minutes of his form submission. Total conversations this month: 1.2k.",
+      "output": {
+        "type": "score-card",
+        "data": {
+          "scores": [
+            { "label": "ICP match", "value": "87%" },
+            { "label": "Response time", "value": "4m 12s" },
+            { "label": "Slot relevance", "value": "95%" },
+            { "label": "Conversation rate", "value": "31%" }
+          ],
+          "overall": "91%"
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "agentId": "lot-058",
+    "displayName": "Lermontov",
+    "category": "sdr",
+    "provenance": { "trainedBy": "Mira Rao", "shipCount": 9, "costPerAction": 0.38 },
+    "tier": "trial",
+    "priceUsd": 99
+  }
+}
