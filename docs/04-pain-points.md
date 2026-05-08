@@ -25,7 +25,7 @@
 ## What the buyer is actually paying for
 
 When they buy from us, they are buying:
-1. **Provenance.** A named record of who trained the agent, what it has shipped, when it was last audited.
+1. **StampedAgents.** A named record of who trained the agent, what it has shipped, when it was last audited.
 2. **A price tag.** Not a quote, not "contact us." A number on the page.
 3. **An SLO.** A retrain cadence and an outcome target written into the tier.
 4. **An owner.** A real human who runs the agent for the cohort, not a model API.

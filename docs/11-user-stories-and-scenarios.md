@@ -1,8 +1,8 @@
 # 11 — User Stories and Scenarios
 
-This document is the canonical input contract for Provenance's Phase 2 SaaS implementation. It enumerates personas, primary user stories, end-to-end scenarios (happy paths, edge cases, anti-scenarios), and ties each flow to the frontend touch-points and backend services that doc 12 specifies. Every API endpoint in doc 12 must trace back to at least one story here; no orphan endpoints, no orphan stories.
+This document is the canonical input contract for StampedAgents's Phase 2 SaaS implementation. It enumerates personas, primary user stories, end-to-end scenarios (happy paths, edge cases, anti-scenarios), and ties each flow to the frontend touch-points and backend services that doc 12 specifies. Every API endpoint in doc 12 must trace back to at least one story here; no orphan endpoints, no orphan stories.
 
-Provenance's product surface is a **catalog of vetted AI agents** (the shelf), with three buyer tiers (Trial / Pro / Enterprise), one self-serve checkout rail (NOWPayments), and a Concierge rail that bridges in-page demo to purchase in under ten minutes.
+StampedAgents's product surface is a **catalog of vetted AI agents** (the shelf), with three buyer tiers (Trial / Pro / Enterprise), one self-serve checkout rail (NOWPayments), and a Concierge rail that bridges in-page demo to purchase in under ten minutes.
 
 ---
 
@@ -169,7 +169,7 @@ Allowed. Rev-share accrues at 30% on the $99/mo line. (We accept the tradeoff: a
 
 ### AS-1 — No-code playground / "build your own agent"
 
-The catalog is curated. There is no UI to create a new agent from the buyer side. If a prospect asks for this in the Concierge rail, the rail responds: "Provenance is a vetted catalog, not a builder. We can refer you to a no-code agent platform." The implementation must NOT add a builder route, even as a hidden flag.
+The catalog is curated. There is no UI to create a new agent from the buyer side. If a prospect asks for this in the Concierge rail, the rail responds: "StampedAgents is a vetted catalog, not a builder. We can refer you to a no-code agent platform." The implementation must NOT add a builder route, even as a hidden flag.
 
 ### AS-2 — Free tier / freemium
 

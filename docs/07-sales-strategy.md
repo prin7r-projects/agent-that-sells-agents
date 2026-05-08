@@ -28,10 +28,10 @@ Outcome-based pricing is supported as a footnote on Pro and Enterprise — for S
 | "What's the SLO?" | 99.5% reachability for Pro, hard-targets per-agent for Enterprise (e.g., SDR: 100 actions/day, 30-day reply rate >25%). |
 | "How do you handle drift?" | Monthly retraining is part of Pro; we ship a public eval log per agent. Drift is owned by the named operator. |
 | "Why crypto checkout?" | Faster than card pilots — buyers in our wedge already use stablecoin rails. Wire and ACH coming; not in v1. |
-| "I want to see the prompts." | Provenance section lists corpus + eval method. Full prompt access is part of Enterprise. |
+| "I want to see the prompts." | StampedAgents section lists corpus + eval method. Full prompt access is part of Enterprise. |
 
 ## Closing motion
 
 - Self-serve checkout (NOWPayments hosted invoice) for Trial and Pro.
 - Concierge-led close for Enterprise with a 24h turnaround on the invoice.
-- All paid orders route to a single Slack channel (`#orders-provenance`) for human review of the first delivery.
+- All paid orders route to a single Slack channel (`#orders-stampedagents`) for human review of the first delivery.

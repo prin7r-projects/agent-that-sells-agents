@@ -6,7 +6,7 @@ Each slide is a single concept, written as Markdown. The companion `pitch-deck.h
 
 ## Slide 1 — Title
 
-- **PROVENANCE** · Lot 001 · 2026
+- **STAMPEDAGENTS** · Lot 001 · 2026
 - *A vetted shelf of working AI agents. Sold by an agent.*
 
 ## Slide 2 — The problem (one sentence each)
@@ -25,10 +25,10 @@ Each slide is a single concept, written as Markdown. The companion `pitch-deck.h
 
 ## Slide 4 — The product (one screenshot, no copy)
 
-- Catalog peek. Provenance ribbon. Concierge rail.
+- Catalog peek. StampedAgents ribbon. Concierge rail.
 - The line at the bottom: "Demo. Vet. Buy. Under ten minutes."
 
-## Slide 5 — Provenance, in one card
+## Slide 5 — StampedAgents, in one card
 
 - Lot 042 — Anders, SDR.
 - Trained by: Mira Rao.

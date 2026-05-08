@@ -1,4 +1,4 @@
-# apps/app — Provenance dashboard (stub)
+# apps/app — StampedAgents dashboard (stub)
 
 This directory is reserved for the Open-SaaS-derived dashboard that delivers post-purchase value: digests, eval logs, agent owner contact, retraining slot booking.
 

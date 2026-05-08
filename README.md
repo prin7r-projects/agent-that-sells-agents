@@ -1,4 +1,4 @@
-# Provenance
+# StampedAgents
 
 **Agent that sells agents** — a catalog of pre-built AI agents (sales SDR, support, research, ops) that buyers can demo, vet, and purchase in under ten minutes. The catalog is sold by an agent: a self-driving sales module on the landing answers questions, qualifies the buyer, and walks them to checkout.
 
@@ -8,7 +8,7 @@
 
 ## What this is
 
-A working storefront where each AI agent has provenance the way fine art does: trained-by, deployed-since, last-30-day outcomes, references, win-rate. No robot avatars, no purple gradients. The visual language is closer to a HashiCorp release page meets a Sotheby's catalog.
+A working storefront where each AI agent carries a stamp the way fine art does: trained-by, deployed-since, last-30-day outcomes, references, win-rate. No robot avatars, no purple gradients. The visual language is closer to a HashiCorp release page meets a Sotheby's catalog.
 
 ## Repo layout
 

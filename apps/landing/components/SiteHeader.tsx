@@ -7,13 +7,13 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-3">
           <span aria-hidden className="block w-2.5 h-2.5 rounded-full bg-ink" />
           <span className="font-semibold tracking-[-0.016em] text-[16px] text-ink">
-            Provenance
+            StampedAgents
           </span>
           <span className="lot-label hidden sm:inline">LOT 001 · 2026</span>
         </Link>
         <nav className="hidden md:flex items-center gap-7 text-[14px] text-ink">
           <Link href="#catalog" className="hover:text-graphite transition-colors">Catalog</Link>
-          <Link href="#provenance" className="hover:text-graphite transition-colors">Provenance</Link>
+          <Link href="#stamp" className="hover:text-graphite transition-colors">Stamp</Link>
           <Link href="#pricing" className="hover:text-graphite transition-colors">Pricing</Link>
           <Link href="#faq" className="hover:text-graphite transition-colors">FAQ</Link>
         </nav>

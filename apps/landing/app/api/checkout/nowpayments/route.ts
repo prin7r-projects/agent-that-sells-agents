@@ -28,10 +28,10 @@ export async function POST(request: Request) {
   }
 
   const baseUrl = appUrlFromRequest(request);
-  const orderId = `prov_${tier.id}_${Date.now().toString(36)}`;
+  const orderId = `stmp_${tier.id}_${Date.now().toString(36)}`;
   const description = agent
-    ? `Provenance — ${tier.name} (Lot ${agent.lot} · ${agent.name})`
-    : `Provenance — ${tier.name}`;
+    ? `StampedAgents — ${tier.name} (Lot ${agent.lot} · ${agent.name})`
+    : `StampedAgents — ${tier.name}`;
 
   const invoicePayload = {
     price_amount: tier.amountUsd,
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       : "";
 
   console.log(
-    `[PROVENANCE_CHECKOUT] tier=${tier.id} order=${orderId} invoice=${invoiceId} url=${invoiceUrl}`,
+    `[STAMPED_AGENTS_CHECKOUT] tier=${tier.id} order=${orderId} invoice=${invoiceId} url=${invoiceUrl}`,
   );
 
   return NextResponse.json({

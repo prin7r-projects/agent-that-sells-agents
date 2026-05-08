@@ -1,6 +1,6 @@
 # 13 — Implementation Plan
 
-> **Hand-off ready.** This plan is for the Phase 2 implementation agent (likely an Opus 4.7 Code agent) picking up Provenance after Wave 2's landing-only deploy. You will find: (a) a deployed landing at `https://agent-that-sells-agents.prin7r.com` with NOWPayments checkout wired and verified; (b) brand identity, audience, and architecture docs in `/docs/01..10-*.md`; (c) the user-story contract in `/docs/11-user-stories-and-scenarios.md`; (d) the technical specification in `/docs/12-technical-specification.md`. You are extending — not reinventing — the existing repo. The open-saas fork in `apps/app/` is currently a stub README; Phase 2's Phase 1 work is to bring it online. Read docs 11 + 12 before starting any phase.
+> **Hand-off ready.** This plan is for the Phase 2 implementation agent (likely an Opus 4.7 Code agent) picking up StampedAgents after Wave 2's landing-only deploy. You will find: (a) a deployed landing at `https://agent-that-sells-agents.prin7r.com` with NOWPayments checkout wired and verified; (b) brand identity, audience, and architecture docs in `/docs/01..10-*.md`; (c) the user-story contract in `/docs/11-user-stories-and-scenarios.md`; (d) the technical specification in `/docs/12-technical-specification.md`. You are extending — not reinventing — the existing repo. The open-saas fork in `apps/app/` is currently a stub README; Phase 2's Phase 1 work is to bring it online. Read docs 11 + 12 before starting any phase.
 
 ---
 
@@ -39,7 +39,7 @@
 **Definition of Done.**
 - [ ] `pnpm install` at repo root completes without error.
 - [ ] `pnpm -F landing build` produces a Next.js standalone in `apps/landing/.next/standalone/`.
-- [ ] `pnpm -F app dev` starts the open-saas Wasp server on `localhost:3001` with a `Hello, Provenance` placeholder route.
+- [ ] `pnpm -F app dev` starts the open-saas Wasp server on `localhost:3001` with a `Hello, StampedAgents` placeholder route.
 - [ ] `data/seed/agents.json` parses with the schema in `apps/app/src/db/schema.ts`.
 - [ ] Production site `https://agent-that-sells-agents.prin7r.com` continues to render `HTTP/2 200`.
 
@@ -118,7 +118,7 @@
 2. Webhook handler: idempotent on `(orderId, paymentStatus)`. On `finished`, mark order paid, issue license via `LicenseService.issue(orderId)`, accrue rev-share via `RevShareService` if `referralCode` present.
 3. `POST /api/admin/invoices` for Enterprise concierge close — Bearer auth, returns hosted invoice URL.
 4. Magic-link email post-payment: Postmark/Resend template "Welcome — your license key + dashboard link." Email is the trigger to mint a `customers` row if the email is new.
-5. Notion sync (Wave 3): on every paid order, append a row to a Notion data source `Provenance Orders` (data source ID stored in `NOTION_ORDERS_DSID`). Bearer auth via `PRIN7R_NOTION_TOKEN`.
+5. Notion sync (Wave 3): on every paid order, append a row to a Notion data source `StampedAgents Orders` (data source ID stored in `NOTION_ORDERS_DSID`). Bearer auth via `PRIN7R_NOTION_TOKEN`.
 6. Add `POST /api/billing/switch-mode` for outcome-based pricing toggle (Pro tier).
 
 **Dependencies.** Phase 1 (DB), Phase 2 (UX).
@@ -129,7 +129,7 @@
 - [ ] Trial $99 purchase end-to-end: NOWPayments unpaid invoice created → simulated paid IPN → license issued → magic-link email received.
 - [ ] Pro $499 purchase with `referralCode: 'AGENCY-NYC-014'` accrues 30% on a `revShareLedger` row.
 - [ ] Enterprise concierge invoice via `POST /api/admin/invoices` returns a hosted invoice URL within 1.5s p95.
-- [ ] Notion `Provenance Orders` row appears for every paid order (verified via `notion-fetch` on the data source).
+- [ ] Notion `StampedAgents Orders` row appears for every paid order (verified via `notion-fetch` on the data source).
 - [ ] `POST /api/billing/switch-mode` flips an order between flat and outcome modes; cap is enforced at 1.5x.
 
 **Hand-off context.**
@@ -160,7 +160,7 @@
 **Definition of Done.**
 - [ ] Idempotency test: same body POST'd 5 times produces ONE invoice row.
 - [ ] Forged IPN with bad sig returns 401, increments the failure counter, does NOT mark any order paid.
-- [ ] Slack `#alerts-provenance` receives a test message from each of the 3 alert paths.
+- [ ] Slack `#alerts-stampedagents` receives a test message from each of the 3 alert paths.
 - [ ] CSP header present on every landing response (verify via `curl -sI`).
 - [ ] PII scrub regex tested with a real-shaped IPN payload — no plaintext email or pay_address in stdout.
 

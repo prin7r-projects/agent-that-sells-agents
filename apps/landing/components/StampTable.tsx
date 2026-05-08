@@ -36,7 +36,7 @@ const trainingMeta: Record<
   },
 };
 
-export function ProvenanceTable() {
+export function StampTable() {
   return (
     <div className="overflow-x-auto rounded-[28px] border border-snow/15">
       <table className="w-full text-[14px]">

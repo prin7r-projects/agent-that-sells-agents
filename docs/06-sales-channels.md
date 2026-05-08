@@ -10,7 +10,7 @@ We pick channels by where Mira and Alex already are. The ranking below is by exp
 | 2 | **Curated communities (Pavilion, RevGenius, RevOps Co-op, Demand Curve Slack)** | The buyer is already there. We post a single "Lot N — what it shipped" weekly digest, no marketing copy. |
 | 3 | **Targeted outbound from our own SDR agent (eat our own dog food)** | We use Lot 042 (Anders) to sell the catalog itself — the meta motion is the demo. |
 | 4 | **Newsletters (Lenny, RevOps Co-op weekly, Pavilion Roundup)** | One sponsored slot per quarter, with an actual lot number and outcome — not a logo. |
-| 5 | **Agency partners (Alex)** | Alex resells to his clients on a 70/30. He gets a co-branded `partner.provenance.run` page (post-Wave 2). |
+| 5 | **Agency partners (Alex)** | Alex resells to his clients on a 70/30. He gets a co-branded `partner.stampedagents.com` page (post-Wave 2). |
 | 6 | **Conferences (one per year, max)** | Pavilion CRO Summit. Stand at a booth with a working SDR demo, not a banner. |
 | 7 | **Search (low priority for v1)** | We do not chase "best AI agent" SEO. The category is too noisy. We chase "vetted SDR agent" long-tail and a single category page only. |
 

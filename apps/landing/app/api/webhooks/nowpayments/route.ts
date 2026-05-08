@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     "unknown";
 
   console.log(
-    `[PROVENANCE_WEBHOOK] verified=${verified} order=${orderId} status=${status}`,
+    `[STAMPED_AGENTS_WEBHOOK] verified=${verified} order=${orderId} status=${status}`,
   );
 
   // Always 200 once we've logged; verified flag is in the body so NOWPayments

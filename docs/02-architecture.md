@@ -2,7 +2,7 @@
 
 ## System overview
 
-Provenance is a Next.js 15 (App Router) landing with a small server-side surface. The shape is intentionally narrow for v1: one route renders the site, two routes wrap NOWPayments. The future "app" tier (`apps/app/`) will be open-saas-derived and is stubbed for now.
+StampedAgents is a Next.js 15 (App Router) landing with a small server-side surface. The shape is intentionally narrow for v1: one route renders the site, two routes wrap NOWPayments. The future "app" tier (`apps/app/`) will be open-saas-derived and is stubbed for now.
 
 ```mermaid
 flowchart LR
@@ -38,7 +38,7 @@ flowchart LR
 | Landing page | Hero, catalog, provenance, outcomes, pricing, FAQ | `apps/landing/app/page.tsx` |
 | Concierge rail | Scripted "agent talking" UI on hero | `apps/landing/components/ConciergeRail.tsx` |
 | Catalog grid | 6 AgentCards | `apps/landing/components/CatalogGrid.tsx` |
-| Provenance table | Dark-section table | `apps/landing/components/ProvenanceTable.tsx` |
+| StampedAgents table | Dark-section table | `apps/landing/components/StampedAgentsTable.tsx` |
 | Pricing tiers | Trial / Pro / Enterprise with NOWPayments CTAs | `apps/landing/components/PricingTier.tsx` |
 | Checkout API | Server-side wrapper for `POST /v1/invoice` | `apps/landing/app/api/checkout/nowpayments/route.ts` |
 | Webhook API | Verifies HMAC-SHA512 IPN, writes a log line | `apps/landing/app/api/webhooks/nowpayments/route.ts` |

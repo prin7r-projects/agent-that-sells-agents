@@ -1,6 +1,6 @@
 # 12 — Technical Specification
 
-This is the authoritative technical contract for Provenance Wave 2 → Wave 3. Doc 11 specifies the user-visible flows; this doc specifies the runtime, schema, contracts, and operational guardrails the implementation must respect. Every endpoint here traces back to a story in doc 11. Every entity here is the canonical name to be used in code.
+This is the authoritative technical contract for StampedAgents Wave 2 → Wave 3. Doc 11 specifies the user-visible flows; this doc specifies the runtime, schema, contracts, and operational guardrails the implementation must respect. Every endpoint here traces back to a story in doc 11. Every entity here is the canonical name to be used in code.
 
 ---
 
@@ -241,7 +241,7 @@ CSRF: handled by Next.js default (samesite=lax cookie + same-origin form posts).
 - **Logs.** Stdout JSON lines `{ ts, level, route, orderId?, event, message }`. Container logs scraped by Loki (Wave 4) or `docker logs` (Wave 2).
 - **Metrics.** Wave 3 emits Prometheus counters: `orders_created_total`, `orders_paid_total`, `webhook_verifications_failed_total`, `checkout_invoice_create_latency_seconds_p95`. Wave 2 metrics derive from log greps.
 - **Alerts.**
-  - Webhook signature failures >5/hour → Slack `#alerts-provenance`.
+  - Webhook signature failures >5/hour → Slack `#alerts-stampedagents`.
   - Checkout invoice creation p95 >2s for 5 min → Slack.
   - Daily orders count <2 stddev below 30-day mean → Slack (anomaly detection).
 - **Trace propagation.** Single `requestId` UUID minted at edge, passed via `x-request-id` to backend log lines. No distributed tracing infrastructure in Wave 2/3.

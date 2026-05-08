@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AgentCard } from "@/components/AgentCard";
 import { ConciergeRail } from "@/components/ConciergeRail";
-import { ProvenanceTable } from "@/components/ProvenanceTable";
+import { StampTable } from "@/components/StampTable";
 import { PricingTierCard } from "@/components/PricingTier";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -14,7 +14,7 @@ export default function HomePage() {
       <Hero />
       <RibbonRow />
       <Catalog />
-      <Provenance />
+      <Stamp />
       <Outcomes />
       <Pricing />
       <Faq />
@@ -110,7 +110,7 @@ function RibbonRow() {
     { lot: "058", text: "Lermontov, Inbound — 188 demos booked in April." },
   ];
   return (
-    <section aria-label="Provenance ribbons" className="border-b border-silver-mist bg-fog">
+    <section aria-label="Stamp ribbons" className="border-b border-silver-mist bg-fog">
       <div className="max-w-content mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {ribbons.map((r) => (
           <div key={r.lot} className="flex items-baseline gap-3 text-[13px]">
@@ -158,18 +158,18 @@ function Catalog() {
   );
 }
 
-function Provenance() {
+function Stamp() {
   return (
-    <section id="provenance" className="bg-obsidian text-snow">
+    <section id="stamp" className="bg-obsidian text-snow">
       <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           dark
           lot="03"
-          label="PROVENANCE"
+          label="STAMP"
           title="How they're built — with names attached."
           description="No black boxes. Every agent ships with the corpus it was trained on, the model family it runs on, and the evaluation method that catches drift before you do."
         />
-        <ProvenanceTable />
+        <StampTable />
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-[15px] text-snow/75">
           <Pillar
             title="Named operators"

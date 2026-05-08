@@ -2,14 +2,14 @@
 
 ## Brand pyramid
 
-- **Essence (1 word)** — Provenance.
+- **Essence (1 word)** — StampedAgents.
 - **Personality (3 traits)** — Restrained. Specific. Owned.
-- **Values (3)** — Named outcomes over abstract capability. Shelf over marketplace. Provenance over personality.
+- **Values (3)** — Named outcomes over abstract capability. Shelf over marketplace. StampedAgents over personality.
 - **Attributes (5)** — Catalog-grade typography. Lot numbers. Brass-on-paper. Single signal-blue accent. No mascots.
 
 ## Positioning statement
 
-For operators who need named outcomes, **Provenance** is a vetted catalog of working AI agents that you can demo and buy in under ten minutes — unlike no-code agent marketplaces, because every agent ships with a real provenance record (who trained it, what it has shipped, what it costs to run).
+For operators who need named outcomes, **StampedAgents** is a vetted catalog of working AI agents that you can demo and buy in under ten minutes — unlike no-code agent marketplaces, because every agent ships with a real provenance record (who trained it, what it has shipped, what it costs to run).
 
 ## Audience
 
@@ -34,14 +34,14 @@ For operators who need named outcomes, **Provenance** is a vetted catalog of wor
 
 **Typography.** **Inter Display** (display + UI, weights 400-700) and **JetBrains Mono** (lot numbers, agent IDs). The grotesk + mono pair reads like a release note, not like an ad.
 
-**Logo concept.** Word-mark "PROVENANCE" in Inter Display 600, all caps, tracked -20. A single 6px brass dot sits to the left of the P, on the baseline. Inline SVG, no raster:
+**Logo concept.** Word-mark "STAMPEDAGENTS" in Inter Display 600, all caps, tracked -20. A single 6px brass dot sits to the left of the S, on the baseline. Inline SVG, no raster:
 
 ```svg
 <svg width="220" height="20" viewBox="0 0 220 20" xmlns="http://www.w3.org/2000/svg">
   <circle cx="6" cy="10" r="3" fill="#A88646" />
   <text x="20" y="15" font-family="Inter Display, Inter, sans-serif"
         font-weight="600" font-size="14" letter-spacing="-0.02em" fill="#161513">
-    PROVENANCE
+    STAMPEDAGENTS
   </text>
 </svg>
 ```

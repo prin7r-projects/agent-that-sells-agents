@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 /**
- * [PROVENANCE_TAILWIND] Apple-gallery refresh — 2026-05-08.
+ * [STAMPED_AGENTS_TAILWIND] Apple-gallery refresh — 2026-05-08.
  * Mirrored in `app/globals.css` and DESIGN.md §4-5, §15.
  */
 const config: Config = {

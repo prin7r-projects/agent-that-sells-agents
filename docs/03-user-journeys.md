@@ -34,4 +34,4 @@ Three journeys, all written from the buyer's point of view. Time targets are rea
 3. She decides to add a second agent — Lot 047, the support concierge. The catalog opens with a "Owned" filter showing what she already has. She buys the second agent through the same NOWPayments path.
 4. Friction is the same as week one: one click to demo, one click to buy.
 
-**Success metric.** Adding the second agent takes under 5 minutes. Provenance footer is consistent across both purchases.
+**Success metric.** Adding the second agent takes under 5 minutes. StampedAgents footer is consistent across both purchases.

@@ -1,4 +1,4 @@
-# DESIGN.md — Provenance
+# DESIGN.md — StampedAgents
 
 > Canonical design + style guide for `agent-that-sells-agents.prin7r.com`. Owned by Chief of Design. The 15 sections below are mandatory; if a decision is deferred, the section is marked **TBD** and inherits the ShadCN baseline.
 
@@ -19,13 +19,13 @@
 After the **2026-05-08 Apple-gallery refresh** (see §15), the visual posture is `apple` reference. Hero headline pushed to 96-112px at `-0.022em` tracking; section headings 64-80px; brass `#A88646` and wax `#E9E0CF` retired (they read as warm-paper); ribbon row remapped to fog `#F5F5F7`; signal blue re-pointed to Apple azure `#0071E3` for the singular CTA. The catalog identity (lot numbers, JetBrains-Mono provenance language) is preserved as the "writing inside the gallery."
 
 **Reference points (mood, not copying).**
-- **Apple MacBook product pages** — gallery wall, enormous type, color enters only as product. Apple's centred-stack hero with full-bleed product card below is exactly the new Provenance hero pattern.
+- **Apple MacBook product pages** — gallery wall, enormous type, color enters only as product. Apple's centred-stack hero with full-bleed product card below is exactly the new StampedAgents hero pattern.
 - **Sotheby's catalog** — provenance language, lot numbers, "trained by" attribution. The voice survives the Apple refresh; it now reads inside the gallery cards instead of dressing the page.
 - **HashiCorp release pages** — restrained, technical, honest. Tables that read like specs.
 
 **Anti-references (we do not look like).** ChatGPT marketing, Replit, Lovable, agent.ai, generic "AI marketplace" gradients, robot mascots, neon purple/teal, warm-paper kraft palettes. None of those.
 
-**Positioning statement.** For operators who need named outcomes, Provenance is a vetted catalog of working AI agents that you can demo and buy in under ten minutes — unlike no-code marketplaces, because every agent ships with a provenance record (who trained it, what it has done, what it costs to run).
+**Positioning statement.** For operators who need named outcomes, StampedAgents is a vetted catalog of working AI agents that you can demo and buy in under ten minutes — unlike no-code marketplaces, because every agent ships with a provenance record (who trained it, what it has done, what it costs to run).
 
 ## 3. ShadCN baseline and local component policy
 
@@ -33,13 +33,13 @@ We follow the **Prin7r Component Library Baseline: ShadCN-first**. Components ar
 
 **Used now.** `Button`, `Card`, `Badge`, `Separator`, `Tabs`, `Accordion`, `Input`, `ScrollArea`, `Sheet`. Each one is the stock ShadCN file with no custom variants; tokens come from `tailwind.config.ts` and `globals.css`.
 
-**Custom components live under `apps/landing/components/`** with descriptive names: `AgentCard.tsx`, `ConciergeRail.tsx`, `ProvenanceTable.tsx`, `PricingTier.tsx`. They compose ShadCN primitives — they do not re-implement them.
+**Custom components live under `apps/landing/components/`** with descriptive names: `AgentCard.tsx`, `ConciergeRail.tsx`, `StampedAgentsTable.tsx`, `PricingTier.tsx`. They compose ShadCN primitives — they do not re-implement them.
 
 **Exceptions to baseline.** None. We deliberately avoid pro/paid component libraries for Wave 2.
 
 ## 4. Color tokens
 
-After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → fog → snow → silver-mist → ink scale) plus a singular azure CTA. The brass and wax warm-paper accents are retired — Provenance is now a pure-white gallery, not a kraft catalog.
+After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → fog → snow → silver-mist → ink scale) plus a singular azure CTA. The brass and wax warm-paper accents are retired — StampedAgents is now a pure-white gallery, not a kraft catalog.
 
 | Token              | Hex        | Role                                                                       |
 |--------------------|------------|----------------------------------------------------------------------------|
@@ -51,7 +51,7 @@ After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → f
 | `slate`            | `#474747`  | 17px body copy; agent blurb; FAQ answers.                                  |
 | `graphite`         | `#707070`  | Lot labels; ribbon text; meta data; suggested-question text.               |
 | `ash`              | `#8F8F8F`  | Disabled state; fine-grain icon strokes.                                   |
-| `obsidian`         | `#000000`  | Dark stage (Provenance + Pricing sections); maximum-contrast wells.        |
+| `obsidian`         | `#000000`  | Dark stage (StampedAgents + Pricing sections); maximum-contrast wells.        |
 | `azure`            | `#0071E3`  | Singular CTA fill ("Browse the catalog", "Buy Trial"); selection highlight; focus ring. |
 | `cobalt-link`      | `#0066CC`  | Inline text links only (not button fills).                                 |
 | `vellum`           | `#FAFAF8`  | Manuscript-like raised card surface (Concierge rail, agent cards).         |
@@ -59,7 +59,7 @@ After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → f
 
 **Legacy aliases preserved.** `paper`, `brass`, `brass-2`, `signal`, `signal-2`, `wax` still resolve in Tailwind (paper→canvas, brass/brass-2→ink/graphite, signal/signal-2→azure, wax→fog) so existing classnames don't break.
 
-Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of the page is light. We do not flip the entire site.
+Dark mode is reserved for the `StampedAgents` and `Pricing` sections; the rest of the page is light. We do not flip the entire site.
 
 ## 5. Typography
 
@@ -97,7 +97,7 @@ Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of t
 
 **Breakpoints.** `sm 640`, `md 768`, `lg 1024`, `xl 1280`, `2xl 1440`. Verified at 320, 768, 1024, 1440. The hero fits at 320px without overflow.
 
-**Section rhythm.** Vertical section padding is `py-24 lg:py-32` on desktop, `py-16` on mobile. Section headings sit on a 4-column "Lot/Section" grid that reads "LOT 04 — PROVENANCE" in JetBrains Mono.
+**Section rhythm.** Vertical section padding is `py-24 lg:py-32` on desktop, `py-16` on mobile. Section headings sit on a 4-column "Lot/Section" grid that reads "LOT 04 — STAMPEDAGENTS" in JetBrains Mono.
 
 ## 8. Component catalog
 
@@ -105,20 +105,20 @@ Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of t
 
 **`ConciergeRail`** — sticky right rail on the hero. A single-column "agent talking" UI with a typing indicator and three suggested questions ("How do I price the SDR?", "Can I keep the model in our VPC?", "What's the rev-share?"). Pretends to be live; actually scripted.
 
-**`ProvenanceTable`** — full-width data table on the dark "How they're built" section. 5 columns: agent, training corpus, model family, evaluation method, last audit date.
+**`StampedAgentsTable`** — full-width data table on the dark "How they're built" section. 5 columns: agent, training corpus, model family, evaluation method, last audit date.
 
 **`PricingTier`** — three tiers (Trial, Pro, Enterprise). Each has a NOWPayments crypto CTA and a stable "What's included" list. Outcome pricing is shown in a footnote; subscription is the headline.
 
 **`FaqAccordion`** — ShadCN accordion, restrained. 8 items.
 
-**`SiteHeader` / `SiteFooter`** — header has logo (lockup with brass dot), nav (Catalog · Provenance · Pricing · FAQ), and a "Talk to Concierge" pill. Footer has the lot-number ID for this build.
+**`SiteHeader` / `SiteFooter`** — header has logo (lockup with brass dot), nav (Catalog · StampedAgents · Pricing · FAQ), and a "Talk to Concierge" pill. Footer has the lot-number ID for this build.
 
 ## 9. Landing page structure
 
 Top to bottom, in order:
 1. **Hero** — left: catalog peek (3 visible AgentCards stacked on a slight angle, like a fan of vellum). Right: ConciergeRail with "Concierge — online" status and the script's first message. Below: a row of 4 provenance ribbons ("Lot 042 · Anders, SDR — sold to 18 ops teams since Feb").
 2. **Catalog** — 6 AgentCards in a real grid. Filter pills: All · Sales · Support · Research · Ops.
-3. **How they're built** — dark section, Provenance table.
+3. **How they're built** — dark section, StampedAgents table.
 4. **Outcomes** — three "Last 30 days" panels with named-customer outcomes (anonymized).
 5. **Pricing** — three NOWPayments-CTA tiers (Trial / Pro / Enterprise).
 6. **FAQ** — 8 questions, no marketing fluff.
@@ -169,4 +169,5 @@ If a section of the design changes, the screenshots are re-captured and committe
 ## 15. Changelog
 
 - **2026-05-08** — v0.1. Initial spec drafted alongside the v1 landing build. All 15 sections decisions made; no `TBD` left.
-- **2026-05-08 design refresh — `apple` (Gallery wall)**. Lifted Apple's MacBook product-page direction. Hero pushed from 44-68px to **96-112px** at `-0.022em` tracking; section headings 64-80px. Brass `#A88646` and wax `#E9E0CF` warm-paper accents retired — palette swapped to Apple-aligned canvas/fog/snow/silver-mist scale. Signal blue re-pointed to Apple azure `#0071E3` for the singular CTA; rounded-square buttons swapped to **999px pills** with opacity-only hover. Card radius `10px → 28px` (Apple feature card); zero shadows (color-only elevation). Provenance + Pricing dark stage swapped to obsidian `#000000`. Catalog filter chips swapped to pill geometry. Section pads bumped to `py-24 lg:py-32`. Reference: `/Users/keer/projects/prin7r/design-references/apple.md`. Touched files: `apps/landing/app/{globals.css,page.tsx}`, `apps/landing/tailwind.config.ts`, `apps/landing/components/{SectionHeading,AgentCard,SiteHeader,SiteFooter,PricingTier,ConciergeRail,ProvenanceTable}.tsx`, `DESIGN.md` §1, §4, §5, §15.
+- **2026-05-08 design refresh — `apple` (Gallery wall)**. Lifted Apple's MacBook product-page direction. Hero pushed from 44-68px to **96-112px** at `-0.022em` tracking; section headings 64-80px. Brass `#A88646` and wax `#E9E0CF` warm-paper accents retired — palette swapped to Apple-aligned canvas/fog/snow/silver-mist scale. Signal blue re-pointed to Apple azure `#0071E3` for the singular CTA; rounded-square buttons swapped to **999px pills** with opacity-only hover. Card radius `10px → 28px` (Apple feature card); zero shadows (color-only elevation). StampedAgents + Pricing dark stage swapped to obsidian `#000000`. Catalog filter chips swapped to pill geometry. Section pads bumped to `py-24 lg:py-32`. Reference: `/Users/keer/projects/prin7r/design-references/apple.md`. Touched files: `apps/landing/app/{globals.css,page.tsx}`, `apps/landing/tailwind.config.ts`, `apps/landing/components/{SectionHeading,AgentCard,SiteHeader,SiteFooter,PricingTier,ConciergeRail,StampTable}.tsx`, `DESIGN.md` §1, §4, §5, §15.
+- **2026-05-08 critical rebrand — Provenance → StampedAgents (FAIL on live getprovenance.dev collision)**. The legacy brand "Provenance" collided with `getprovenance.dev` ("Provenance — Find, Verify and Hire AI Agents"), an active same-sector SaaS with the identical pitch. Renamed brand → **StampedAgents** (new domain `stampedagents.com`, verified available). Replaced wordmark + monogram (`P` → `S`); renamed `ProvenanceTable.tsx` → `StampTable.tsx`; section anchor `#provenance` → `#stamp`, label `PROVENANCE` → `STAMP`; nav copy "Provenance" → "Stamp"; debug tags `[PROVENANCE_*]` → `[STAMPED_AGENTS_*]`; checkout order prefix `prov_` → `stmp_`; Slack channels `#alerts-provenance` / `#orders-provenance` → `#alerts-stampedagents` / `#orders-stampedagents`; agency partner subdomain `partner.provenance.run` → `partner.stampedagents.com`. Common-noun "provenance" (e.g. "provenance record", "provenance-ribbon", "provenance the way fine art does") preserved as catalog metaphor — same lineage-of-origin family as "stamp." Container/repo slug unchanged (`agent-that-sells-agents`).

@@ -16,14 +16,14 @@ We are **the vetted shelf** — not the marketplace. Every claim on the page is 
 1. **Lot drops.** A weekly post-mortem-style note on a single lot — what it shipped, what failed, who owns it. Shared in Pavilion, RevGenius, RevOps Co-op.
 2. **Eval logs.** The public side of an agent's monthly eval. Numbers, not screenshots.
 3. **Concierge transcripts.** Anonymized, with the buyer's permission. The agent qualifying a real buyer.
-4. **Retire announcements.** When we sunset a lot. Provenance includes the end date.
+4. **Retire announcements.** When we sunset a lot. StampedAgents includes the end date.
 5. **Operator spotlights.** Named human owner of each agent — short profile, 200 words, real photo.
 
 ## Voice in copy
 
 Use specific numbers; refuse to use "scale," "leverage," "revolutionary." Open paragraphs with a number or a lot. Close paragraphs with the next action, not a feeling.
 
-**Sample paragraph.** "Lot 042 — Anders, the SDR — has shipped to eighteen B2B teams since February. Thirty-day reply rate is 42%, 7-day inbox open rate is 71%, and the named operator is Mira Rao at Provenance. You can demo him in your data, not ours. Trial is $99/mo. Demo first."
+**Sample paragraph.** "Lot 042 — Anders, the SDR — has shipped to eighteen B2B teams since February. Thirty-day reply rate is 42%, 7-day inbox open rate is 71%, and the named operator is Mira Rao at StampedAgents. You can demo him in your data, not ours. Trial is $99/mo. Demo first."
 
 ## Distribution rules
 
