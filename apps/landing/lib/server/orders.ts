@@ -341,6 +341,27 @@ export const LicenseService = {
     }));
   },
 
+  /** List all licenses */
+  async listAll(): Promise<License[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.licenses)
+      .leftJoin(schema.customers, eq(schema.licenses.customerId, schema.customers.id))
+      .orderBy(desc(schema.licenses.createdAt));
+
+    return results.map((r: any) => ({
+      orderId: r.licenses.orderId,
+      customerEmail: r.customers?.email ?? "unknown",
+      agentId: r.licenses.agentId,
+      tier: r.licenses.tier,
+      validUntil: r.licenses.validUntil.toISOString(),
+      revokedAt: r.licenses.revokedAt?.toISOString(),
+      issuedAt: r.licenses.createdAt.toISOString(),
+    }));
+  },
+
   /** Revoke a license */
   async revoke(orderId: string): Promise<License | null> {
     const { db, schema } = await getDb();

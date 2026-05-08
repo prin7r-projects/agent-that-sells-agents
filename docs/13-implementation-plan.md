@@ -217,7 +217,7 @@
 **Definition of Done.**
 - [ ] Outcome-pricing toggle visible to 50% of Pro customers; analytics pipe records the split.
 - [ ] Partner analytics endpoint returns valid JSON for a seeded partner.
-- [ ] Drift cohort report shows a numeric churn rate per status color over the 30-day window.
+- [x] Drift cohort report shows a numeric churn rate per status color over the 30-day window. Verified: `GET /api/admin/drift-cohorts` returns 200 with correct JSON shape; e2e test in `e2e/drift-cohorts.spec.ts` covers 401 path and cohort validation (PRI-2292).
 - [ ] `/changelog` page is publicly accessible and reflects recent agent + drift events.
 
 **Hand-off context.**

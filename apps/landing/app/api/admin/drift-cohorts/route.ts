@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { validateAdminToken, getBearerToken } from "@/lib/server/auth";
 import { LicenseService } from "@/lib/server/orders";
-import { loadAgents } from "@/lib/catalog-data";
+import { loadAgents, type Agent } from "@/lib/catalog-data";
 
 export const runtime = "nodejs";
 
@@ -18,10 +18,10 @@ export async function GET(request: Request) {
     );
   }
 
-  const agents = loadAgents();
+  const agents: Agent[] = loadAgents();
   const agentDrift = new Map(agents.map((a) => [a.id, a.driftStatus]));
 
-  const allLicenses = LicenseService.listAll();
+  const allLicenses = await LicenseService.listAll();
   const now = Date.now();
   const dayMs = 24 * 60 * 60 * 1000;
   const windowDays = 30;
