@@ -1,0 +1,128 @@
+[
+  {
+    "id": "lot-042",
+    "lotNumber": 42,
+    "displayName": "Anders",
+    "category": "sdr",
+    "blurb": "Outbound SDR. Works the inbox. Books meetings against your ICP.",
+    "provenance": {
+      "trainedBy": "Mira Rao",
+      "shipCount": 18,
+      "costPerAction": 0.42
+    },
+    "deployedSince": "2026-02-04",
+    "driftStatus": "green",
+    "outcomes": [
+      { "label": "Sends / mo", "value": "312" },
+      { "label": "Reply rate", "value": "42%" },
+      { "label": "Meetings", "value": "8" }
+    ],
+    "references": 18,
+    "lastAudit": "2026-04-30"
+  },
+  {
+    "id": "lot-047",
+    "lotNumber": 47,
+    "displayName": "Hatfield",
+    "category": "support",
+    "blurb": "Tier-1 concierge. Closes 71% of tickets without a handoff.",
+    "provenance": {
+      "trainedBy": "Sara Okereke",
+      "shipCount": 11,
+      "costPerAction": 0.31
+    },
+    "deployedSince": "2026-02-22",
+    "driftStatus": "green",
+    "outcomes": [
+      { "label": "Tickets / wk", "value": "428" },
+      { "label": "First-touch close", "value": "71%" },
+      { "label": "CSAT", "value": "4.7" }
+    ],
+    "references": 11,
+    "lastAudit": "2026-04-30"
+  },
+  {
+    "id": "lot-051",
+    "lotNumber": 51,
+    "displayName": "Vance",
+    "category": "research",
+    "blurb": "Decision-grade market research. Cited. Two-day SLA.",
+    "provenance": {
+      "trainedBy": "Theo Kapoor",
+      "shipCount": 14,
+      "costPerAction": 1.20
+    },
+    "deployedSince": "2026-03-08",
+    "driftStatus": "green",
+    "outcomes": [
+      { "label": "Reports / mo", "value": "63" },
+      { "label": "Avg sources", "value": "41" },
+      { "label": "Rework rate", "value": "9%" }
+    ],
+    "references": 14,
+    "lastAudit": "2026-04-22"
+  },
+  {
+    "id": "lot-054",
+    "lotNumber": 54,
+    "displayName": "Brunel",
+    "category": "ops",
+    "blurb": "Internal ops auditor. Watches your tools. Files anomalies.",
+    "provenance": {
+      "trainedBy": "Joon Park",
+      "shipCount": 7,
+      "costPerAction": 0.55
+    },
+    "deployedSince": "2026-03-19",
+    "driftStatus": "green",
+    "outcomes": [
+      { "label": "Tools watched", "value": "27" },
+      { "label": "Findings / wk", "value": "19" },
+      { "label": "False positive", "value": "6%" }
+    ],
+    "references": 7,
+    "lastAudit": "2026-05-01"
+  },
+  {
+    "id": "lot-058",
+    "lotNumber": 58,
+    "displayName": "Lermontov",
+    "category": "sdr",
+    "blurb": "Inbound qualifier. Books demos with the buyer, not the form.",
+    "provenance": {
+      "trainedBy": "Mira Rao",
+      "shipCount": 9,
+      "costPerAction": 0.38
+    },
+    "deployedSince": "2026-04-02",
+    "driftStatus": "yellow",
+    "outcomes": [
+      { "label": "Conversations", "value": "1.2k" },
+      { "label": "Qualified", "value": "31%" },
+      { "label": "Booked", "value": "188" }
+    ],
+    "references": 9,
+    "lastAudit": "2026-04-30"
+  },
+  {
+    "id": "lot-061",
+    "lotNumber": 61,
+    "displayName": "Whitfield",
+    "category": "research",
+    "blurb": "Competitive intel. Weekly briefs against your top five.",
+    "provenance": {
+      "trainedBy": "Theo Kapoor",
+      "shipCount": 5,
+      "costPerAction": 1.45
+    },
+    "deployedSince": "2026-04-14",
+    "driftStatus": "green",
+    "outcomes": [
+      { "label": "Briefs / mo", "value": "20" },
+      { "label": "Cited claims", "value": "342" },
+      { "label": "Read-through", "value": "84%" }
+    ],
+    "references": 5,
+    "lastAudit": "2026-05-02"
+  }
+]

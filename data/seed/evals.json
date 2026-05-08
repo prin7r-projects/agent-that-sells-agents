@@ -1,0 +1,25 @@
+{
+  "lot-042": [
+    { "corpus": "inbox-prod-q1-2026", "scoreBps": 9420, "evaluator": "Mira Rao", "runDate": "2026-04-15" },
+    { "corpus": "inbox-prod-q1-2026", "scoreBps": 9375, "evaluator": "Mira Rao", "runDate": "2026-04-30" },
+    { "corpus": "inbox-prod-q2-2026", "scoreBps": 9500, "evaluator": "Mira Rao", "runDate": "2026-05-05" }
+  ],
+  "lot-047": [
+    { "corpus": "tickets-q1-2026", "scoreBps": 8890, "evaluator": "Sara Okereke", "runDate": "2026-04-15" },
+    { "corpus": "tickets-q1-2026", "scoreBps": 8920, "evaluator": "Sara Okereke", "runDate": "2026-05-01" }
+  ],
+  "lot-051": [
+    { "corpus": "research-q1-2026", "scoreBps": 9150, "evaluator": "Theo Kapoor", "runDate": "2026-04-22" },
+    { "corpus": "research-q2-2026", "scoreBps": 9230, "evaluator": "Theo Kapoor", "runDate": "2026-05-03" }
+  ],
+  "lot-054": [
+    { "corpus": "ops-audit-q2-2026", "scoreBps": 8740, "evaluator": "Joon Park", "runDate": "2026-05-01" }
+  ],
+  "lot-058": [
+    { "corpus": "inbound-q1-2026", "scoreBps": 9075, "evaluator": "Mira Rao", "runDate": "2026-04-30" },
+    { "corpus": "inbound-q2-2026", "scoreBps": 8820, "evaluator": "Mira Rao", "runDate": "2026-05-02" }
+  ],
+  "lot-061": [
+    { "corpus": "comp-intel-q1-2026", "scoreBps": 9340, "evaluator": "Theo Kapoor", "runDate": "2026-05-02" }
+  ]
+}

@@ -1,7 +1,7 @@
 import { agents, tiers } from "@/lib/agents";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { AgentCard } from "@/components/AgentCard";
+import { CatalogGrid } from "@/components/CatalogGrid";
 import { ConciergeRail } from "@/components/ConciergeRail";
 import { StampTable } from "@/components/StampTable";
 import { PricingTierCard } from "@/components/PricingTier";
@@ -13,7 +13,7 @@ export default function HomePage() {
       <SiteHeader />
       <Hero />
       <RibbonRow />
-      <Catalog />
+      <CatalogGrid />
       <Stamp />
       <Outcomes />
       <Pricing />
@@ -118,41 +118,6 @@ function RibbonRow() {
             <span className="text-slate leading-snug">{r.text}</span>
           </div>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function Catalog() {
-  return (
-    <section id="catalog" className="border-b border-silver-mist bg-canvas">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
-        <SectionHeading
-          lot="02"
-          label="CATALOG"
-          title="Six agents on the shelf, each with a price tag."
-          description="Filter by function — Sales, Support, Research, Ops. Each card lists the named operator, when the agent was deployed, and the last 30 days of outcomes."
-        />
-        <div className="flex gap-2 mb-10 text-[14px] flex-wrap">
-          {["All", "Sales", "Support", "Research", "Ops"].map((f, i) => (
-            <button
-              key={f}
-              type="button"
-              className={
-                i === 0
-                  ? "px-4 py-2 rounded-full bg-ink text-snow"
-                  : "px-4 py-2 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
-              }
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {agents.map((a) => (
-            <AgentCard key={a.lot} agent={a} />
-          ))}
-        </div>
       </div>
     </section>
   );
