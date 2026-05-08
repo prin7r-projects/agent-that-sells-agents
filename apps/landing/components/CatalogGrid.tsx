@@ -65,21 +65,27 @@ export function CatalogGrid() {
           </p>
         </div>
 
-        <div className="flex gap-2 mb-10 text-[14px] flex-wrap">
-          {filters.map((f, i) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setActiveFilter(f)}
-              className={
-                activeFilter === f
-                  ? "px-4 py-2 rounded-full bg-ink text-snow"
-                  : "px-4 py-2 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
-              }
-            >
-              {f}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-10">
+          <div className="flex gap-2 text-[14px] flex-wrap">
+            {filters.map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setActiveFilter(f)}
+                className={
+                  activeFilter === f
+                    ? "px-4 py-2 rounded-full bg-ink text-snow"
+                    : "px-4 py-2 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
+                }
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+          {/* OwnedFilter — hidden for unauthenticated; Phase 3: conditionally show */}
+          <span className="text-[12px] font-mono text-graphite">
+            Sign in to see your owned agents
+          </span>
         </div>
 
         {loading && (
