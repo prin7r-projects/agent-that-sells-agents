@@ -5,7 +5,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 
 // Static import — all consumers use runtime: "nodejs"
-import { db, schema } from "../../src/db/index.js";
+import { db, schema } from "../../src/db/index";
 
 const MAGIC_LINK_EXPIRY_HOURS = 24;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://agent-that-sells-agents.prin7r.com";

@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY?.trim();
 
 // Static import — all consumers use runtime: "nodejs"
-import { db, schema } from "../../src/db/index.js";
+import { db, schema } from "../../src/db/index";
 
 /**
  * Validate an admin Bearer token. Uses constant-time comparison.

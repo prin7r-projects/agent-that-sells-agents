@@ -6,7 +6,7 @@ import { createMagicLink } from "@/lib/server/magic-link";
 import { syncOrderToNotion } from "@/lib/server/notion";
 import { agents as staticAgents } from "@/lib/agents";
 import { eq } from "drizzle-orm";
-import { db, schema } from "@/src/db/index.js";
+import { db, schema } from "@/src/db/index";
 
 async function getAgentName(agentId: string | undefined): Promise<string> {
   if (!agentId) return "your agent";

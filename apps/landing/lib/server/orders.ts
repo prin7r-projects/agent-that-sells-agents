@@ -4,7 +4,7 @@
 import { eq, and, desc } from "drizzle-orm";
 
 // Static import — all consumers use runtime: "nodejs"
-import { db, schema } from "../../src/db/index.js";
+import { db, schema } from "../../src/db/index";
 
 interface PersistedOrder {
   orderId: string;
