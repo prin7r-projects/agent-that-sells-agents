@@ -1,7 +1,7 @@
 // apps/app/src/db/index.ts — PostgreSQL connection via Drizzle ORM
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import * as schema from "./schema.js";
+import * as schema from "./schema";
 
 const connectionString = process.env.DATABASE_URL ?? "postgresql://stampedagents:stampedagents_dev@localhost:5432/stampedagents";
 

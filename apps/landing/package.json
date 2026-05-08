@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "queue:eval": "tsx lib/queues/eval-runner.ts",
+    "queue:eval:trigger": "tsx lib/queues/trigger-eval.ts"
   },
   "dependencies": {
     "bullmq": "^5.76.6",
