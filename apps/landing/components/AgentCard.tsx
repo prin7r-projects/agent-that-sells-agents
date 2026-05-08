@@ -15,11 +15,24 @@ export interface AgentCardProps {
   outcomes?: { label: string; value: string }[];
   references?: number;
   lastAudit?: string;
+  driftStatus?: string;
   compact?: boolean;
 }
 
+const DRIFT_CONFIG: Record<string, { label: string; classes: string }> = {
+  yellow: {
+    label: "Drift watch — eval variance detected",
+    classes: "bg-amber-50 border-amber-200 text-amber-800",
+  },
+  red: {
+    label: "Drift alert — performance below threshold",
+    classes: "bg-vermilion/5 border-vermilion/20 text-vermilion",
+  },
+};
+
 export function AgentCard({ agent, compact = false }: { agent: AgentCardProps; compact?: boolean }) {
   const [evalOpen, setEvalOpen] = useState(false);
+  const drift = agent.driftStatus && DRIFT_CONFIG[agent.driftStatus];
 
   return (
     <>
@@ -29,6 +42,11 @@ export function AgentCard({ agent, compact = false }: { agent: AgentCardProps; c
           compact && "p-6",
         )}
       >
+        {drift && (
+          <div className={cn("-mx-7 -mt-7 mb-2 px-7 py-2 text-[12px] font-medium border-b rounded-t-[28px]", drift.classes)}>
+            {drift.label}
+          </div>
+        )}
         <header className="flex items-start justify-between gap-4">
           <div>
             <div className="lot-label">LOT {agent.lot} · {agent.role.toUpperCase()}</div>

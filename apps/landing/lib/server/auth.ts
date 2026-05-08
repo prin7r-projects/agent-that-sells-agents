@@ -1,7 +1,22 @@
 // Server-side auth utilities — Phase 3 (docs/12 §6)
-// Validates Bearer tokens for admin endpoints and API keys.
+// DB-backed API key validation via Drizzle ORM.
+
+import { createHash } from "node:crypto";
 
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY?.trim();
+
+// Dynamic import to avoid bundling DB client in edge runtime
+let db: any = null;
+let schema: any = null;
+
+async function getDb() {
+  if (!db) {
+    const mod = await import("../../../../app/src/db/index.js");
+    db = mod.db;
+    schema = mod.schema;
+  }
+  return { db, schema };
+}
 
 /**
  * Validate an admin Bearer token. Uses constant-time comparison.
@@ -29,27 +44,56 @@ export function validateAdminToken(authHeader: string | null): boolean {
 }
 
 /**
- * Validate an API key from the request. In Phase 3+ this checks against DB.
- * In Phase 2/early-Phase3, any key ≥ 8 characters is accepted (stub auth).
+ * Hash an API key for secure storage/comparison.
  */
-export function validateApiKey(authHeader: string | null): {
+export function hashApiKey(key: string): string {
+  return createHash("sha256").update(key).digest("hex");
+}
+
+/**
+ * Validate an API key from the request. DB-backed lookup by key hash.
+ * Returns valid, keyHash, accountId (customerId), and keyId.
+ */
+export async function validateApiKey(authHeader: string | null): Promise<{
   valid: boolean;
   keyHash?: string;
   accountId?: string;
-} {
+  keyId?: string;
+}> {
   if (!authHeader) return { valid: false };
   const key = authHeader.startsWith("Bearer ")
     ? authHeader.slice(7).trim()
     : authHeader.trim();
 
-  // Phase 2 stub: any key ≥ 8 chars
-  // Phase 3: sha256(key) → lookup in api_keys table
   if (key.length < 8) return { valid: false };
+
+  const { db, schema } = await getDb();
+  const keyHash = hashApiKey(key);
+
+  const existing = await db
+    .select()
+    .from(schema.apiKeys)
+    .where(eq(schema.apiKeys.keyHash, keyHash))
+    .limit(1);
+
+  if (existing.length === 0) return { valid: false };
+
+  const apiKey = existing[0];
+
+  // Check if revoked
+  if (apiKey.revokedAt) return { valid: false };
+
+  // Update lastUsedAt
+  await db
+    .update(schema.apiKeys)
+    .set({ lastUsedAt: new Date() })
+    .where(eq(schema.apiKeys.id, apiKey.id));
 
   return {
     valid: true,
-    keyHash: `stub_${key.slice(0, 8)}`,
-    accountId: "acct_stub",
+    keyHash: keyHash.slice(0, 16),
+    accountId: apiKey.customerId,
+    keyId: apiKey.id,
   };
 }
 

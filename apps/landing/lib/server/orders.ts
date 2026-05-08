@@ -1,5 +1,20 @@
 // Order persistence service — Phase 3 (docs/13 Phase 3 Task 1)
-// In-memory store for MVP; migrates to DB in Phase 3 full.
+// DB-backed via Drizzle ORM + PostgreSQL.
+
+import { eq, and, desc } from "drizzle-orm";
+
+// Dynamic import to avoid bundling DB client in edge runtime
+let db: any = null;
+let schema: any = null;
+
+async function getDb() {
+  if (!db) {
+    const mod = await import("../../../../app/src/db/index.js");
+    db = mod.db;
+    schema = mod.schema;
+  }
+  return { db, schema };
+}
 
 interface PersistedOrder {
   orderId: string;
@@ -14,6 +29,8 @@ interface PersistedOrder {
   paidAt?: string;
   refundedAt?: string;
   createdAt: string;
+  billingMode?: string;
+  billingCap?: number;
 }
 
 interface License {
@@ -34,14 +51,9 @@ interface RevShareEntry {
   createdAt: string;
 }
 
-// In-memory stores (migrate to DB in Phase 3 full)
-const orders = new Map<string, PersistedOrder>();
-const licenses = new Map<string, License[]>();
-const revShareLedger: RevShareEntry[] = [];
-
 export const OrderService = {
   /** Persist a pending order after checkout creation */
-  create(params: {
+  async create(params: {
     orderId: string;
     tier: string;
     agentLot?: string;
@@ -50,121 +62,366 @@ export const OrderService = {
     upgradeFrom?: string;
     customerEmail?: string;
     invoiceId?: string;
-  }): PersistedOrder {
-    const order: PersistedOrder = {
-      orderId: params.orderId,
-      tier: params.tier,
+  }): Promise<PersistedOrder> {
+    const { db, schema } = await getDb();
+
+    // Upsert customer if email provided
+    let customerId: string | null = null;
+    if (params.customerEmail) {
+      const existing = await db
+        .select()
+        .from(schema.customers)
+        .where(eq(schema.customers.email, params.customerEmail.toLowerCase()))
+        .limit(1);
+
+      if (existing.length > 0) {
+        customerId = existing[0].id;
+      } else {
+        const [newCustomer] = await db
+          .insert(schema.customers)
+          .values({ email: params.customerEmail.toLowerCase() })
+          .returning();
+        customerId = newCustomer.id;
+      }
+    }
+
+    const [order] = await db
+      .insert(schema.orders)
+      .values({
+        id: params.orderId,
+        customerId,
+        agentId: params.agentLot ? `lot-${params.agentLot}` : null,
+        tier: params.tier,
+        status: "pending",
+        priceAmountUsd: params.priceAmountUsd,
+        invoiceId: params.invoiceId,
+        referralCode: params.referralCode,
+      })
+      .returning();
+
+    return {
+      orderId: order.id,
+      tier: order.tier,
       agentLot: params.agentLot,
-      status: "pending",
-      priceAmountUsd: params.priceAmountUsd,
-      referralCode: params.referralCode,
+      status: order.status as PersistedOrder["status"],
+      priceAmountUsd: order.priceAmountUsd ?? 0,
+      referralCode: order.referralCode ?? undefined,
       upgradeFrom: params.upgradeFrom,
       customerEmail: params.customerEmail,
-      invoiceId: params.invoiceId,
-      createdAt: new Date().toISOString(),
+      invoiceId: order.invoiceId ?? undefined,
+      createdAt: order.createdAt.toISOString(),
+      billingMode: order.billingMode ?? undefined,
+      billingCap: order.billingCap ?? undefined,
     };
-    orders.set(params.orderId, order);
-    return order;
   },
 
   /** Mark an order as paid (idempotent on orderId+status) */
-  markPaid(orderId: string): PersistedOrder | null {
-    const order = orders.get(orderId);
-    if (!order) return null;
-    if (order.status === "paid") return order; // idempotent
-    order.status = "paid";
-    order.paidAt = new Date().toISOString();
-    orders.set(orderId, order);
-    return order;
+  async markPaid(orderId: string): Promise<PersistedOrder | null> {
+    const { db, schema } = await getDb();
+
+    const existing = await db
+      .select()
+      .from(schema.orders)
+      .where(eq(schema.orders.id, orderId))
+      .limit(1);
+
+    if (existing.length === 0) return null;
+
+    const order = existing[0];
+    if (order.status === "paid") {
+      return {
+        orderId: order.id,
+        tier: order.tier,
+        status: "paid",
+        priceAmountUsd: order.priceAmountUsd ?? 0,
+        referralCode: order.referralCode ?? undefined,
+        invoiceId: order.invoiceId ?? undefined,
+        paidAt: order.paidAt?.toISOString(),
+        createdAt: order.createdAt.toISOString(),
+        billingMode: order.billingMode ?? undefined,
+        billingCap: order.billingCap ?? undefined,
+      };
+    }
+
+    const [updated] = await db
+      .update(schema.orders)
+      .set({ status: "paid", paidAt: new Date() })
+      .where(eq(schema.orders.id, orderId))
+      .returning();
+
+    return {
+      orderId: updated.id,
+      tier: updated.tier,
+      status: "paid",
+      priceAmountUsd: updated.priceAmountUsd ?? 0,
+      referralCode: updated.referralCode ?? undefined,
+      invoiceId: updated.invoiceId ?? undefined,
+      paidAt: updated.paidAt?.toISOString(),
+      createdAt: updated.createdAt.toISOString(),
+      billingMode: updated.billingMode ?? undefined,
+      billingCap: updated.billingCap ?? undefined,
+    };
   },
 
   /** Get an order by ID */
-  get(orderId: string): PersistedOrder | null {
-    return orders.get(orderId) ?? null;
+  async get(orderId: string): Promise<PersistedOrder | null> {
+    const { db, schema } = await getDb();
+
+    const existing = await db
+      .select()
+      .from(schema.orders)
+      .where(eq(schema.orders.id, orderId))
+      .limit(1);
+
+    if (existing.length === 0) return null;
+
+    const order = existing[0];
+    return {
+      orderId: order.id,
+      tier: order.tier,
+      status: order.status as PersistedOrder["status"],
+      priceAmountUsd: order.priceAmountUsd ?? 0,
+      referralCode: order.referralCode ?? undefined,
+      invoiceId: order.invoiceId ?? undefined,
+      paidAt: order.paidAt?.toISOString(),
+      refundedAt: order.refundedAt?.toISOString(),
+      createdAt: order.createdAt.toISOString(),
+      billingMode: order.billingMode ?? undefined,
+      billingCap: order.billingCap ?? undefined,
+    };
   },
 
   /** List orders by customer email */
-  listByCustomer(email: string): PersistedOrder[] {
-    return Array.from(orders.values()).filter(
-      (o) => o.customerEmail?.toLowerCase() === email.toLowerCase(),
-    );
+  async listByCustomer(email: string): Promise<PersistedOrder[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.orders)
+      .innerJoin(schema.customers, eq(schema.orders.customerId, schema.customers.id))
+      .where(eq(schema.customers.email, email.toLowerCase()))
+      .orderBy(desc(schema.orders.createdAt));
+
+    return results.map((r: any) => ({
+      orderId: r.orders.id,
+      tier: r.orders.tier,
+      status: r.orders.status as PersistedOrder["status"],
+      priceAmountUsd: r.orders.priceAmountUsd ?? 0,
+      referralCode: r.orders.referralCode ?? undefined,
+      invoiceId: r.orders.invoiceId ?? undefined,
+      paidAt: r.orders.paidAt?.toISOString(),
+      createdAt: r.orders.createdAt.toISOString(),
+      billingMode: r.orders.billingMode ?? undefined,
+      billingCap: r.orders.billingCap ?? undefined,
+    }));
   },
 
   /** Mark order as refunded */
-  refund(orderId: string, reason?: string): PersistedOrder | null {
-    const order = orders.get(orderId);
-    if (!order) return null;
-    order.status = "refunded";
-    order.refundedAt = new Date().toISOString();
-    orders.set(orderId, order);
-    return order;
+  async refund(orderId: string, reason?: string): Promise<PersistedOrder | null> {
+    const { db, schema } = await getDb();
+
+    const [updated] = await db
+      .update(schema.orders)
+      .set({ status: "refunded", refundedAt: new Date() })
+      .where(eq(schema.orders.id, orderId))
+      .returning();
+
+    if (!updated) return null;
+
+    return {
+      orderId: updated.id,
+      tier: updated.tier,
+      status: "refunded",
+      priceAmountUsd: updated.priceAmountUsd ?? 0,
+      refundedAt: updated.refundedAt?.toISOString(),
+      createdAt: updated.createdAt.toISOString(),
+      billingMode: updated.billingMode ?? undefined,
+      billingCap: updated.billingCap ?? undefined,
+    };
+  },
+
+  /** Update billing mode for an order */
+  async updateBillingMode(orderId: string, mode: "flat" | "outcome", cap?: number): Promise<PersistedOrder | null> {
+    const { db, schema } = await getDb();
+
+    const [updated] = await db
+      .update(schema.orders)
+      .set({
+        billingMode: mode,
+        billingCap: mode === "outcome" ? (cap ?? 1.5) : null,
+      })
+      .where(eq(schema.orders.id, orderId))
+      .returning();
+
+    if (!updated) return null;
+
+    return {
+      orderId: updated.id,
+      tier: updated.tier,
+      status: updated.status as PersistedOrder["status"],
+      priceAmountUsd: updated.priceAmountUsd ?? 0,
+      createdAt: updated.createdAt.toISOString(),
+      billingMode: updated.billingMode ?? undefined,
+      billingCap: updated.billingCap ?? undefined,
+    };
   },
 };
 
 export const LicenseService = {
   /** Issue a license after payment */
-  issue(params: {
+  async issue(params: {
     orderId: string;
     customerEmail: string;
     agentId: string;
     tier: string;
     validMonths?: number;
-  }): License {
+  }): Promise<License> {
+    const { db, schema } = await getDb();
+
+    // Get or create customer
+    let customerId: string;
+    const existing = await db
+      .select()
+      .from(schema.customers)
+      .where(eq(schema.customers.email, params.customerEmail.toLowerCase()))
+      .limit(1);
+
+    if (existing.length > 0) {
+      customerId = existing[0].id;
+    } else {
+      const [newCustomer] = await db
+        .insert(schema.customers)
+        .values({ email: params.customerEmail.toLowerCase() })
+        .returning();
+      customerId = newCustomer.id;
+    }
+
     const validUntil = new Date();
     validUntil.setMonth(validUntil.getMonth() + (params.validMonths ?? 1));
-    const license: License = {
-      orderId: params.orderId,
+
+    const [license] = await db
+      .insert(schema.licenses)
+      .values({
+        orderId: params.orderId,
+        customerId,
+        agentId: params.agentId,
+        tier: params.tier,
+        validUntil,
+      })
+      .returning();
+
+    return {
+      orderId: license.orderId!,
       customerEmail: params.customerEmail,
-      agentId: params.agentId,
-      tier: params.tier,
-      validUntil: validUntil.toISOString(),
-      issuedAt: new Date().toISOString(),
+      agentId: license.agentId!,
+      tier: license.tier,
+      validUntil: license.validUntil.toISOString(),
+      issuedAt: license.createdAt.toISOString(),
     };
-    const existing = licenses.get(params.customerEmail) ?? [];
-    existing.push(license);
-    licenses.set(params.customerEmail, existing);
-    return license;
   },
 
   /** Get licenses for a customer */
-  listByCustomer(email: string): License[] {
-    return licenses.get(email.toLowerCase()) ?? [];
+  async listByCustomer(email: string): Promise<License[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.licenses)
+      .innerJoin(schema.customers, eq(schema.licenses.customerId, schema.customers.id))
+      .where(eq(schema.customers.email, email.toLowerCase()));
+
+    return results.map((r: any) => ({
+      orderId: r.licenses.orderId,
+      customerEmail: email,
+      agentId: r.licenses.agentId,
+      tier: r.licenses.tier,
+      validUntil: r.licenses.validUntil.toISOString(),
+      revokedAt: r.licenses.revokedAt?.toISOString(),
+      issuedAt: r.licenses.createdAt.toISOString(),
+    }));
   },
 
   /** Revoke a license */
-  revoke(orderId: string): License | null {
-    for (const [email, customerLicenses] of licenses) {
-      const idx = customerLicenses.findIndex((l) => l.orderId === orderId);
-      if (idx >= 0) {
-        customerLicenses[idx].revokedAt = new Date().toISOString();
-        return customerLicenses[idx];
-      }
-    }
-    return null;
+  async revoke(orderId: string): Promise<License | null> {
+    const { db, schema } = await getDb();
+
+    const [updated] = await db
+      .update(schema.licenses)
+      .set({ revokedAt: new Date() })
+      .where(eq(schema.licenses.orderId, orderId))
+      .returning();
+
+    if (!updated) return null;
+
+    // Get customer email
+    const customer = await db
+      .select()
+      .from(schema.customers)
+      .where(eq(schema.customers.id, updated.customerId!))
+      .limit(1);
+
+    return {
+      orderId: updated.orderId!,
+      customerEmail: customer[0]?.email ?? "unknown",
+      agentId: updated.agentId!,
+      tier: updated.tier,
+      validUntil: updated.validUntil.toISOString(),
+      revokedAt: updated.revokedAt?.toISOString(),
+      issuedAt: updated.createdAt.toISOString(),
+    };
   },
 };
 
 export const RevShareService = {
   /** Accrue rev-share for a partner referral */
-  accrue(params: {
+  async accrue(params: {
     orderId: string;
     referralCode: string;
     amountUsd: number;
     bps?: number;
-  }): RevShareEntry {
-    const entry: RevShareEntry = {
-      orderId: params.orderId,
-      referralCode: params.referralCode,
-      amountUsd: params.amountUsd,
+  }): Promise<RevShareEntry> {
+    const { db, schema } = await getDb();
+
+    const [entry] = await db
+      .insert(schema.creditTransactions)
+      .values({
+        orderId: params.orderId,
+        type: "rev_share_accrual",
+        amountUsd: params.amountUsd,
+        referralCode: params.referralCode,
+      })
+      .returning();
+
+    return {
+      orderId: entry.orderId!,
+      referralCode: entry.referralCode!,
+      amountUsd: entry.amountUsd,
       bps: params.bps ?? 3000,
-      createdAt: new Date().toISOString(),
+      createdAt: entry.createdAt.toISOString(),
     };
-    revShareLedger.push(entry);
-    return entry;
   },
 
   /** Get rev-share for a partner code */
-  getByCode(code: string): RevShareEntry[] {
-    return revShareLedger.filter((e) => e.referralCode === code);
+  async getByCode(code: string): Promise<RevShareEntry[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.creditTransactions)
+      .where(
+        and(
+          eq(schema.creditTransactions.referralCode, code),
+          eq(schema.creditTransactions.type, "rev_share_accrual")
+        )
+      )
+      .orderBy(desc(schema.creditTransactions.createdAt));
+
+    return results.map((r: any) => ({
+      orderId: r.orderId,
+      referralCode: r.referralCode!,
+      amountUsd: r.amountUsd,
+      bps: 3000,
+      createdAt: r.createdAt.toISOString(),
+    }));
   },
 };
