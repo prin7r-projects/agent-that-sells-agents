@@ -6,18 +6,8 @@ import { eq } from "drizzle-orm";
 
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY?.trim();
 
-// Dynamic import to avoid bundling DB client in edge runtime
-let db: any = null;
-let schema: any = null;
-
-async function getDb() {
-  if (!db) {
-    const mod = await import("../../src/db/index.js");
-    db = mod.db;
-    schema = mod.schema;
-  }
-  return { db, schema };
-}
+// Static import — all consumers use runtime: "nodejs"
+import { db, schema } from "../../src/db/index.js";
 
 /**
  * Validate an admin Bearer token. Uses constant-time comparison.
@@ -68,7 +58,6 @@ export async function validateApiKey(authHeader: string | null): Promise<{
 
   if (key.length < 8) return { valid: false };
 
-  const { db, schema } = await getDb();
   const keyHash = hashApiKey(key);
 
   const existing = await db

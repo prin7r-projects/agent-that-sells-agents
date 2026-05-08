@@ -6,16 +6,10 @@ import { createMagicLink } from "@/lib/server/magic-link";
 import { syncOrderToNotion } from "@/lib/server/notion";
 import { agents as staticAgents } from "@/lib/agents";
 import { eq } from "drizzle-orm";
-
-// Dynamic import to avoid bundling DB client in edge runtime
-async function getDb() {
-  const mod = await import("../../../../src/db/index.js");
-  return { db: mod.db, schema: mod.schema };
-}
+import { db, schema } from "@/src/db/index.js";
 
 async function getAgentName(agentId: string | undefined): Promise<string> {
   if (!agentId) return "your agent";
-  const { db, schema } = await getDb();
   const rows = await db.select().from(schema.agents).where(eq(schema.agents.id, agentId)).limit(1);
   if (rows.length > 0) return rows[0].displayName;
   const staticAgent = staticAgents.find((a) => `lot-${a.lot}` === agentId || a.lot === agentId);

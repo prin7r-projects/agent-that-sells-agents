@@ -3,18 +3,8 @@
 
 import { eq, and, desc } from "drizzle-orm";
 
-// Dynamic import to avoid bundling DB client in edge runtime
-let db: any = null;
-let schema: any = null;
-
-async function getDb() {
-  if (!db) {
-    const mod = await import("../../src/db/index.js");
-    db = mod.db;
-    schema = mod.schema;
-  }
-  return { db, schema };
-}
+// Static import — all consumers use runtime: "nodejs"
+import { db, schema } from "../../src/db/index.js";
 
 interface PersistedOrder {
   orderId: string;
@@ -63,7 +53,6 @@ export const OrderService = {
     customerEmail?: string;
     invoiceId?: string;
   }): Promise<PersistedOrder> {
-    const { db, schema } = await getDb();
 
     // Upsert customer if email provided
     let customerId: string | null = null;
@@ -106,7 +95,6 @@ export const OrderService = {
 
   /** Mark an order as paid (idempotent on orderId+status) */
   async markPaid(orderId: string): Promise<PersistedOrder | null> {
-    const { db, schema } = await getDb();
 
     const existing = await db
       .select()
@@ -154,7 +142,6 @@ export const OrderService = {
 
   /** Get an order by ID */
   async get(orderId: string): Promise<PersistedOrder | null> {
-    const { db, schema } = await getDb();
 
     const existing = await db
       .select()
@@ -182,7 +169,6 @@ export const OrderService = {
 
   /** List orders by customer email */
   async listByCustomer(email: string): Promise<PersistedOrder[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -210,7 +196,6 @@ export const OrderService = {
 
   /** Mark order as refunded */
   async refund(orderId: string, reason?: string): Promise<PersistedOrder | null> {
-    const { db, schema } = await getDb();
 
     const existing = await this.get(orderId);
     if (!existing) return null;
@@ -225,7 +210,6 @@ export const OrderService = {
 
   /** Update billing mode for an order */
   async updateBillingMode(orderId: string, mode: "flat" | "outcome", cap?: number): Promise<PersistedOrder | null> {
-    const { db, schema } = await getDb();
 
     const existing = await this.get(orderId);
     if (!existing) return null;
@@ -243,7 +227,6 @@ export const OrderService = {
 
   /** List all orders (admin) */
   async listAll(): Promise<PersistedOrder[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -267,7 +250,6 @@ export const OrderService = {
 
   /** Aggregate order stats (admin) */
   async stats(): Promise<{ total: number; paid: number; pending: number; refunded: number }> {
-    const { db, schema } = await getDb();
 
     const results = await db.select().from(schema.orders);
     const total = results.length;
@@ -288,7 +270,6 @@ export const LicenseService = {
     tier: string;
     validMonths?: number;
   }): Promise<License> {
-    const { db, schema } = await getDb();
 
     // Get or create customer
     let customerId: string;
@@ -334,7 +315,6 @@ export const LicenseService = {
 
   /** Get licenses for a customer */
   async listByCustomer(email: string): Promise<License[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -355,7 +335,6 @@ export const LicenseService = {
 
   /** List all licenses */
   async listAll(): Promise<License[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -376,7 +355,6 @@ export const LicenseService = {
 
   /** Revoke a license */
   async revoke(orderId: string): Promise<License | null> {
-    const { db, schema } = await getDb();
 
     const [updated] = await db
       .update(schema.licenses)
@@ -413,7 +391,6 @@ export const RevShareService = {
     amountUsd: number;
     bps?: number;
   }): Promise<RevShareEntry> {
-    const { db, schema } = await getDb();
 
     const [entry] = await db
       .insert(schema.creditTransactions)
@@ -436,7 +413,6 @@ export const RevShareService = {
 
   /** Get rev-share for a partner code */
   async getByCode(code: string): Promise<RevShareEntry[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -460,7 +436,6 @@ export const RevShareService = {
 
   /** Reverse rev-share entries for an order (used during refund) */
   async reverseForOrder(orderId: string): Promise<RevShareEntry | null> {
-    const { db, schema } = await getDb();
 
     const existing = await db
       .select()
@@ -502,7 +477,6 @@ export const RevShareService = {
 
   /** List all rev-share entries (admin) */
   async listAll(): Promise<RevShareEntry[]> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()
@@ -521,7 +495,6 @@ export const RevShareService = {
 
   /** Aggregate rev-share stats (admin) */
   async stats(): Promise<{ totalEntries: number; totalUsd: number; uniqueCodes: number }> {
-    const { db, schema } = await getDb();
 
     const results = await db
       .select()

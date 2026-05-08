@@ -2,19 +2,10 @@
 // Generates and validates magic links for post-purchase onboarding.
 
 import { createHash, randomBytes } from "node:crypto";
+import { eq } from "drizzle-orm";
 
-// Dynamic import to avoid bundling DB client in edge runtime
-let db: any = null;
-let schema: any = null;
-
-async function getDb() {
-  if (!db) {
-    const mod = await import("../../src/db/index.js");
-    db = mod.db;
-    schema = mod.schema;
-  }
-  return { db, schema };
-}
+// Static import — all consumers use runtime: "nodejs"
+import { db, schema } from "../../src/db/index.js";
 
 const MAGIC_LINK_EXPIRY_HOURS = 24;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://agent-that-sells-agents.prin7r.com";
@@ -33,8 +24,6 @@ export async function createMagicLink(params: {
   email: string;
   orderId: string;
 }): Promise<MagicLinkResult> {
-  const { db, schema } = await getDb();
-
   // Generate a secure random token
   const token = randomBytes(32).toString("hex");
   const expiresAt = new Date();
@@ -64,8 +53,6 @@ export async function validateMagicLink(token: string): Promise<{
   orderId?: string;
   error?: string;
 }> {
-  const { db, schema } = await getDb();
-
   const existing = await db
     .select()
     .from(schema.magicLinks)
@@ -102,5 +89,3 @@ export async function validateMagicLink(token: string): Promise<{
     orderId: link.orderId ?? undefined,
   };
 }
-
-import { eq } from "drizzle-orm";
