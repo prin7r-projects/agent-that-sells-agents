@@ -1,7 +1,7 @@
 // apps/app/src/db/schema.ts — Drizzle ORM schema for StampedAgents
 // Per docs/12 §2.2. PostgreSQL 16 via docker-compose.
 
-import { pgTable, text, integer, real, uniqueIndex, index, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, real, uniqueIndex, index, boolean, timestamp, sql } from "drizzle-orm/pg-core";
 
 // ── Customers ──────────────────────────────────────────────────────────────
 export const customers = pgTable("customers", {
@@ -44,7 +44,7 @@ export const orders = pgTable("orders", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("orders_customer_status_idx").on(table.customerId, table.status),
-  uniqueIndex("orders_invoice_id_unique").on(table.invoiceId).where(table.invoiceId.isNotNull()),
+  uniqueIndex("orders_invoice_id_unique").on(table.invoiceId).where(sql`${table.invoiceId} IS NOT NULL`),
 ]);
 
 // ── Licenses ───────────────────────────────────────────────────────────────
