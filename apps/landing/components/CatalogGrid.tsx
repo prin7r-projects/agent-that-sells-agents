@@ -104,13 +104,11 @@ export function CatalogGrid() {
                 agent={{
                   lot: a.id.replace("lot-", ""),
                   name: a.displayName,
-                  role: categoryMap[a.category] as "Sales" | "Support" | "Research" | "Ops",
+                  role: categoryMap[a.category] ?? a.category,
                   blurb: a.blurb,
                   trainedBy: a.provenance.trainedBy,
                   deployedSince: a.deployedSince,
-                  outcomes: [],
                   references: 0,
-                  lastAudit: "",
                 }}
               />
             ))}
