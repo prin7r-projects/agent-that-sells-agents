@@ -99,8 +99,8 @@
 - [x] DemoSheet runs on every agent without errors. ✅ (2026-05-08: 3 demo scripts — lot-042 Anders/SDR, lot-047 Hatfield/Support, lot-051 Vance/Research. useReducer state machine with 4 auto-advancing steps + output renderers)
 - [x] After demo completes, the PricingTier appears with NOWPayments CTAs already wired. ✅ (2026-05-08: Complete state shows CheckoutButton for Trial $99/mo + 'Run again')
 - [x] OwnedFilter renders for logged-in customers, is hidden for unauthenticated. ✅ (2026-05-08: Placeholder text 'Sign in to see your owned agents' — toggle logic deferred to Phase 3 auth)
-- [ ] Mobile layout passes the same content audit as desktop (no overflow, focus visible, demo step navigation usable on a 390×844 viewport).
-- [ ] Lighthouse a11y score on landing >= 95.
+- [x] Mobile layout passes the same content audit as desktop (no overflow, focus visible, demo step navigation usable on a 390×844 viewport). ✅ (2026-05-08: DemoSheet full-screen on mobile, ConciergeRail sticky bottom bar with tap-to-expand)
+- [ ] Lighthouse a11y score on landing >= 95. (DEFERRED to Phase 4 hardening)
 
 **Hand-off context.**
 - The demo-script JSON format is opinionated — keep it stable; if you must rev it, version it as `v2.json`.
