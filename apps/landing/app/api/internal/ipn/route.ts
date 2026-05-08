@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 
 // Dynamic import to avoid bundling DB client in edge runtime
 async function getDb() {
-  const mod = await import("../../../app/src/db/index.js");
+  const mod = await import("../../../../src/db/index.js");
   return { db: mod.db, schema: mod.schema };
 }
 
