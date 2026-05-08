@@ -65,6 +65,41 @@ pnpm test:e2e
 PLAYWRIGHT_BASE_URL=https://agent-that-sells-agents.prin7r.com pnpm test:e2e
 ```
 
+## Eval Runner (Phase 5.2)
+
+The eval runner is a BullMQ worker that runs nightly at 02:00 GMT, evaluating each agent against a hard-coded test corpus and appending rows to the `eval_runs` table.
+
+### Quick test (one-off run)
+
+```bash
+# Requires: DATABASE_URL and REDIS_URL set (see .env.example)
+cd apps/landing
+DATABASE_URL="postgresql://..." REDIS_URL="redis://..." pnpm queue:eval:trigger
+```
+
+This starts a temporary worker, enqueues a single eval job, waits for completion, and exits. Confirm new rows with:
+
+```bash
+psql $DATABASE_URL -c "SELECT agent_id, corpus, score_bps, run_date FROM eval_runs ORDER BY created_at DESC LIMIT 6;"
+```
+
+### Run the worker (long-running)
+
+```bash
+cd apps/landing
+DATABASE_URL="postgresql://..." REDIS_URL="redis://..." pnpm queue:eval
+```
+
+The worker registers a repeatable BullMQ job at cron `0 2 * * *` (UTC) and listens for jobs until stopped.
+
+### Docker Compose
+
+Redis is included in `docker-compose.yml` (preserves data via the `redisdata` volume). Both the eval-runner and digest-runner share the same `redis` service.
+
+```bash
+docker compose up -d redis
+```
+
 ## Deploy
 
 The deploy host is the Prin7r VPS (`144.91.94.91`). The compose file uses host-mode Traefik.
@@ -90,6 +125,7 @@ Traefik picks up the labels and issues a Let's Encrypt cert for the host rule.
 | `NOWPAYMENTS_IPN_SECRET` | Yes* | Webhook HMAC verification |
 | `DB_PASSWORD` | Phase 3+ | PostgreSQL password |
 | `DATABASE_URL` | Phase 3+ | PostgreSQL connection (auto-set in docker-compose) |
+| `REDIS_URL` | Phase 5+ | Redis connection for BullMQ (eval-runner, digest-runner) |
 | `ADMIN_API_KEY` | Phase 3+ | Bearer auth for /api/admin/* |
 | `POSTMARK_API_KEY` | Phase 3+ | Transactional email |
 | `NOTION_TOKEN` | Phase 3+ | Order sync to Notion |
