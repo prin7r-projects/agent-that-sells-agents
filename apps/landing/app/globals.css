@@ -2,17 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   [PROVENANCE_GLOBALS] Apple-gallery refresh — 2026-05-08
+   The catalog is a gallery: pure-white canvas, museum-piece treatment per
+   agent (28px-radius cards, no shadow), enormous display type. Color enters
+   only as the agent's outcome data and the singular azure CTA.
+   See DESIGN.md §1, §4, §5, §15.
+   --------------------------------------------------------------------------- */
+
 @layer base {
   :root {
+    /* Apple-aligned canvas + surface scale */
+    --canvas: #FFFFFF;
+    --fog: #F5F5F7;
+    --snow: #FFFFFF;
+    --silver-mist: #E8E8ED;
+
+    /* Ink scale (Apple Ink/Slate/Graphite/Ash) */
+    --ink: #1D1D1F;
+    --slate: #474747;
+    --graphite: #707070;
+    --ash: #8F8F8F;
+
+    /* Accents */
+    --obsidian: #000000;
+    --azure: #0071E3;        /* singular CTA accent */
+    --cobalt-link: #0066CC;  /* inline links only */
+    --vellum: #FAFAF8;       /* manuscript-like raised surface for cards */
+    --night: #0E0D0B;        /* dark-stage section background */
+
+    /* Legacy aliases preserved for back-compat with existing classnames */
     --paper: #FFFFFF;
-    --ink: #161513;
     --ink-2: #2C2925;
-    --brass: #A88646;
-    --signal: #1F4FE0;
+    --brass: #1D1D1F;        /* re-pointed: brass label colour now reads as ink */
+    --signal: #0071E3;
+    --wax: #F5F5F7;          /* ribbon row remapped to fog */
   }
 
   html {
-    background: var(--paper);
+    background: var(--canvas);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -20,15 +48,20 @@
 
   body {
     font-feature-settings: "ss01", "cv11";
+    font-size: 17px;
+    line-height: 1.47;
+    letter-spacing: -0.003em;
+    background: var(--canvas);
+    color: var(--ink);
   }
 
   ::selection {
-    background: var(--signal);
-    color: var(--paper);
+    background: var(--azure);
+    color: var(--snow);
   }
 
   *:focus-visible {
-    outline: 2px solid var(--signal);
+    outline: 2px solid var(--azure);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -46,12 +79,12 @@
   .lot-label {
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 11px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #A88646;
+    color: var(--graphite);
   }
   .grid-rule {
-    background-image: linear-gradient(to right, rgba(22,21,19,0.06) 1px, transparent 1px);
+    background-image: linear-gradient(to right, rgba(29,29,31,0.06) 1px, transparent 1px);
     background-size: calc(100% / 12) 100%;
   }
 }

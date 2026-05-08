@@ -14,13 +14,16 @@
 
 ## 2. Visual positioning
 
-**Reference points (mood, not copying).**
-- **HashiCorp release pages** — restrained, technical, honest. Tables that read like specs.
-- **Sotheby's catalog** — provenance language, lot numbers, "trained by" attribution.
-- **Bloomberg Terminal** at low saturation — dense data, a single signal-blue accent, no chrome.
-- **Pentagram studio site** — typographic confidence; quiet ornament.
+> A Sotheby's catalog installed on Apple's gallery wall. Every agent gets museum-piece treatment — 28px-radius card, no shadow, the agent's outcome data is the only color note. Pure-white canvas; enormous Inter-Display headlines (96-112px hero) carry the room.
 
-**Anti-references (we do not look like).** ChatGPT marketing, Replit, Lovable, agent.ai, generic "AI marketplace" gradients, robot mascots, neon purple/teal. None of those.
+After the **2026-05-08 Apple-gallery refresh** (see §15), the visual posture is `apple` reference. Hero headline pushed to 96-112px at `-0.022em` tracking; section headings 64-80px; brass `#A88646` and wax `#E9E0CF` retired (they read as warm-paper); ribbon row remapped to fog `#F5F5F7`; signal blue re-pointed to Apple azure `#0071E3` for the singular CTA. The catalog identity (lot numbers, JetBrains-Mono provenance language) is preserved as the "writing inside the gallery."
+
+**Reference points (mood, not copying).**
+- **Apple MacBook product pages** — gallery wall, enormous type, color enters only as product. Apple's centred-stack hero with full-bleed product card below is exactly the new Provenance hero pattern.
+- **Sotheby's catalog** — provenance language, lot numbers, "trained by" attribution. The voice survives the Apple refresh; it now reads inside the gallery cards instead of dressing the page.
+- **HashiCorp release pages** — restrained, technical, honest. Tables that read like specs.
+
+**Anti-references (we do not look like).** ChatGPT marketing, Replit, Lovable, agent.ai, generic "AI marketplace" gradients, robot mascots, neon purple/teal, warm-paper kraft palettes. None of those.
 
 **Positioning statement.** For operators who need named outcomes, Provenance is a vetted catalog of working AI agents that you can demo and buy in under ten minutes — unlike no-code marketplaces, because every agent ships with a provenance record (who trained it, what it has done, what it costs to run).
 
@@ -36,22 +39,25 @@ We follow the **Prin7r Component Library Baseline: ShadCN-first**. Components ar
 
 ## 4. Color tokens
 
-A "ledger" palette: paper, ink, brass, signal. No purple, no teal, no neon. Tokens map to Tailwind via `tailwind.config.ts` and to runtime CSS via `globals.css`.
+After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → fog → snow → silver-mist → ink scale) plus a singular azure CTA. The brass and wax warm-paper accents are retired — Provenance is now a pure-white gallery, not a kraft catalog.
 
-| Token              | Hex        | Role                                                           |
-|--------------------|------------|----------------------------------------------------------------|
-| `paper`            | `#FFFFFF`  | Page background. Slight warmth — not white.                    |
-| `ink`              | `#161513`  | Primary text and chrome. Deep neutral, not pure black.         |
-| `ink-2`            | `#2C2925`  | Secondary text, table borders.                                 |
-| `graphite`         | `#3F3B36`  | Card borders on dark sections.                                 |
-| `brass`            | `#A88646`  | Accent. Used sparingly — provenance ribbons, lot numbers.      |
-| `brass-2`          | `#C9A35E`  | Hover/highlight state for `brass`.                             |
-| `signal`           | `#1F4FE0`  | The single interaction blue. CTAs, focus rings, active tabs.   |
-| `signal-2`         | `#3766F0`  | Hover state for `signal`.                                      |
-| `vermilion`        | `#B5331A`  | Reserved for delete/danger only. Never decorative.             |
-| `wax`              | `#E9E0CF`  | Surface for cards on `paper`.                                  |
-| `vellum`           | `#FAFAF8`  | Surface for elevated cards.                                    |
-| `night`            | `#0E0D0B`  | Dark sections (Provenance, Pricing).                           |
+| Token              | Hex        | Role                                                                       |
+|--------------------|------------|----------------------------------------------------------------------------|
+| `canvas`           | `#FFFFFF`  | Page background, default surface.                                          |
+| `fog`              | `#F5F5F7`  | Section bands (Outcomes, ribbon row), recessed wells.                      |
+| `snow`             | `#FFFFFF`  | Card surfaces on dark stages, raised wells.                                |
+| `silver-mist`      | `#E8E8ED`  | Hairline borders, card outlines, FAQ rules, button-ghost border.           |
+| `ink`              | `#1D1D1F`  | All headline + body text; primary nav labels; section divider.             |
+| `slate`            | `#474747`  | 17px body copy; agent blurb; FAQ answers.                                  |
+| `graphite`         | `#707070`  | Lot labels; ribbon text; meta data; suggested-question text.               |
+| `ash`              | `#8F8F8F`  | Disabled state; fine-grain icon strokes.                                   |
+| `obsidian`         | `#000000`  | Dark stage (Provenance + Pricing sections); maximum-contrast wells.        |
+| `azure`            | `#0071E3`  | Singular CTA fill ("Browse the catalog", "Buy Trial"); selection highlight; focus ring. |
+| `cobalt-link`      | `#0066CC`  | Inline text links only (not button fills).                                 |
+| `vellum`           | `#FAFAF8`  | Manuscript-like raised card surface (Concierge rail, agent cards).         |
+| `night`            | `#0E0D0B`  | Reserved (legacy alias for `obsidian`).                                    |
+
+**Legacy aliases preserved.** `paper`, `brass`, `brass-2`, `signal`, `signal-2`, `wax` still resolve in Tailwind (paper→canvas, brass/brass-2→ink/graphite, signal/signal-2→azure, wax→fog) so existing classnames don't break.
 
 Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of the page is light. We do not flip the entire site.
 
@@ -61,18 +67,19 @@ Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of t
 **Mono.** **JetBrains Mono** (Google Fonts) — `400, 500`. Used for lot numbers, agent IDs, deploy versions, code.
 **Fallbacks.** `ui-sans-serif, system-ui, sans-serif` and `ui-monospace, SFMono-Regular, monospace`.
 
-**Type scale.**
+**Type scale.** Apple-aligned (post-2026-05-08 refresh):
 
-| Role          | Size    | Line | Weight | Tracking | Notes                            |
-|---------------|---------|------|--------|----------|----------------------------------|
-| Display XL    | 64 / 80 | 0.95 | 600    | -0.02em  | Hero only.                       |
-| Display L     | 48 / 56 | 1.0  | 600    | -0.02em  | Section headings.                |
-| Heading M     | 28      | 1.15 | 600    | -0.01em  | Subsections.                     |
-| Heading S     | 20      | 1.25 | 600    | -0.005em | Cards, list headers.             |
-| Body L        | 18      | 1.55 | 400    | 0        | Long copy.                       |
-| Body M        | 16      | 1.55 | 400    | 0        | Default.                         |
-| Body S        | 14      | 1.5  | 500    | 0.005em  | Microcopy.                       |
-| Mono          | 13      | 1.4  | 500    | 0        | Lot/agent IDs.                   |
+| Role          | Size    | Line | Weight | Tracking  | Notes                                          |
+|---------------|---------|------|--------|-----------|------------------------------------------------|
+| Display XL    | 96-112  | 1.04 | 700    | -0.022em  | Hero only — Apple display posture.             |
+| Display L     | 64-80   | 1.04 | 700    | -0.022em  | Section headings.                              |
+| Heading M     | 40      | 1.17 | 600    | -0.015em  | Subsections.                                   |
+| Heading S     | 22-28   | 1.21 | 600    | -0.016em  | Cards, list headers.                           |
+| Subheading    | 20-22   | 1.4  | 300    | -0.010em  | Lede paragraphs (Apple "lighter than headline" rule). |
+| Body L        | 17      | 1.47 | 400    | -0.003em  | Long copy.                                     |
+| Body M        | 15      | 1.55 | 400    | -0.003em  | Default body.                                  |
+| Body S        | 13-14   | 1.5  | 400    | 0         | Microcopy.                                     |
+| Mono          | 11-13   | 1.4  | 500    | 0.18em    | Lot/agent IDs (uppercase, opens to 0.18em).    |
 
 ## 6. Spacing, radius, shadows, and borders
 
@@ -162,3 +169,4 @@ If a section of the design changes, the screenshots are re-captured and committe
 ## 15. Changelog
 
 - **2026-05-08** — v0.1. Initial spec drafted alongside the v1 landing build. All 15 sections decisions made; no `TBD` left.
+- **2026-05-08 design refresh — `apple` (Gallery wall)**. Lifted Apple's MacBook product-page direction. Hero pushed from 44-68px to **96-112px** at `-0.022em` tracking; section headings 64-80px. Brass `#A88646` and wax `#E9E0CF` warm-paper accents retired — palette swapped to Apple-aligned canvas/fog/snow/silver-mist scale. Signal blue re-pointed to Apple azure `#0071E3` for the singular CTA; rounded-square buttons swapped to **999px pills** with opacity-only hover. Card radius `10px → 28px` (Apple feature card); zero shadows (color-only elevation). Provenance + Pricing dark stage swapped to obsidian `#000000`. Catalog filter chips swapped to pill geometry. Section pads bumped to `py-24 lg:py-32`. Reference: `/Users/keer/projects/prin7r/design-references/apple.md`. Touched files: `apps/landing/app/{globals.css,page.tsx}`, `apps/landing/tailwind.config.ts`, `apps/landing/components/{SectionHeading,AgentCard,SiteHeader,SiteFooter,PricingTier,ConciergeRail,ProvenanceTable}.tsx`, `DESIGN.md` §1, §4, §5, §15.

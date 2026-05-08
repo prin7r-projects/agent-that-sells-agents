@@ -3,26 +3,26 @@ export function ConciergeRail() {
     <aside
       id="concierge"
       aria-label="Concierge agent"
-      className="rounded-[10px] border border-ink/10 bg-vellum p-5 flex flex-col gap-4 min-h-[420px]"
+      className="rounded-[28px] border border-silver-mist bg-vellum p-6 flex flex-col gap-4 min-h-[440px]"
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span aria-hidden className="block w-2 h-2 rounded-sm bg-signal" />
+          <span aria-hidden className="block w-2 h-2 rounded-full bg-azure" />
           <div>
-            <div className="text-[14px] font-semibold tracking-tight">Concierge</div>
+            <div className="text-[15px] font-semibold tracking-[-0.010em] text-ink">Concierge</div>
             <div className="lot-label">ON · LOT 001 META</div>
           </div>
         </div>
-        <span className="text-[11px] font-mono text-ink-2">avg reply 18s</span>
+        <span className="text-[11px] font-mono text-graphite">avg reply 18s</span>
       </header>
 
       <div className="flex flex-col gap-3 flex-1">
         <Bubble who="concierge">
-          Hi — I run the catalog. Tell me your function and I'll surface the
+          Hi — I run the catalog. Tell me your function and I&rsquo;ll surface the
           two lots that best fit. Or pick one yourself below.
         </Bubble>
         <Bubble who="visitor">
-          We're a 7M ARR SaaS. Two SDRs, no inbound team yet. What fits?
+          We&rsquo;re a 7M ARR SaaS. Two SDRs, no inbound team yet. What fits?
         </Bubble>
         <Bubble who="concierge">
           Lot 042 — Anders — works the inbox for 18 B2B teams. 30-day reply rate
@@ -32,7 +32,7 @@ export function ConciergeRail() {
         <Bubble who="concierge" typing />
       </div>
 
-      <div className="border-t border-ink/10 pt-4 flex flex-col gap-2">
+      <div className="border-t border-silver-mist pt-4 flex flex-col gap-2">
         <div className="lot-label">Suggested questions</div>
         <ul className="flex flex-col gap-1.5 text-[13px]">
           <li>
@@ -42,12 +42,12 @@ export function ConciergeRail() {
             <Suggested>Can I keep the model in our VPC?</Suggested>
           </li>
           <li>
-            <Suggested>What's the rev-share if I'm an agency partner?</Suggested>
+            <Suggested>What&rsquo;s the rev-share if I&rsquo;m an agency partner?</Suggested>
           </li>
         </ul>
       </div>
 
-      <div className="border-t border-ink/10 pt-4">
+      <div className="border-t border-silver-mist pt-4">
         <label htmlFor="concierge-input" className="lot-label block mb-2">
           Reply to Concierge
         </label>
@@ -56,16 +56,16 @@ export function ConciergeRail() {
             id="concierge-input"
             type="text"
             placeholder="What does your week look like?"
-            className="flex-1 bg-paper border border-ink/15 rounded-sm px-3 py-2 text-[13px] focus:border-signal focus:outline-none"
+            className="flex-1 bg-snow border border-silver-mist rounded-full px-4 py-2 text-[14px] focus:border-azure focus:outline-none"
           />
           <button
             type="button"
-            className="bg-ink text-paper text-[13px] font-medium px-3 py-2 rounded-sm hover:bg-signal transition-colors"
+            className="bg-ink text-snow text-[14px] font-medium px-4 py-2 rounded-full hover:opacity-88 transition-opacity"
           >
             Send
           </button>
         </div>
-        <p className="text-[11px] text-ink-2 mt-2 leading-relaxed">
+        <p className="text-[12px] text-graphite mt-2 leading-relaxed">
           The Concierge is a scripted demo on the public landing. Real
           replies are answered by the named operator on your tier.
         </p>
@@ -89,15 +89,15 @@ function Bubble({
       <div
         className={
           isConcierge
-            ? "max-w-[92%] rounded-[10px] bg-paper border border-ink/10 px-3.5 py-2.5 text-[13px] leading-relaxed"
-            : "max-w-[88%] rounded-[10px] bg-ink text-paper px-3.5 py-2.5 text-[13px] leading-relaxed"
+            ? "max-w-[92%] rounded-[18px] bg-snow border border-silver-mist px-4 py-2.5 text-[14px] leading-relaxed text-slate"
+            : "max-w-[88%] rounded-[18px] bg-ink text-snow px-4 py-2.5 text-[14px] leading-relaxed"
         }
       >
         {typing ? (
           <span className="inline-flex gap-1 py-1" aria-label="Concierge is typing">
-            <span aria-hidden className="dot-1 inline-block w-1.5 h-1.5 rounded-full bg-ink-2" />
-            <span aria-hidden className="dot-2 inline-block w-1.5 h-1.5 rounded-full bg-ink-2" />
-            <span aria-hidden className="dot-3 inline-block w-1.5 h-1.5 rounded-full bg-ink-2" />
+            <span aria-hidden className="dot-1 inline-block w-1.5 h-1.5 rounded-full bg-graphite" />
+            <span aria-hidden className="dot-2 inline-block w-1.5 h-1.5 rounded-full bg-graphite" />
+            <span aria-hidden className="dot-3 inline-block w-1.5 h-1.5 rounded-full bg-graphite" />
           </span>
         ) : (
           children
@@ -111,9 +111,9 @@ function Suggested({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="button"
-      className="text-left w-full text-ink-2 hover:text-signal transition-colors"
+      className="text-left w-full text-slate hover:text-ink transition-colors"
     >
-      <span className="text-brass mr-2">›</span>
+      <span className="text-graphite mr-2">›</span>
       {children}
     </button>
   );

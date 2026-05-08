@@ -6,34 +6,32 @@ export function PricingTierCard({ tier }: { tier: Tier }) {
   return (
     <article
       className={cn(
-        "rounded-[10px] border p-7 flex flex-col gap-5 transition-colors",
+        "rounded-[28px] border p-7 flex flex-col gap-5 transition-colors",
         tier.highlight
-          ? "bg-paper text-ink border-brass"
-          : "bg-night/40 text-paper border-graphite hover:border-brass",
+          ? "bg-snow text-ink border-ink"
+          : "bg-snow/[0.04] text-snow border-snow/15 hover:border-snow/35",
       )}
     >
       <header className="flex items-baseline justify-between">
         <div>
-          <div className={cn("lot-label", tier.highlight ? "text-brass" : "text-brass-2")}>
+          <div className={cn("lot-label", tier.highlight ? "text-graphite" : "text-snow/60")}>
             {tier.id.toUpperCase()}
           </div>
-          <h3 className="text-[28px] font-semibold tracking-tight mt-1">{tier.name}</h3>
+          <h3 className="text-[28px] font-semibold tracking-[-0.016em] mt-2">{tier.name}</h3>
         </div>
       </header>
       <div>
-        <div className={cn("text-[40px] font-semibold tracking-tight", tier.highlight && "text-ink")}>
+        <div className={cn("text-[40px] font-bold tracking-[-0.022em]", tier.highlight ? "text-ink" : "text-snow")}>
           {tier.priceLabel}
         </div>
-        <div className={cn("text-[13px]", tier.highlight ? "text-ink-2" : "text-paper/70")}>
+        <div className={cn("text-[13px]", tier.highlight ? "text-graphite" : "text-snow/60")}>
           {tier.cadence}
         </div>
       </div>
-      <ul className="flex flex-col gap-2 text-[14px] flex-1">
+      <ul className="flex flex-col gap-2.5 text-[15px] flex-1">
         {tier.features.map((f) => (
           <li key={f} className="flex gap-3 items-start">
-            <span aria-hidden className="text-brass mt-0.5 leading-none">
-              ◆
-            </span>
+            <span aria-hidden className={cn("mt-2 inline-block w-2 h-px", tier.highlight ? "bg-ink/40" : "bg-snow/40")} />
             <span>{f}</span>
           </li>
         ))}
@@ -42,19 +40,19 @@ export function PricingTierCard({ tier }: { tier: Tier }) {
         tierId={tier.id}
         label={tier.ctaLabel}
         className={cn(
-          "text-[14px] font-semibold px-4 py-3 rounded-sm transition-colors",
+          "text-[15px] font-medium px-6 py-3 rounded-full transition-opacity",
           tier.highlight
-            ? "bg-signal text-paper hover:bg-signal-2"
-            : "bg-paper text-ink hover:bg-brass-2",
+            ? "bg-azure text-snow hover:opacity-88"
+            : "bg-snow text-ink hover:opacity-88",
         )}
       />
       <p
         className={cn(
           "text-[11px] font-mono",
-          tier.highlight ? "text-ink-2" : "text-paper/50",
+          tier.highlight ? "text-graphite" : "text-snow/50",
         )}
       >
-        Outcome pricing available on Pro and Enterprise; capped at 1.5×.
+        Outcome pricing available on Pro and Enterprise; capped at 1.5x.
       </p>
     </article>
   );

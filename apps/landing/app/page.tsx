@@ -26,61 +26,64 @@ export default function HomePage() {
 function Hero() {
   const peek = agents.slice(0, 3);
   return (
-    <section className="border-b border-ink/10">
-      <div className="max-w-content mx-auto px-6 lg:px-12 pt-16 lg:pt-24 pb-20 lg:pb-28 grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-7">
+    <section className="border-b border-silver-mist bg-canvas">
+      <div className="max-w-content mx-auto px-6 lg:px-12 pt-20 lg:pt-32 pb-12 lg:pb-16">
+        {/* Apple-style centered hero: lot label, enormous headline, lede, CTAs */}
+        <div className="text-center mx-auto max-w-5xl">
           <div className="lot-label">LOT 001 · OPENING</div>
-          <h1 className="mt-3 text-[44px] sm:text-[56px] lg:text-[68px] font-semibold leading-[0.98] tracking-tightest">
+          <h1 className="mt-6 mx-auto max-w-[18ch] text-[56px] sm:text-[80px] lg:text-[112px] font-bold leading-[1.04] tracking-[-0.022em] text-ink">
             A vetted shelf of working AI agents.
-            <br />
-            <span className="text-ink-2">Sold by an agent.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-[18px] leading-relaxed text-ink-2">
-            Six agents on the shelf — sales SDR, support concierge, research analyst,
-            ops auditor. Each one ships with a real provenance record: who trained it,
-            what it shipped last month, and a price tag. Demo it in your data, vet it,
-            buy it in under ten minutes. The Concierge on your right runs the demo.
+          <p className="mt-8 mx-auto max-w-[44ch] text-[20px] lg:text-[22px] font-light leading-[1.4] tracking-[-0.010em] text-graphite">
+            Sold by an agent. Six agents on the shelf — sales SDR, support concierge,
+            research analyst, ops auditor. Demo it in your data, vet it, buy it in
+            under ten minutes.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#catalog"
-              className="bg-signal text-paper text-[14px] font-semibold px-5 py-3 rounded-sm hover:bg-signal-2 transition-colors"
+              className="bg-azure text-snow text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full hover:opacity-88 transition-opacity"
             >
               Browse the catalog
             </a>
             <a
               href="#concierge"
-              className="text-[14px] font-semibold px-5 py-3 rounded-sm border border-ink/20 hover:border-signal hover:text-signal transition-colors"
+              className="text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
             >
               Talk to the Concierge
             </a>
-            <span className="lot-label">avg time-to-buy · under 10 min</span>
           </div>
+          <p className="mt-7 lot-label">avg time-to-buy · under 10 min</p>
+        </div>
+      </div>
 
-          <div className="mt-12 relative h-[260px] sm:h-[300px]">
+      {/* Below-fold: gallery card stack of 3 peek agents on the left, Concierge on the right */}
+      <div className="max-w-content mx-auto px-6 lg:px-12 pb-20 lg:pb-28 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="lg:col-span-7">
+          <div className="relative h-[300px] sm:h-[340px]">
             <div aria-hidden className="absolute inset-0">
               {peek.map((a, i) => (
                 <div
                   key={a.lot}
-                  className="absolute rounded-[10px] bg-vellum border border-ink/10 shadow-[0_1px_0_rgba(22,21,19,0.04),0_0_0_1px_rgba(22,21,19,0.05)] p-5 w-[280px] sm:w-[340px]"
+                  className="absolute rounded-[28px] bg-vellum border border-silver-mist p-6 w-[280px] sm:w-[360px]"
                   style={{
-                    left: `${i * 56}px`,
-                    top: `${i * 18}px`,
-                    transform: `rotate(${(i - 1) * 1.6}deg)`,
+                    left: `${i * 64}px`,
+                    top: `${i * 22}px`,
+                    transform: `rotate(${(i - 1) * 1.4}deg)`,
                     zIndex: 10 - i,
                   }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="lot-label">LOT {a.lot} · {a.role.toUpperCase()}</div>
-                    <span className="text-[11px] font-mono text-ink-2">
+                    <span className="text-[11px] font-mono text-graphite">
                       {a.deployedSince}
                     </span>
                   </div>
-                  <div className="text-[18px] font-semibold mt-1">{a.name}</div>
-                  <div className="text-[12px] text-ink-2 mt-1 line-clamp-2">
+                  <div className="text-[20px] font-semibold mt-2 tracking-[-0.016em]">{a.name}</div>
+                  <div className="text-[14px] text-slate mt-1 line-clamp-2">
                     {a.blurb}
                   </div>
-                  <div className="mt-3 flex items-center gap-3 text-[11px] text-ink-2 font-mono">
+                  <div className="mt-4 flex items-center gap-3 text-[11px] text-graphite font-mono">
                     <span>{a.outcomes[0].label}: {a.outcomes[0].value}</span>
                     <span>·</span>
                     <span>{a.outcomes[1].label}: {a.outcomes[1].value}</span>
@@ -107,12 +110,12 @@ function RibbonRow() {
     { lot: "058", text: "Lermontov, Inbound — 188 demos booked in April." },
   ];
   return (
-    <section aria-label="Provenance ribbons" className="border-b border-ink/10 bg-wax/60">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section aria-label="Provenance ribbons" className="border-b border-silver-mist bg-fog">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {ribbons.map((r) => (
           <div key={r.lot} className="flex items-baseline gap-3 text-[13px]">
             <span className="lot-label whitespace-nowrap">LOT {r.lot}</span>
-            <span className="text-ink-2 leading-snug">{r.text}</span>
+            <span className="text-slate leading-snug">{r.text}</span>
           </div>
         ))}
       </div>
@@ -122,23 +125,23 @@ function RibbonRow() {
 
 function Catalog() {
   return (
-    <section id="catalog" className="border-b border-ink/10">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-20 lg:py-28">
+    <section id="catalog" className="border-b border-silver-mist bg-canvas">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           lot="02"
           label="CATALOG"
           title="Six agents on the shelf, each with a price tag."
           description="Filter by function — Sales, Support, Research, Ops. Each card lists the named operator, when the agent was deployed, and the last 30 days of outcomes."
         />
-        <div className="flex gap-2 mb-8 text-[13px] flex-wrap">
+        <div className="flex gap-2 mb-10 text-[14px] flex-wrap">
           {["All", "Sales", "Support", "Research", "Ops"].map((f, i) => (
             <button
               key={f}
               type="button"
               className={
                 i === 0
-                  ? "px-3 py-1.5 rounded-sm bg-ink text-paper"
-                  : "px-3 py-1.5 rounded-sm border border-ink/15 hover:border-signal hover:text-signal transition-colors"
+                  ? "px-4 py-2 rounded-full bg-ink text-snow"
+                  : "px-4 py-2 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
               }
             >
               {f}
@@ -157,8 +160,8 @@ function Catalog() {
 
 function Provenance() {
   return (
-    <section id="provenance" className="bg-night text-paper">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-20 lg:py-28">
+    <section id="provenance" className="bg-obsidian text-snow">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           dark
           lot="03"
@@ -167,7 +170,7 @@ function Provenance() {
           description="No black boxes. Every agent ships with the corpus it was trained on, the model family it runs on, and the evaluation method that catches drift before you do."
         />
         <ProvenanceTable />
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 text-[14px] text-paper/80">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-[15px] text-snow/75">
           <Pillar
             title="Named operators"
             body="Each agent is owned by a real human. Their handle is on the page. Drift is their problem first, yours second."
@@ -188,8 +191,8 @@ function Provenance() {
 
 function Pillar({ title, body }: { title: string; body: string }) {
   return (
-    <div className="border-l-2 border-brass pl-4">
-      <div className="text-[15px] font-semibold text-paper">{title}</div>
+    <div className="border-l-2 border-snow/30 pl-5">
+      <div className="text-[16px] font-semibold text-snow tracking-[-0.010em]">{title}</div>
       <p className="mt-2 leading-relaxed">{body}</p>
     </div>
   );
@@ -214,8 +217,8 @@ function Outcomes() {
     },
   ];
   return (
-    <section id="outcomes" className="border-b border-ink/10">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-20 lg:py-28">
+    <section id="outcomes" className="border-b border-silver-mist bg-fog">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           lot="04"
           label="OUTCOMES"
@@ -225,11 +228,11 @@ function Outcomes() {
           {items.map((it) => (
             <article
               key={it.lot}
-              className="rounded-[10px] bg-vellum border border-ink/10 p-6 flex flex-col gap-3"
+              className="rounded-[28px] bg-snow border border-silver-mist p-7 flex flex-col gap-3"
             >
               <div className="lot-label">LOT {it.lot} · 30D</div>
-              <h3 className="text-[18px] font-semibold leading-snug">{it.title}</h3>
-              <p className="text-[14px] text-ink-2 leading-relaxed">{it.detail}</p>
+              <h3 className="text-[19px] font-semibold tracking-[-0.016em] leading-snug">{it.title}</h3>
+              <p className="text-[15px] text-slate leading-relaxed">{it.detail}</p>
             </article>
           ))}
         </div>
@@ -240,8 +243,8 @@ function Outcomes() {
 
 function Pricing() {
   return (
-    <section id="pricing" className="bg-night text-paper">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-20 lg:py-28">
+    <section id="pricing" className="bg-obsidian text-snow">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           dark
           lot="05"
@@ -295,18 +298,18 @@ function Faq() {
     },
   ];
   return (
-    <section id="faq" className="border-b border-ink/10">
-      <div className="max-w-content mx-auto px-6 lg:px-12 py-20 lg:py-28">
+    <section id="faq" className="border-b border-silver-mist bg-canvas">
+      <div className="max-w-content mx-auto px-6 lg:px-12 py-24 lg:py-32">
         <SectionHeading
           lot="06"
           label="FAQ"
           title="Eight honest answers."
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
           {faqs.map((f) => (
             <div key={f.q}>
-              <h3 className="text-[16px] font-semibold tracking-tight">{f.q}</h3>
-              <p className="mt-2 text-[14px] text-ink-2 leading-relaxed">{f.a}</p>
+              <h3 className="text-[18px] font-semibold tracking-[-0.016em]">{f.q}</h3>
+              <p className="mt-3 text-[15px] text-slate leading-relaxed">{f.a}</p>
             </div>
           ))}
         </div>

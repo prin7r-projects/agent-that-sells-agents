@@ -38,31 +38,31 @@ const trainingMeta: Record<
 
 export function ProvenanceTable() {
   return (
-    <div className="overflow-x-auto rounded-[10px] border border-graphite">
+    <div className="overflow-x-auto rounded-[28px] border border-snow/15">
       <table className="w-full text-[14px]">
-        <thead className="text-paper/60">
-          <tr className="border-b-2 border-graphite">
-            <th className="text-left p-4 font-medium">Agent</th>
-            <th className="text-left p-4 font-medium">Training corpus</th>
-            <th className="text-left p-4 font-medium">Model family</th>
-            <th className="text-left p-4 font-medium">Evaluation method</th>
-            <th className="text-left p-4 font-medium font-mono text-[12px]">Last audit</th>
+        <thead className="text-snow/55">
+          <tr className="border-b border-snow/15">
+            <th className="text-left p-5 font-medium">Agent</th>
+            <th className="text-left p-5 font-medium">Training corpus</th>
+            <th className="text-left p-5 font-medium">Model family</th>
+            <th className="text-left p-5 font-medium">Evaluation method</th>
+            <th className="text-left p-5 font-medium font-mono text-[12px]">Last audit</th>
           </tr>
         </thead>
         <tbody>
           {agents.map((a) => {
             const meta = trainingMeta[a.lot];
             return (
-              <tr key={a.lot} className="border-b border-graphite/60">
-                <td className="p-4 align-top">
-                  <div className="lot-label text-brass-2">LOT {a.lot}</div>
-                  <div className="font-semibold">{a.name}</div>
-                  <div className="text-[12px] text-paper/60">{a.role}</div>
+              <tr key={a.lot} className="border-b border-snow/10 last:border-b-0">
+                <td className="p-5 align-top">
+                  <div className="lot-label text-snow/55">LOT {a.lot}</div>
+                  <div className="font-semibold text-snow">{a.name}</div>
+                  <div className="text-[12px] text-snow/55">{a.role}</div>
                 </td>
-                <td className="p-4 align-top text-paper/85">{meta?.corpus}</td>
-                <td className="p-4 align-top text-paper/85">{meta?.modelFamily}</td>
-                <td className="p-4 align-top text-paper/85">{meta?.eval}</td>
-                <td className="p-4 align-top font-mono text-[12px] text-paper/85">
+                <td className="p-5 align-top text-snow/80">{meta?.corpus}</td>
+                <td className="p-5 align-top text-snow/80">{meta?.modelFamily}</td>
+                <td className="p-5 align-top text-snow/80">{meta?.eval}</td>
+                <td className="p-5 align-top font-mono text-[12px] text-snow/80">
                   {a.lastAudit}
                 </td>
               </tr>
