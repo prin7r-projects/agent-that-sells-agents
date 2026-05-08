@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { validateApiKey, getBearerToken } from "@/lib/server/auth";
+import { validateApiKey, validateAdminToken, getBearerToken } from "@/lib/server/auth";
+import { OrderService } from "@/lib/server/orders";
 import { isFlagEnabled, recordFlagEvent } from "@/lib/server/feature-flags";
 
 export const runtime = "nodejs";
@@ -11,9 +12,10 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   const token = getBearerToken(request);
   const auth = await validateApiKey(token);
-  if (!auth.valid) {
+  const isAdmin = validateAdminToken(request.headers.get("authorization"));
+  if (!auth.valid && !isAdmin) {
     return NextResponse.json(
-      { error: { code: "unauthorized", message: "Valid API key required." } },
+      { error: { code: "unauthorized", message: "Valid API key or admin token required." } },
       { status: 401 },
     );
   }
@@ -51,8 +53,8 @@ export async function POST(request: Request) {
   const customerId = body.customerId ?? auth.accountId ?? "anonymous";
   const customerTier = body.customerTier ?? "pro"; // default to pro for toggle eligibility
 
-  // Feature-flag gating
-  const flagOn = isFlagEnabled("outcomePricingToggle", customerId, customerTier);
+  // Feature-flag gating (admins bypass)
+  const flagOn = isAdmin || isFlagEnabled("outcomePricingToggle", customerId, customerTier);
 
   // Log exposure on every request (idempotent pipe)
   recordFlagEvent("outcomePricingToggle", customerId, "exposed", {
@@ -76,6 +78,15 @@ export async function POST(request: Request) {
   const effectiveAt = new Date().toISOString();
   const cap = body.cap ?? (body.mode === "outcome" ? 1.5 : undefined);
 
+  // Persist billing mode change
+  const updated = await OrderService.updateBillingMode(body.orderId, body.mode, cap);
+  if (!updated) {
+    return NextResponse.json(
+      { error: { code: "order_not_found", message: `Order ${body.orderId} not found.` } },
+      { status: 404 },
+    );
+  }
+
   // Log conversion (mode switch)
   recordFlagEvent("outcomePricingToggle", customerId, "converted", {
     orderId: body.orderId,
@@ -84,7 +95,7 @@ export async function POST(request: Request) {
   });
 
   console.log(
-    `[STAMPED_AGENTS_BILLING] order=${body.orderId} mode=${body.mode} cap=${cap} account=${auth.accountId}`,
+    `[STAMPED_AGENTS_BILLING] order=${body.orderId} mode=${body.mode} cap=${cap} account=${auth.accountId ?? "admin"}`,
   );
 
   return NextResponse.json({
