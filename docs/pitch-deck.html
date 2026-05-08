@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Provenance — Pitch Deck</title>
+  <style>
+    :root {
+      --paper: #F4EFE6;
+      --ink: #161513;
+      --ink-2: #2C2925;
+      --brass: #A88646;
+      --signal: #1F4FE0;
+      --wax: #E9E0CF;
+      --night: #0E0D0B;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", "Inter Display", ui-sans-serif, system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-feature-settings: "ss01", "cv11";
+    }
+    .deck {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 32px;
+    }
+    .slide {
+      min-height: 540px;
+      padding: 56px 56px;
+      margin-bottom: 48px;
+      border: 1px solid rgba(22,21,19,0.12);
+      border-radius: 14px;
+      background: #FBF7EE;
+      position: relative;
+    }
+    .slide.dark {
+      background: var(--night);
+      color: var(--paper);
+      border-color: #2A2723;
+    }
+    .lot {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: var(--brass);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 56px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      margin: 0 0 24px;
+    }
+    h2 {
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      font-weight: 600;
+      margin: 0 0 24px;
+    }
+    p { font-size: 18px; line-height: 1.55; margin: 0 0 12px; }
+    ul { font-size: 18px; line-height: 1.7; padding-left: 24px; margin: 0 0 12px; }
+    li { margin-bottom: 8px; }
+    .accent { color: var(--signal); }
+    .brass { color: var(--brass); }
+    table { width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 16px; }
+    th, td {
+      text-align: left;
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(22,21,19,0.12);
+    }
+    th { font-weight: 500; color: var(--ink-2); }
+    .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; }
+    .footer {
+      position: absolute;
+      bottom: 24px; left: 56px; right: 56px;
+      display: flex; justify-content: space-between;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--ink-2);
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+    .slide.dark .footer { color: var(--paper); }
+    .ask {
+      font-size: 22px;
+      line-height: 1.4;
+      max-width: 720px;
+    }
+    .num { font-family: "JetBrains Mono", monospace; color: var(--brass); }
+    @media print {
+      .slide { page-break-after: always; min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- 1 -->
+    <section class="slide">
+      <div class="lot">Slide 01</div>
+      <h1>Provenance</h1>
+      <p style="font-size:22px">A vetted shelf of working AI agents. Sold by an agent.</p>
+      <p class="mono brass">LOT 001 · 2026 · Prin7r Wave 2</p>
+      <div class="footer"><span>PROVENANCE</span><span>01 / 10</span></div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide">
+      <div class="lot">Slide 02 — Problem</div>
+      <h2>Operators are tired of pilots</h2>
+      <ul>
+        <li>Custom builds drift after 90 days. Nobody owns retraining.</li>
+        <li>Agent marketplaces sell prompt wrappers, not provenance.</li>
+        <li>Big-co AI suites take six months to land.</li>
+        <li>"ChatGPT with custom instructions" doesn't scale beyond one human.</li>
+      </ul>
+      <div class="footer"><span>PROVENANCE</span><span>02 / 10</span></div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide">
+      <div class="lot">Slide 03 — Why now</div>
+      <h2>Three things changed</h2>
+      <ul>
+        <li>Agents are real workloads now, not demos.</li>
+        <li>Buyers are exhausted by "explore" UIs.</li>
+        <li>Stablecoin rails make a $99 international Trial trivial.</li>
+        <li>Eval is finally public-facing per agent.</li>
+      </ul>
+      <div class="footer"><span>PROVENANCE</span><span>03 / 10</span></div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide">
+      <div class="lot">Slide 04 — Product</div>
+      <h2>Catalog. Concierge. Checkout.</h2>
+      <p>Six lots in the catalog. A concierge agent on the landing answers questions and walks the buyer to a hosted invoice.</p>
+      <p class="accent" style="font-size:22px;font-weight:500">Demo. Vet. Buy. Under ten minutes.</p>
+      <div class="footer"><span>PROVENANCE</span><span>04 / 10</span></div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide">
+      <div class="lot">Slide 05 — Provenance, in one card</div>
+      <h2>Lot 042 — Anders, SDR</h2>
+      <table>
+        <tr><th>Trained by</th><td>Mira Rao</td></tr>
+        <tr><th>Deployed since</th><td class="mono">2026-02-04</td></tr>
+        <tr><th>30-day outcomes</th><td>312 sends · 42% reply · 8 meetings</td></tr>
+        <tr><th>References</th><td>18 named B2B teams</td></tr>
+        <tr><th>Last audit</th><td class="mono">2026-04-30</td></tr>
+      </table>
+      <div class="footer"><span>PROVENANCE</span><span>05 / 10</span></div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide dark">
+      <div class="lot">Slide 06 — Pricing</div>
+      <h2>Trial · Pro · Enterprise</h2>
+      <ul>
+        <li><span class="num">$99/mo</span> — Trial. One agent, 500 actions, single seat.</li>
+        <li><span class="num">$499/mo</span> — Pro. Three agents, 5k actions, named operator, monthly retrain.</li>
+        <li><span class="num">$4,800/yr+</span> — Enterprise. Unlimited catalog, 50k actions, 99.5% SLO.</li>
+      </ul>
+      <p style="margin-top:24px">Crypto stablecoin (USDT/USDC via NOWPayments) is the v1 rail.</p>
+      <div class="footer"><span>PROVENANCE</span><span>06 / 10</span></div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide">
+      <div class="lot">Slide 07 — Distribution</div>
+      <h2>Where Mira already lives</h2>
+      <ul>
+        <li>Peer Slack DMs (warm intros).</li>
+        <li>Pavilion · RevGenius · RevOps Co-op weekly lot drops.</li>
+        <li>Our own SDR agent eats its own dog food.</li>
+        <li>One newsletter sponsorship per quarter.</li>
+      </ul>
+      <div class="footer"><span>PROVENANCE</span><span>07 / 10</span></div>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide">
+      <div class="lot">Slide 08 — Why us</div>
+      <h2>Prin7r builds productized offers weekly</h2>
+      <ul>
+        <li>Wave 2 ships one productized offer per week.</li>
+        <li>Operators trust catalogs more than marketplaces.</li>
+        <li>The named operators are already in-house.</li>
+      </ul>
+      <div class="footer"><span>PROVENANCE</span><span>08 / 10</span></div>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide">
+      <div class="lot">Slide 09 — 90-day plan</div>
+      <h2>$12k MRR by week 12</h2>
+      <ul>
+        <li><span class="num">Week 1</span> — Catalog live. First Concierge demo.</li>
+        <li><span class="num">Week 4</span> — Two paid lots; two named operators public.</li>
+        <li><span class="num">Week 8</span> — Ten Trials, three Pros, $5k MRR.</li>
+        <li><span class="num">Week 12</span> — One Enterprise; agency partner live; $12k MRR.</li>
+      </ul>
+      <div class="footer"><span>PROVENANCE</span><span>09 / 10</span></div>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide dark">
+      <div class="lot">Slide 10 — Ask</div>
+      <h2>$250k pre-seed at $5M cap</h2>
+      <p class="ask">Nine months of runway. Target: $25k MRR, five named lots, two agency partners reselling. One full-time hire — a named operator who owns Lot 047.</p>
+      <p class="mono brass" style="margin-top:32px">PROVENANCE · LOT 001 · 2026</p>
+      <div class="footer"><span>PROVENANCE</span><span>10 / 10</span></div>
+    </section>
+
+  </div>
+</body>
+</html>
