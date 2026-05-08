@@ -1,7 +1,8 @@
 // apps/app/src/db/schema.ts — Drizzle ORM schema for StampedAgents
 // Per docs/12 §2.2. PostgreSQL 16 via docker-compose.
 
-import { pgTable, text, integer, real, uniqueIndex, index, boolean, timestamp, sql } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, real, uniqueIndex, index, boolean, timestamp } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // ── Customers ──────────────────────────────────────────────────────────────
 export const customers = pgTable("customers", {
