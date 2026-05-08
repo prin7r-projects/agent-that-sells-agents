@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F4EFE6",
+        paper: "#FFFFFF",
         ink: "#161513",
         "ink-2": "#2C2925",
         graphite: "#3F3B36",
@@ -19,7 +19,7 @@ const config: Config = {
         "signal-2": "#3766F0",
         vermilion: "#B5331A",
         wax: "#E9E0CF",
-        vellum: "#FBF7EE",
+        vellum: "#FAFAF8",
         night: "#0E0D0B",
       },
       fontFamily: {

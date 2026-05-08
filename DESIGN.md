@@ -40,7 +40,7 @@ A "ledger" palette: paper, ink, brass, signal. No purple, no teal, no neon. Toke
 
 | Token              | Hex        | Role                                                           |
 |--------------------|------------|----------------------------------------------------------------|
-| `paper`            | `#F4EFE6`  | Page background. Slight warmth — not white.                    |
+| `paper`            | `#FFFFFF`  | Page background. Slight warmth — not white.                    |
 | `ink`              | `#161513`  | Primary text and chrome. Deep neutral, not pure black.         |
 | `ink-2`            | `#2C2925`  | Secondary text, table borders.                                 |
 | `graphite`         | `#3F3B36`  | Card borders on dark sections.                                 |
@@ -50,7 +50,7 @@ A "ledger" palette: paper, ink, brass, signal. No purple, no teal, no neon. Toke
 | `signal-2`         | `#3766F0`  | Hover state for `signal`.                                      |
 | `vermilion`        | `#B5331A`  | Reserved for delete/danger only. Never decorative.             |
 | `wax`              | `#E9E0CF`  | Surface for cards on `paper`.                                  |
-| `vellum`           | `#FBF7EE`  | Surface for elevated cards.                                    |
+| `vellum`           | `#FAFAF8`  | Surface for elevated cards.                                    |
 | `night`            | `#0E0D0B`  | Dark sections (Provenance, Pricing).                           |
 
 Dark mode is reserved for the `Provenance` and `Pricing` sections; the rest of the page is light. We do not flip the entire site.
