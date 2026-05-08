@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const licenses = LicenseService.listAll();
+  const licenses = await LicenseService.listAll();
   const active = licenses.filter((l) => !l.revokedAt && new Date(l.validUntil) > new Date()).length;
   const revoked = licenses.filter((l) => l.revokedAt).length;
 

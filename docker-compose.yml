@@ -1,18 +1,4 @@
 services:
-  redis:
-    image: redis:7-alpine
-    container_name: agent-that-sells-agents-redis
-    restart: unless-stopped
-    volumes:
-      - redisdata:/data
-    expose:
-      - "6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   postgres:
     image: postgres:16-alpine
     container_name: agent-that-sells-agents-postgres
@@ -41,13 +27,10 @@ services:
       - .env
     environment:
       - DATABASE_URL=postgresql://stampedagents:${DB_PASSWORD:-stampedagents_dev}@postgres:5432/stampedagents
-      - REDIS_URL=redis://redis:6379
     expose:
       - "3000"
     depends_on:
       postgres:
-        condition: service_healthy
-      redis:
         condition: service_healthy
     labels:
       - "traefik.enable=true"
@@ -57,5 +40,4 @@ services:
       - "traefik.http.services.agent-that-sells-agents.loadbalancer.server.port=3000"
 
 volumes:
-  redisdata:
   pgdata:

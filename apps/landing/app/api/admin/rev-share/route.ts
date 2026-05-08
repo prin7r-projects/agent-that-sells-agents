@@ -16,8 +16,8 @@ export async function GET(request: Request) {
     );
   }
 
-  const entries = RevShareService.listAll();
-  const stats = RevShareService.stats();
+  const entries = await RevShareService.listAll();
+  const stats = await RevShareService.stats();
 
   return NextResponse.json({
     entries,

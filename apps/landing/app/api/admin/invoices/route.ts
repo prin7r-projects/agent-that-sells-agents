@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { validateAdminToken, getBearerToken } from "@/lib/server/auth";
+import { OrderService } from "@/lib/server/orders";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
     agentIds?: string[];
     priceAmountUsd?: number;
     expiresAt?: string;
+    customerEmail?: string;
   };
   try {
     body = await request.json();
@@ -83,6 +85,24 @@ export async function POST(request: Request) {
 
   const invoiceUrl = typeof data.invoice_url === "string" ? data.invoice_url : "";
   const invoiceId = typeof data.id === "string" || typeof data.id === "number" ? String(data.id) : "";
+
+  // Persist order in DB (Wave 3)
+  try {
+    await OrderService.create({
+      orderId,
+      tier,
+      agentLot: body.agentIds?.[0],
+      priceAmountUsd,
+      customerEmail: body.customerEmail,
+      invoiceId,
+    });
+  } catch (dbErr) {
+    console.error(`[STAMPED_AGENTS_ADMIN_INVOICE] DB persist failed order=${orderId}:`, dbErr);
+    return NextResponse.json(
+      { error: { code: "db_error", message: "Invoice created but order persistence failed." } },
+      { status: 500 },
+    );
+  }
 
   console.log(
     `[STAMPED_AGENTS_ADMIN_INVOICE] tier=${tier} order=${orderId} invoice=${invoiceId} customer=${customerId}`,

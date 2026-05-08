@@ -23,7 +23,7 @@ export async function GET(
   const { code } = await params;
   const decodedCode = decodeURIComponent(code);
 
-  const allOrders = OrderService.listAll();
+  const allOrders = await OrderService.listAll();
   const now = Date.now();
   const dayMs = 24 * 60 * 60 * 1000;
 
@@ -50,7 +50,7 @@ export async function GET(
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
-  const totalRevShare = RevShareService.totalByCode(decodedCode);
+  const totalRevShare = await RevShareService.totalByCode(decodedCode);
 
   return NextResponse.json({
     partnerCode: decodedCode,

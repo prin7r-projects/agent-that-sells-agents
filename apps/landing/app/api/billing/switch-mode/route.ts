@@ -10,7 +10,7 @@ export const runtime = "nodejs";
  */
 export async function POST(request: Request) {
   const token = getBearerToken(request);
-  const auth = validateApiKey(token);
+  const auth = await validateApiKey(token);
   if (!auth.valid) {
     return NextResponse.json(
       { error: { code: "unauthorized", message: "Valid API key required." } },

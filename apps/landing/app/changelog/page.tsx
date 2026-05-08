@@ -22,10 +22,10 @@ function formatDate(iso: string): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-export default function ChangelogPage() {
+export default async function ChangelogPage() {
   const agents = loadAgents();
-  const orders = OrderService.listAll();
-  const revShare = (RevShareService as { getByCode?: (c: string) => { createdAt: string; amountUsd: number; referralCode: string }[] }).getByCode?.("AGENCY-NYC-014") ?? [];
+  const orders = await OrderService.listAll();
+  const revShare = await RevShareService.getByCode("AGENCY-NYC-014");
 
   const events: ChangelogEvent[] = [];
 

@@ -16,8 +16,8 @@ export async function GET(request: Request) {
     );
   }
 
-  const orders = OrderService.listAll();
-  const stats = OrderService.stats();
+  const orders = await OrderService.listAll();
+  const stats = await OrderService.stats();
 
   return NextResponse.json({
     orders,

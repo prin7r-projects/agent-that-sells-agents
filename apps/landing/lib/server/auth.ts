@@ -2,6 +2,7 @@
 // DB-backed API key validation via Drizzle ORM.
 
 import { createHash } from "node:crypto";
+import { eq } from "drizzle-orm";
 
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY?.trim();
 
@@ -11,7 +12,7 @@ let schema: any = null;
 
 async function getDb() {
   if (!db) {
-    const mod = await import("../../../../app/src/db/index.js");
+    const mod = await import("../../../app/src/db/index.js");
     db = mod.db;
     schema = mod.schema;
   }

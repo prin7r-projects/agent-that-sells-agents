@@ -9,7 +9,7 @@ let schema: any = null;
 
 async function getDb() {
   if (!db) {
-    const mod = await import("../../../../app/src/db/index.js");
+    const mod = await import("../../../app/src/db/index.js");
     db = mod.db;
     schema = mod.schema;
   }

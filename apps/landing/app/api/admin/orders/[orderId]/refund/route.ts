@@ -29,7 +29,7 @@ export async function POST(
     // body is optional
   }
 
-  const order = OrderService.get(orderId);
+  const order = await OrderService.get(orderId);
   if (!order) {
     return NextResponse.json(
       { error: { code: "order_not_found", message: `Order ${orderId} not found.` } },
@@ -45,13 +45,13 @@ export async function POST(
   }
 
   // 1. Mark order as refunded
-  OrderService.refund(orderId, body.reason);
+  await OrderService.refund(orderId, body.reason);
 
   // 2. Revoke license
-  const revokedLicense = LicenseService.revoke(orderId);
+  const revokedLicense = await LicenseService.revoke(orderId);
 
   // 3. Reverse rev-share if applicable
-  const reversedRevShare = RevShareService.reverseForOrder(orderId);
+  const reversedRevShare = await RevShareService.reverseForOrder(orderId);
 
   console.log(
     `[STAMPED_AGENTS_ADMIN_REFUND] order=${orderId} reason=${body.reason ?? "N/A"} licenseRevoked=${!!revokedLicense} revShareReversed=${!!reversedRevShare}`,

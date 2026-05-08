@@ -9,7 +9,7 @@ let schema: any = null;
 
 async function getDb() {
   if (!db) {
-    const mod = await import("../../../../app/src/db/index.js");
+    const mod = await import("../../../app/src/db/index.js");
     db = mod.db;
     schema = mod.schema;
   }
@@ -99,20 +99,9 @@ export const OrderService = {
       })
       .returning();
 
-    return {
-      orderId: order.id,
-      tier: order.tier,
-      agentLot: params.agentLot,
-      status: order.status as PersistedOrder["status"],
-      priceAmountUsd: order.priceAmountUsd ?? 0,
-      referralCode: order.referralCode ?? undefined,
-      upgradeFrom: params.upgradeFrom,
-      customerEmail: params.customerEmail,
-      invoiceId: order.invoiceId ?? undefined,
-      createdAt: order.createdAt.toISOString(),
-      billingMode: order.billingMode ?? undefined,
-      billingCap: order.billingCap ?? undefined,
-    };
+    const full = await this.get(order.id);
+    if (!full) throw new Error("Order created but could not be retrieved");
+    return full;
   },
 
   /** Mark an order as paid (idempotent on orderId+status) */
@@ -205,10 +194,13 @@ export const OrderService = {
     return results.map((r: any) => ({
       orderId: r.orders.id,
       tier: r.orders.tier,
+      agentId: r.orders.agentId ?? undefined,
+      agentLot: r.orders.agentId ? r.orders.agentId.replace(/^lot-/, "") : undefined,
       status: r.orders.status as PersistedOrder["status"],
       priceAmountUsd: r.orders.priceAmountUsd ?? 0,
       referralCode: r.orders.referralCode ?? undefined,
       invoiceId: r.orders.invoiceId ?? undefined,
+      customerEmail: r.customers?.email ?? undefined,
       paidAt: r.orders.paidAt?.toISOString(),
       createdAt: r.orders.createdAt.toISOString(),
       billingMode: r.orders.billingMode ?? undefined,
@@ -220,50 +212,70 @@ export const OrderService = {
   async refund(orderId: string, reason?: string): Promise<PersistedOrder | null> {
     const { db, schema } = await getDb();
 
-    const [updated] = await db
+    const existing = await this.get(orderId);
+    if (!existing) return null;
+
+    await db
       .update(schema.orders)
       .set({ status: "refunded", refundedAt: new Date() })
-      .where(eq(schema.orders.id, orderId))
-      .returning();
+      .where(eq(schema.orders.id, orderId));
 
-    if (!updated) return null;
-
-    return {
-      orderId: updated.id,
-      tier: updated.tier,
-      status: "refunded",
-      priceAmountUsd: updated.priceAmountUsd ?? 0,
-      refundedAt: updated.refundedAt?.toISOString(),
-      createdAt: updated.createdAt.toISOString(),
-      billingMode: updated.billingMode ?? undefined,
-      billingCap: updated.billingCap ?? undefined,
-    };
+    return this.get(orderId);
   },
 
   /** Update billing mode for an order */
   async updateBillingMode(orderId: string, mode: "flat" | "outcome", cap?: number): Promise<PersistedOrder | null> {
     const { db, schema } = await getDb();
 
-    const [updated] = await db
+    const existing = await this.get(orderId);
+    if (!existing) return null;
+
+    await db
       .update(schema.orders)
       .set({
         billingMode: mode,
         billingCap: mode === "outcome" ? (cap ?? 1.5) : null,
       })
-      .where(eq(schema.orders.id, orderId))
-      .returning();
+      .where(eq(schema.orders.id, orderId));
 
-    if (!updated) return null;
+    return this.get(orderId);
+  },
 
-    return {
-      orderId: updated.id,
-      tier: updated.tier,
-      status: updated.status as PersistedOrder["status"],
-      priceAmountUsd: updated.priceAmountUsd ?? 0,
-      createdAt: updated.createdAt.toISOString(),
-      billingMode: updated.billingMode ?? undefined,
-      billingCap: updated.billingCap ?? undefined,
-    };
+  /** List all orders (admin) */
+  async listAll(): Promise<PersistedOrder[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.orders)
+      .orderBy(desc(schema.orders.createdAt));
+
+    return results.map((r: any) => ({
+      orderId: r.id,
+      tier: r.tier,
+      status: r.status as PersistedOrder["status"],
+      priceAmountUsd: r.priceAmountUsd ?? 0,
+      referralCode: r.referralCode ?? undefined,
+      invoiceId: r.invoiceId ?? undefined,
+      paidAt: r.paidAt?.toISOString(),
+      refundedAt: r.refundedAt?.toISOString(),
+      createdAt: r.createdAt.toISOString(),
+      billingMode: r.billingMode ?? undefined,
+      billingCap: r.billingCap ?? undefined,
+    }));
+  },
+
+  /** Aggregate order stats (admin) */
+  async stats(): Promise<{ total: number; paid: number; pending: number; refunded: number }> {
+    const { db, schema } = await getDb();
+
+    const results = await db.select().from(schema.orders);
+    const total = results.length;
+    const paid = results.filter((r: any) => r.status === "paid").length;
+    const pending = results.filter((r: any) => r.status === "pending").length;
+    const refunded = results.filter((r: any) => r.status === "refunded").length;
+
+    return { total, paid, pending, refunded };
   },
 };
 
@@ -444,5 +456,82 @@ export const RevShareService = {
       bps: 3000,
       createdAt: r.createdAt.toISOString(),
     }));
+  },
+
+  /** Reverse rev-share entries for an order (used during refund) */
+  async reverseForOrder(orderId: string): Promise<RevShareEntry | null> {
+    const { db, schema } = await getDb();
+
+    const existing = await db
+      .select()
+      .from(schema.creditTransactions)
+      .where(
+        and(
+          eq(schema.creditTransactions.orderId, orderId),
+          eq(schema.creditTransactions.type, "rev_share_accrual"),
+        ),
+      )
+      .limit(1);
+
+    if (existing.length === 0) return null;
+
+    const [reversal] = await db
+      .insert(schema.creditTransactions)
+      .values({
+        orderId,
+        type: "rev_share_reversal",
+        amountUsd: -existing[0].amountUsd,
+        referralCode: existing[0].referralCode,
+      })
+      .returning();
+
+    return {
+      orderId: reversal.orderId!,
+      referralCode: reversal.referralCode!,
+      amountUsd: reversal.amountUsd,
+      bps: 3000,
+      createdAt: reversal.createdAt.toISOString(),
+    };
+  },
+
+  /** Sum total rev-share accrued for a partner code */
+  async totalByCode(code: string): Promise<number> {
+    const entries = await this.getByCode(code);
+    return entries.reduce((sum, e) => sum + e.amountUsd, 0);
+  },
+
+  /** List all rev-share entries (admin) */
+  async listAll(): Promise<RevShareEntry[]> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.creditTransactions)
+      .where(eq(schema.creditTransactions.type, "rev_share_accrual"))
+      .orderBy(desc(schema.creditTransactions.createdAt));
+
+    return results.map((r: any) => ({
+      orderId: r.orderId,
+      referralCode: r.referralCode!,
+      amountUsd: r.amountUsd,
+      bps: 3000,
+      createdAt: r.createdAt.toISOString(),
+    }));
+  },
+
+  /** Aggregate rev-share stats (admin) */
+  async stats(): Promise<{ totalEntries: number; totalUsd: number; uniqueCodes: number }> {
+    const { db, schema } = await getDb();
+
+    const results = await db
+      .select()
+      .from(schema.creditTransactions)
+      .where(eq(schema.creditTransactions.type, "rev_share_accrual"));
+
+    const totalEntries = results.length;
+    const totalUsd = results.reduce((sum: number, r: any) => sum + r.amountUsd, 0);
+    const uniqueCodes = new Set(results.map((r: any) => r.referralCode)).size;
+
+    return { totalEntries, totalUsd, uniqueCodes };
   },
 };
