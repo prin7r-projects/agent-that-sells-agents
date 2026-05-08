@@ -47,7 +47,7 @@ async function seed() {
       displayName: "Reeves",
       category: "ops",
       blurb: "LinkedIn outbound agent that generates 50+ qualified leads per week.",
-      provenanceTriainedBy: "Triangulate Labs",
+      provenanceTrainedBy: "Triangulate Labs",
       provenanceShipCount: 29,
       provenanceCostPerAction: 1.90,
       driftStatus: "green",
