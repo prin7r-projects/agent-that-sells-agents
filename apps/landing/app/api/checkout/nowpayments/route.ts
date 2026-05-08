@@ -6,6 +6,8 @@ export const runtime = "nodejs";
 type CheckoutBody = {
   tierId?: "trial" | "pro" | "enterprise";
   agentLot?: string;
+  upgradeFrom?: "trial";
+  referralCode?: string;
 };
 
 function appUrlFromRequest(request: Request) {
@@ -28,10 +30,13 @@ export async function POST(request: Request) {
   }
 
   const baseUrl = appUrlFromRequest(request);
-  const orderId = `stmp_${tier.id}_${Date.now().toString(36)}`;
-  const description = agent
-    ? `StampedAgents — ${tier.name} (Lot ${agent.lot} · ${agent.name})`
-    : `StampedAgents — ${tier.name}`;
+  const upgradeSuffix = body.upgradeFrom ? `_upgradeFrom_${body.upgradeFrom}` : "";
+  const referralSuffix = body.referralCode ? `_ref_${body.referralCode}` : "";
+  const orderId = `stmp_${tier.id}${upgradeSuffix}${referralSuffix}_${Date.now().toString(36)}`;
+  const descriptionParts = [`StampedAgents — ${tier.name}`];
+  if (agent) descriptionParts.push(`Lot ${agent.lot} · ${agent.name}`);
+  if (body.upgradeFrom) descriptionParts.push(`(upgrade from ${body.upgradeFrom})`);
+  const description = descriptionParts.join(" ");
 
   const invoicePayload = {
     price_amount: tier.amountUsd,
@@ -81,7 +86,9 @@ export async function POST(request: Request) {
       : "";
 
   console.log(
-    `[STAMPED_AGENTS_CHECKOUT] tier=${tier.id} order=${orderId} invoice=${invoiceId} url=${invoiceUrl}`,
+    `[STAMPED_AGENTS_CHECKOUT] tier=${tier.id} order=${orderId} invoice=${invoiceId} url=${invoiceUrl}` +
+    (body.upgradeFrom ? ` upgradeFrom=${body.upgradeFrom}` : "") +
+    (body.referralCode ? ` referral=${body.referralCode}` : ""),
   );
 
   return NextResponse.json({
@@ -92,5 +99,7 @@ export async function POST(request: Request) {
     invoiceUrl,
     tier: tier.id,
     description,
+    upgradeFrom: body.upgradeFrom ?? null,
+    referralCode: body.referralCode ?? null,
   });
 }

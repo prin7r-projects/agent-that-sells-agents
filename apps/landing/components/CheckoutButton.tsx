@@ -7,9 +7,11 @@ type Props = {
   agentLot?: string;
   label: string;
   className?: string;
+  upgradeFrom?: "trial";
+  referralCode?: string;
 };
 
-export function CheckoutButton({ tierId, agentLot, label, className }: Props) {
+export function CheckoutButton({ tierId, agentLot, label, className, upgradeFrom, referralCode }: Props) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +22,7 @@ export function CheckoutButton({ tierId, agentLot, label, className }: Props) {
       const res = await fetch("/api/checkout/nowpayments", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ tierId, agentLot }),
+        body: JSON.stringify({ tierId, agentLot, upgradeFrom, referralCode }),
       });
       const data = (await res.json()) as { ok?: boolean; invoiceUrl?: string; message?: string };
       if (data.ok && data.invoiceUrl) {
