@@ -198,7 +198,7 @@ export function DemoSheet({ agentId, label = "Demo in your data", className = ""
   const lotNum = agentId.replace("lot-", "");
 
   return (
-    <div className={`rounded-[28px] bg-vellum border border-silver-mist p-7 ${className}`}>
+    <div className={`rounded-[28px] bg-vellum border border-silver-mist p-7 max-sm:rounded-none max-sm:border-0 max-sm:p-5 max-sm:min-h-screen ${className}`}>
       {/* Idle state */}
       {state.phase === "idle" && (
         <div className="text-center py-6 space-y-4">

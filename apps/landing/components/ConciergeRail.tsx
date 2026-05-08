@@ -8,6 +8,7 @@ type ConciergeState = "idle" | "demo-active" | "post-demo";
 export function ConciergeRail() {
   const [state, setState] = useState<ConciergeState>("idle");
   const [demoAgentId, setDemoAgentId] = useState<string>("lot-042");
+  const [mobileExpanded, setMobileExpanded] = useState(false);
 
   function startDemo(agentId: string) {
     setDemoAgentId(agentId);
@@ -22,9 +23,31 @@ export function ConciergeRail() {
     <aside
       id="concierge"
       aria-label="Concierge agent"
-      className="rounded-[28px] border border-silver-mist bg-vellum p-6 flex flex-col gap-4 min-h-[440px]"
+      className={
+        "rounded-[28px] border border-silver-mist bg-vellum p-6 flex flex-col gap-4 min-h-[440px] " +
+        "max-lg:fixed max-lg:bottom-0 max-lg:left-0 max-lg:right-0 max-lg:z-40 max-lg:rounded-none max-lg:rounded-t-[20px] max-lg:border-b-0 max-lg:shadow-2xl max-lg:transition-all max-lg:duration-300 " +
+        (mobileExpanded
+          ? "max-lg:max-h-[85vh] max-lg:overflow-y-auto"
+          : "max-lg:max-h-[64px] max-lg:overflow-hidden max-lg:cursor-pointer")
+      }
+      onClick={() => { if (!mobileExpanded) setMobileExpanded(true); }}
     >
-      <header className="flex items-center justify-between">
+      {/* Mobile collapse bar — visible only when collapsed on mobile */}
+      <div
+        className="hidden max-lg:flex items-center justify-between"
+        onClick={(e) => { e.stopPropagation(); setMobileExpanded(!mobileExpanded); }}
+      >
+        <div className="flex items-center gap-2">
+          <span aria-hidden className="block w-2 h-2 rounded-full bg-azure" />
+          <span className="text-[14px] font-semibold">Concierge</span>
+          <span className="lot-label">ON</span>
+        </div>
+        <span className="text-[12px] font-mono text-graphite">
+          {mobileExpanded ? "Tap to collapse" : "Tap to expand"}
+        </span>
+      </div>
+
+      <header className="flex items-center justify-between max-lg:hidden">
         <div className="flex items-center gap-3">
           <span
             aria-hidden
