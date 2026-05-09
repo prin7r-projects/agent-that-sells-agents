@@ -19,6 +19,7 @@ import {
   __getSigFailureCount,
   __getCheckoutLatencies,
   __getDailyOrders,
+  __checkDailyAnomaly,
 } from "@/lib/server/alerts";
 
 // ---------------------------------------------------------------------------
@@ -386,7 +387,7 @@ describe("recordDailyOrder", () => {
     const days = [
       "2026-01-01", "2026-01-02", "2026-01-03",
       "2026-01-04", "2026-01-05", "2026-01-06",
-      "2026-01-07",
+      "2026-01-07", "2026-01-08",
     ];
 
     // Days 1-6: 100 orders each
@@ -397,8 +398,15 @@ describe("recordDailyOrder", () => {
       }
     }
 
-    // Day 7 (today): only 1 order — should be below 2σ
+    // Day 7: only 1 order — anomalous, but check runs on next-day transition
     vi.setSystemTime(new Date(days[6] + "T12:00:00Z"));
+    recordDailyOrder();
+
+    // No alert yet — anomaly check happens on next-day transition
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    // Day 8: first order triggers check for day 7
+    vi.setSystemTime(new Date(days[7] + "T12:00:00Z"));
     recordDailyOrder();
 
     expect(fetchMock).toHaveBeenCalledTimes(1);

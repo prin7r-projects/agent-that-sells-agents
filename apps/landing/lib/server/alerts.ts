@@ -152,6 +152,39 @@ export function incrementCheckoutLatency(ms: number): void {
 
 // ── Daily order anomaly detector ────────────────────────────────────
 
+function checkDailyAnomaly(date: string): void {
+  const day = dailyOrders.find((d) => d.date === date);
+  if (!day) return;
+
+  const historical = dailyOrders.filter((d) => d.date !== date);
+  if (historical.length < 6) return;
+
+  const dayCount = day.count;
+  const counts = historical.map((d) => d.count);
+  const mean = counts.reduce((a, b) => a + b, 0) / counts.length;
+  const variance = counts.reduce((sum, c) => sum + (c - mean) ** 2, 0) / counts.length;
+  const stddev = Math.sqrt(variance);
+  const threshold = mean - 2 * stddev;
+
+  if (dayCount < threshold && !dailyOrdersAlerted) {
+    dailyOrdersAlerted = true;
+    sendSlackAlert({
+      severity: "critical",
+      title: "Daily orders below 2σ threshold",
+      body: `Orders on ${date} (${dayCount}) are below 2σ from the mean.`,
+      fields: {
+        Date: date,
+        Orders: String(dayCount),
+        "Mean (μ)": mean.toFixed(1),
+        "StdDev (σ)": stddev.toFixed(1),
+        "Threshold (μ−2σ)": threshold.toFixed(1),
+      },
+    });
+  } else if (dayCount >= threshold && dailyOrdersAlerted) {
+    dailyOrdersAlerted = false;
+  }
+}
+
 export function recordDailyOrder(): void {
   const today = new Date().toISOString().slice(0, 10);
 
@@ -159,40 +192,17 @@ export function recordDailyOrder(): void {
   if (existing) {
     existing.count++;
   } else {
+    // New day starting — check the previous day's anomaly
+    if (dailyOrders.length > 0) {
+      const prevDate = dailyOrders[dailyOrders.length - 1].date;
+      checkDailyAnomaly(prevDate);
+    }
     existing = { date: today, count: 1 };
     dailyOrders.push(existing);
   }
 
-  // Keep rolling 30-day window
-  while (dailyOrders.length > 30) {
+  while (dailyOrders.length > 31) {
     dailyOrders.shift();
-  }
-
-  // Need at least 7 days of data before anomaly detection makes sense
-  if (dailyOrders.length < 7) return;
-
-  const counts = dailyOrders.map((d) => d.count);
-  const mean = counts.reduce((a, b) => a + b, 0) / counts.length;
-  const variance = counts.reduce((sum, c) => sum + (c - mean) ** 2, 0) / counts.length;
-  const stddev = Math.sqrt(variance);
-  const threshold = mean - 2 * stddev;
-  const todayCount = existing.count;
-
-  if (todayCount < threshold && !dailyOrdersAlerted) {
-    dailyOrdersAlerted = true;
-    sendSlackAlert({
-      severity: "critical",
-      title: "Daily orders below 2σ threshold",
-      body: `Today's orders (${todayCount}) are below 2σ from the mean.`,
-      fields: {
-        Today: String(todayCount),
-        "Mean (μ)": mean.toFixed(1),
-        "StdDev (σ)": stddev.toFixed(1),
-        "Threshold (μ−2σ)": threshold.toFixed(1),
-      },
-    });
-  } else if (todayCount >= threshold && dailyOrdersAlerted) {
-    dailyOrdersAlerted = false;
   }
 }
 
@@ -219,4 +229,8 @@ export function __getCheckoutLatencies(): { ts: number; ms: number }[] {
 
 export function __getDailyOrders(): { date: string; count: number }[] {
   return [...dailyOrders];
+}
+
+export function __checkDailyAnomaly(date: string): void {
+  checkDailyAnomaly(date);
 }
