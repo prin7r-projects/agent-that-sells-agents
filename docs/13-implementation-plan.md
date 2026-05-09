@@ -216,7 +216,7 @@
 **Effort.** M — 80-120 tool-uses, 1-2 days.
 
 **Definition of Done.**
-- [ ] Outcome-pricing toggle visible to 50% of Pro customers; analytics pipe records the split.
+- [x] Outcome-pricing toggle visible to 50% of Pro customers; analytics pipe records the split. Verified: `apps/landing/lib/server/feature-flags.ts` registers `outcomePricingToggle` (rolloutPct=50, targetTier=pro); `POST /api/billing/switch-mode` calls `isFlagEnabled` and returns 403 `feature_not_available` for the control bucket; exposure + conversion events emitted via `recordFlagEvent`; bucketing covered by `apps/landing/e2e/feature-flag-bucket.spec.ts` (deterministic-id, ~50% on 200 random ids) (PRI-2289).
 - [ ] Partner analytics endpoint returns valid JSON for a seeded partner.
 - [x] Drift cohort report shows a numeric churn rate per status color over the 30-day window. Verified: `GET /api/admin/drift-cohorts` returns 200 with correct JSON shape; e2e test in `e2e/drift-cohorts.spec.ts` covers 401 path and cohort validation (PRI-2292).
 - [ ] `/changelog` page is publicly accessible and reflects recent agent + drift events.
