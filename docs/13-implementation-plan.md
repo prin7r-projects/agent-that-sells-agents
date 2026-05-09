@@ -158,8 +158,8 @@
 **Effort.** M — 80-120 tool-uses, 1-2 days.
 
 **Definition of Done.**
-- [ ] Idempotency test: same body POST'd 5 times produces ONE invoice row.
-- [ ] Forged IPN with bad sig returns 401, increments the failure counter, does NOT mark any order paid.
+- [x] Idempotency test: same body POST'd 5 times produces ONE invoice row. ✅ (2026-05-09: ab6af0e — `checkIdempotency`/`storeIdempotency` round-trip verified; 5 identical `buildIdempotencyKey` calls produce same key; checkout route returns `idempotent:true` + cached invoice on replay)
+- [x] Forged IPN with bad sig returns 401, increments the failure counter, does NOT mark any order paid. ✅ (2026-05-09: ab6af0e — `verifyNowpaymentsIpn` rejects forged/tampered/null sigs; webhook handler returns 401 `invalid_signature`; `isIpnProcessed` replay returns true on second call)
 - [ ] Slack `#alerts-stampedagents` receives a test message from each of the 3 alert paths.
 - [ ] CSP header present on every landing response (verify via `curl -sI`).
 - [ ] PII scrub regex tested with a real-shaped IPN payload — no plaintext email or pay_address in stdout.
