@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { tiers, agents } from "@/lib/agents";
 import { OrderService } from "@/lib/server/orders";
+import {
+  buildIdempotencyKey,
+  checkIdempotency,
+  storeIdempotency,
+} from "@/lib/server/idempotency";
 
 export const runtime = "nodejs";
 
@@ -29,6 +34,33 @@ export async function POST(request: Request) {
       { ok: false, mode: "stub", message: "NOWPAYMENTS_API_KEY is not set on the server." },
       { status: 503 },
     );
+  }
+
+  // Idempotency check: same buyer + agent + tier within the same hour → same invoice
+  const idemKey = buildIdempotencyKey({
+    email: body.customerEmail,
+    agentId: body.agentLot,
+    tierId: tier.id,
+  });
+  const cached = checkIdempotency(idemKey);
+  if (cached) {
+    console.log(
+      `[STAMPED_AGENTS_CHECKOUT] idempotent hit key=${idemKey} order=${cached.orderId}` +
+      (body.upgradeFrom ? ` upgradeFrom=${body.upgradeFrom}` : "") +
+      (body.referralCode ? ` referral=${body.referralCode}` : ""),
+    );
+    return NextResponse.json({
+      ok: true,
+      mode: "live",
+      orderId: cached.orderId,
+      invoiceId: cached.invoiceId,
+      invoiceUrl: cached.invoiceUrl,
+      tier: tier.id,
+      description: cached.orderId,
+      idempotent: true,
+      upgradeFrom: body.upgradeFrom ?? null,
+      referralCode: body.referralCode ?? null,
+    });
   }
 
   const baseUrl = appUrlFromRequest(request);
@@ -107,6 +139,9 @@ export async function POST(request: Request) {
     );
   }
 
+  // Store idempotency entry so replays within the hour window return the same invoice
+  storeIdempotency(idemKey, { orderId, invoiceUrl, invoiceId });
+
   console.log(
     `[STAMPED_AGENTS_CHECKOUT] tier=${tier.id} order=${orderId} invoice=${invoiceId} url=${invoiceUrl}` +
     (body.upgradeFrom ? ` upgradeFrom=${body.upgradeFrom}` : "") +
@@ -121,6 +156,7 @@ export async function POST(request: Request) {
     invoiceUrl,
     tier: tier.id,
     description,
+    idempotent: false,
     upgradeFrom: body.upgradeFrom ?? null,
     referralCode: body.referralCode ?? null,
   });

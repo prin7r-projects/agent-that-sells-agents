@@ -9,6 +9,7 @@ import { db, schema } from "../../src/db/index";
 interface PersistedOrder {
   orderId: string;
   tier: string;
+  agentId?: string;
   agentLot?: string;
   status: "pending" | "paid" | "refunded" | "expired";
   priceAmountUsd: number;
@@ -109,6 +110,8 @@ export const OrderService = {
       return {
         orderId: order.id,
         tier: order.tier,
+        agentId: order.agentId ?? undefined,
+        agentLot: order.agentId ? order.agentId.replace(/^lot-/, "") : undefined,
         status: "paid",
         priceAmountUsd: order.priceAmountUsd ?? 0,
         referralCode: order.referralCode ?? undefined,
@@ -129,6 +132,8 @@ export const OrderService = {
     return {
       orderId: updated.id,
       tier: updated.tier,
+      agentId: updated.agentId ?? undefined,
+      agentLot: updated.agentId ? updated.agentId.replace(/^lot-/, "") : undefined,
       status: "paid",
       priceAmountUsd: updated.priceAmountUsd ?? 0,
       referralCode: updated.referralCode ?? undefined,
@@ -155,6 +160,8 @@ export const OrderService = {
     return {
       orderId: order.id,
       tier: order.tier,
+      agentId: order.agentId ?? undefined,
+      agentLot: order.agentId ? order.agentId.replace(/^lot-/, "") : undefined,
       status: order.status as PersistedOrder["status"],
       priceAmountUsd: order.priceAmountUsd ?? 0,
       referralCode: order.referralCode ?? undefined,
@@ -236,6 +243,8 @@ export const OrderService = {
     return results.map((r: any) => ({
       orderId: r.id,
       tier: r.tier,
+      agentId: r.agentId ?? undefined,
+      agentLot: r.agentId ? r.agentId.replace(/^lot-/, "") : undefined,
       status: r.status as PersistedOrder["status"],
       priceAmountUsd: r.priceAmountUsd ?? 0,
       referralCode: r.referralCode ?? undefined,
