@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifyNowpaymentsIpn } from "@/lib/signatures";
+import { incrementSigFailure } from "@/lib/server/alerts";
+import { scrubPii } from "@/lib/server/log-redact";
 
 export const runtime = "nodejs";
 
@@ -9,30 +11,6 @@ export const runtime = "nodejs";
  * Phase 3: verified HMAC → calls internal IPN endpoint for order persistence.
  * Idempotent on (orderId, paymentStatus).
  */
-
-// PII fields that must never appear in plaintext logs
-const PII_FIELDS = new Set([
-  "pay_address",
-  "payout_hash",
-  "payout_extra_id",
-  "buyer_email",
-  "buyer_name",
-  "email",
-]);
-
-function scrubPii(obj: Record<string, unknown>): Record<string, unknown> {
-  const scrubbed: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(obj)) {
-    if (PII_FIELDS.has(key)) {
-      scrubbed[key] = "[REDACTED]";
-    } else if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-      scrubbed[key] = scrubPii(value as Record<string, unknown>);
-    } else {
-      scrubbed[key] = value;
-    }
-  }
-  return scrubbed;
-}
 
 export async function POST(request: Request) {
   const rawBody = await request.text();
@@ -94,6 +72,7 @@ export async function POST(request: Request) {
 
   // Reject forged IPNs
   if (!verified && sig) {
+    incrementSigFailure();
     console.warn(
       `[STAMPED_AGENTS_WEBHOOK] forged IPN rejected order=${orderId} sig_prefix=${sig.slice(0, 8)}...`,
     );

@@ -5,6 +5,7 @@ import { sendMagicLinkEmail } from "@/lib/server/email";
 import { createMagicLink } from "@/lib/server/magic-link";
 import { syncOrderToNotion } from "@/lib/server/notion";
 import { agents as staticAgents } from "@/lib/agents";
+import { redactedLog } from "@/lib/server/log-redact";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/src/db/index";
 
@@ -105,8 +106,9 @@ export async function POST(request: Request) {
       console.error(`[INTERNAL_IPN] post-payment actions failed for order=${orderId}:`, postPaymentErr);
     }
 
-    console.log(
-      `[INTERNAL_IPN] paid order=${orderId} tier=${tier} agent=${agentId} email=${customerEmail} license=${license.validUntil} emailSent=${emailResult.ok} notionSynced=${notionResult.ok}`,
+    redactedLog(
+      `[INTERNAL_IPN] paid order=${orderId} tier=${tier} agent=${agentId}`,
+      { customerEmail, licenseValidUntil: license.validUntil, emailSent: emailResult.ok, notionSynced: notionResult.ok },
     );
 
     return NextResponse.json({
