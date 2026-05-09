@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     }
 
     const customerEmail = body.customerEmail ?? order.customerEmail ?? `customer@${orderId}`;
-    const agentId = body.agentId ?? order.agentId ?? "lot-unknown";
+    const agentId = body.agentId ?? order.agentLot ?? "lot-unknown";
     const tier = body.tier ?? order.tier ?? "trial";
 
     const license = await LicenseService.issue({

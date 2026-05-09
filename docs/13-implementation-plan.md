@@ -219,7 +219,7 @@
 - [x] Outcome-pricing toggle visible to 50% of Pro customers; analytics pipe records the split. Verified: `apps/landing/lib/server/feature-flags.ts` registers `outcomePricingToggle` (rolloutPct=50, targetTier=pro); `POST /api/billing/switch-mode` calls `isFlagEnabled` and returns 403 `feature_not_available` for the control bucket; exposure + conversion events emitted via `recordFlagEvent`; bucketing covered by `apps/landing/e2e/feature-flag-bucket.spec.ts` (deterministic-id, ~50% on 200 random ids) (PRI-2289).
 - [ ] Partner analytics endpoint returns valid JSON for a seeded partner.
 - [x] Drift cohort report shows a numeric churn rate per status color over the 30-day window. Verified: `GET /api/admin/drift-cohorts` returns 200 with correct JSON shape; e2e test in `e2e/drift-cohorts.spec.ts` covers 401 path and cohort validation (PRI-2292).
-- [ ] `/changelog` page is publicly accessible and reflects recent agent + drift events.
+- [x] `/changelog` page is publicly accessible and reflects recent agent + drift events. Verified: `apps/landing/app/changelog/page.tsx` renders last 30 days of agent additions, drift events, eval runs, and payouts; uses DESIGN.md tokens (canvas/fog/ink/slate/graphite/ash); `RevShareService.listAll()` aggregates across all partner codes; `npx tsc --noEmit` passes; `npm run build` succeeds (PRI-2293).
 
 **Hand-off context.**
 - Feature flags via PostHog or a homegrown table — pick one and document in `docs/runbooks/feature-flags.md`.
