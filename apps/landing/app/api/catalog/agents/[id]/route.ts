@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { getAgent, getEvalsForAgent } from "@/lib/catalog-data";
 
 export const runtime = "nodejs";
-export const dynamic = "force-static";
-export const revalidate = 60;
+// dynamic: ISR static files dont route through Traefik standalone
 
 export async function GET(
   _request: Request,
