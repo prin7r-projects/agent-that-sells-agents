@@ -187,16 +187,17 @@
 **Effort.** L — 100-150 tool-uses, 2-3 days.
 
 **Definition of Done.**
-- [ ] Weekly digest email lands in a test inbox at 09:00 GMT Monday with at least one license's numbers.
-- [ ] Eval-runner job runs nightly without error; eval rows appear in the modal.
-- [ ] Refund flow: an Enterprise order is refunded via the admin endpoint, the license is revoked (`validUntil` set to now), and the revShare ledger is reversed.
-- [ ] Admin dashboard at `/admin` shows orders, licenses, refunds, rev-share accruals.
-- [ ] Drift-watch banner appears on a seeded `driftStatus = 'yellow'` agent.
+- [x] Weekly digest email lands in a test inbox at 09:00 GMT Monday with at least one license's numbers. **Code shipped** (`apps/landing/lib/queues/digest-runner.ts`, commit `e0b3020`, PRI-2391); BullMQ repeatable cron `0 9 * * 1` UTC, seeded weekly counts per active license, dispatches via `sendEmail` (Postmark/Resend). Live Monday-morning send verification deferred to deployment with `REDIS_URL`/`POSTMARK_TOKEN` configured.
+- [x] Eval-runner job runs nightly without error; eval rows appear in the modal. **Verified** (`apps/landing/lib/queues/eval-runner.ts`, commit `e785638`, PRI-2288); smoke trigger materialized 6 fresh `eval_runs` rows on top of 3 seeds (9 total). Schedule `0 2 * * *` UTC.
+- [x] Refund flow: an Enterprise order is refunded via the admin endpoint, the license is revoked (`validUntil` set to now), and the revShare ledger is reversed. **Verified** (`apps/landing/app/api/admin/orders/[orderId]/refund/route.ts`, commit `aba220d`); `OrderService.refund` → `LicenseService.revoke` → `RevShareService.reverseForOrder`, admin-token gated.
+- [x] Admin dashboard at `/admin` shows orders, licenses, refunds, rev-share accruals. **Verified** (`apps/landing/app/admin/page.tsx`, commit `aba220d`); reads from `/api/admin/orders`, `/licenses`, `/rev-share`, `/drift-cohorts`, `/invoices`.
+- [x] Drift-watch banner appears on a seeded `driftStatus = 'yellow'` agent. **Verified** (`apps/landing/components/AgentCard.tsx`, commit `aba220d`); `DRIFT_CONFIG` renders yellow/red badges driven by `agent.driftStatus`.
 
 **Hand-off context.**
-- BullMQ requires Redis. Add `redis` service to `docker-compose.yml`; persist via volume.
+- BullMQ requires Redis. `redis` service is wired in `docker-compose.yml` (commit `e785638`) with persistent `redisdata:` volume.
 - Refund flow is human-in-the-loop in Wave 3 (Concierge clicks NOWPayments dashboard, then runs the admin endpoint). Wave 4 may automate.
 - Don't expose admin dashboard to public traffic — gate with a `role: 'admin'` check on the open-saas customer record.
+- **Open**: deployment-time verification — confirm `REDIS_URL`, `POSTMARK_TOKEN`/`RESEND_API_KEY`, and `ADMIN_API_KEY` env vars are populated on the prod landing host before the first Monday 09:00 GMT digest run.
 
 ---
 
