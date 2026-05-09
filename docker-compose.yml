@@ -53,9 +53,23 @@ services:
         condition: service_healthy
     labels:
       - "traefik.enable=true"
+      # API routes — priority 20 (highest, matched first)
+      - "traefik.http.routers.agent-that-sells-agents-api.rule=Host(`agent-that-sells-agents.prin7r.com`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.agent-that-sells-agents-api.entrypoints=websecure"
+      - "traefik.http.routers.agent-that-sells-agents-api.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.agent-that-sells-agents-api.priority=20"
+      - "traefik.http.services.agent-that-sells-agents-api.loadbalancer.server.port=3000"
+      # App routes — priority 15
+      - "traefik.http.routers.agent-that-sells-agents-app.rule=Host(`agent-that-sells-agents.prin7r.com`) && (PathPrefix(`/app`) || PathPrefix(`/admin`) || PathPrefix(`/changelog`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.agent-that-sells-agents-app.entrypoints=websecure"
+      - "traefik.http.routers.agent-that-sells-agents-app.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.agent-that-sells-agents-app.priority=15"
+      - "traefik.http.services.agent-that-sells-agents-app.loadbalancer.server.port=3000"
+      # Landing (default catch-all) — priority 1
       - "traefik.http.routers.agent-that-sells-agents.rule=Host(`agent-that-sells-agents.prin7r.com`)"
       - "traefik.http.routers.agent-that-sells-agents.entrypoints=websecure"
       - "traefik.http.routers.agent-that-sells-agents.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.agent-that-sells-agents.priority=1"
       - "traefik.http.services.agent-that-sells-agents.loadbalancer.server.port=3000"
 
 volumes:
