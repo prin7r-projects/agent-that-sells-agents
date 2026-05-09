@@ -151,7 +151,7 @@
 4. Admin-key rotation runbook: docs at `/docs/runbooks/rotate-admin-key.md`. Includes Slack alert template, downtime window, and roll-forward strategy. Shipped: see `docs/runbooks/rotate-admin-key.md`.
 5. Slack alert webhook for: webhook sig failures >5/hour, checkout p95 >2s for 5 min, daily orders <2σ below mean.
 6. PII scrub in stdout logs: `pay_address`, `payout_hash`, customer email never appear plaintext. Verify via a log-grep test.
-7. CSP headers on landing: `default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.nowpayments.io;`.
+7. CSP headers on landing: `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.nowpayments.io;`.
 
 **Dependencies.** Phase 3 (full payment surface).
 
@@ -161,7 +161,7 @@
 - [x] Idempotency test: same body POST'd 5 times produces ONE invoice row. ✅ (2026-05-09: ab6af0e — `checkIdempotency`/`storeIdempotency` round-trip verified; 5 identical `buildIdempotencyKey` calls produce same key; checkout route returns `idempotent:true` + cached invoice on replay)
 - [x] Forged IPN with bad sig returns 401, increments the failure counter, does NOT mark any order paid. ✅ (2026-05-09: ab6af0e — `verifyNowpaymentsIpn` rejects forged/tampered/null sigs; webhook handler returns 401 `invalid_signature`; `isIpnProcessed` replay returns true on second call)
 - [ ] Slack `#alerts-stampedagents` receives a test message from each of the 3 alert paths.
-- [x] CSP header present on every landing response (verify via `curl -sI`). ✅ (2026-05-09: `curl -sI http://localhost:3000/` → `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.nowpayments.io;` + `X-Content-Type-Options: nosniff` + `Referrer-Policy: strict-origin-when-cross-origin`)
+- [x] CSP header present on every landing response (verify via `curl -sI`). ✅ (2026-05-09: `curl -sI http://localhost:3000/` → `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.nowpayments.io;` + `X-Content-Type-Options: nosniff` + `Referrer-Policy: strict-origin-when-cross-origin`. Updated by [PRI-2469](/PRI/issues/PRI-2469) to fix Google Fonts + inline-style blocking.)
 - [x] PII scrub regex tested with a real-shaped IPN payload — no plaintext email or pay_address in stdout. ✅ (2026-05-09: `pnpm -F landing test pii-scrub` — 8 tests pass; verifies redaction of email, pay_address, payout_hash, buyer_email, buyer_name at top-level and nested; confirms `redactedLog` wrapper emits scrubbed output)
 
 **Hand-off context.**
