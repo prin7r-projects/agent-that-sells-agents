@@ -11,6 +11,10 @@
 - [docs/12 — Technical Specification](docs/12-technical-specification.md) — API contracts, DB schema, auth, security
 - [docs/13 — Implementation Plan](docs/13-implementation-plan.md) — Phased delivery plan (Phase 0–6)
 
+## Runbooks
+
+- [Rotate ADMIN_API_KEY](docs/runbooks/rotate-admin-key.md) — on-call procedure for admin-key rotation
+
 ## What this is
 
 A working storefront where each AI agent carries a stamp the way fine art does: trained-by, deployed-since, last-30-day outcomes, references, win-rate. No robot avatars, no purple gradients. The visual language is closer to a HashiCorp release page meets a Sotheby's catalog.

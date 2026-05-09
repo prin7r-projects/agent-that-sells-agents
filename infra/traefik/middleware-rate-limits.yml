@@ -1,0 +1,28 @@
+# Traefik dynamic config — rate-limit middlewares for StampedAgents
+#
+# How to apply:
+#   1. Copy this file to the dokploy-traefik middleware storage-contabo VPS.
+#   2. Include it via the Traefik file provider (e.g., in the provider's directory).
+#   3. Attach middlewares to the landing router:
+#        traefik.http.routers.landing.middlewares: stamped-checkout-ratelimit,stamped-webhooks-ratelimit
+#
+# Reference: docs/12 §7, docs/13 Phase 4 Task 2
+
+http:
+  middlewares:
+    # /api/checkout/* — 30 requests per minute per source IP
+    stamped-checkout-ratelimit:
+      rateLimit:
+        average: 30
+        period: 1m
+        burst: 30
+        sourceCriterion:
+          ipStrategy:
+            depth: 0
+
+    # /api/webhooks/* — 600 requests per minute total (no per-IP; NOWPayments uses a small IP set)
+    stamped-webhooks-ratelimit:
+      rateLimit:
+        average: 600
+        period: 1m
+        burst: 600

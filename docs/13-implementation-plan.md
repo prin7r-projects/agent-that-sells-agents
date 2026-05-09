@@ -146,9 +146,9 @@
 
 **Tasks.**
 1. Idempotency middleware on `/api/checkout/nowpayments` keyed by `(customerEmail, agentId, tier, hour)` — same buyer gets the same invoice within 1h.
-2. Traefik rate limits per doc 12 §7 (`/api/checkout/*` 30 req/min/IP, `/api/webhooks/*` 600 req/min total).
+2. Traefik rate limits per doc 12 §7 (`/api/checkout/*` 30 req/min/IP, `/api/webhooks/*` 600 req/min total). Shipped: see `infra/traefik/middleware-rate-limits.yml`.
 3. Forged-IPN simulation tests in `apps/landing/__tests__/webhooks.test.ts`. Run via `pnpm -F landing test`.
-4. Admin-key rotation runbook: docs at `/docs/runbooks/rotate-admin-key.md`. Includes Slack alert template, downtime window, and roll-forward strategy.
+4. Admin-key rotation runbook: docs at `/docs/runbooks/rotate-admin-key.md`. Includes Slack alert template, downtime window, and roll-forward strategy. Shipped: see `docs/runbooks/rotate-admin-key.md`.
 5. Slack alert webhook for: webhook sig failures >5/hour, checkout p95 >2s for 5 min, daily orders <2σ below mean.
 6. PII scrub in stdout logs: `pay_address`, `payout_hash`, customer email never appear plaintext. Verify via a log-grep test.
 7. CSP headers on landing: `default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.nowpayments.io;`.
