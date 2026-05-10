@@ -29,9 +29,9 @@ function formatBps(bps: number): string {
 
 function scoreColor(bps: number, baseline: number): string {
   if (bps >= baseline + 200) return "#0071E3"; // azure — exceeding baseline
-  if (bps >= baseline) return "#34C759"; // green — meeting baseline
-  if (bps >= baseline - 300) return "#FF9500"; // orange — borderline
-  return "#FF3B30"; // red — falling
+  if (bps >= baseline) return "#34C759"; // green — meeting baseline (status indicator, retained)
+  if (bps >= baseline - 300) return "#707070"; // graphite — borderline (neutral-palette rule: orange forbidden)
+  return "#B5331A"; // vermilion — falling (DESIGN.md palette token)
 }
 
 /** Tiny inline sparkline bar chart */

@@ -10,12 +10,15 @@ export default defineConfig({
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3456",
   },
-  // Default: only run API-level tests (no browser needed)
-  // Browser tests are in *.browser.spec.ts — run with: npx playwright test --project=browser
   projects: [
     {
       name: "default",
-      testMatch: /^(?!.*\.browser\.)/,  // Exclude .browser.spec.ts files
+      testMatch: /^(?!.*\.browser\.)/,
+    },
+    {
+      name: "browser",
+      testMatch: /\.browser\.spec\.ts$/,
+      use: { browserName: "chromium" },
     },
   ],
 });
