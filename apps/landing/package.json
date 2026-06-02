@@ -13,7 +13,9 @@
     "queue:eval": "tsx lib/queues/eval-runner.ts",
     "queue:eval:trigger": "tsx lib/queues/trigger-eval.ts",
     "queue:digest": "tsx lib/queues/digest-runner.ts",
-    "queue:digest:trigger": "tsx lib/queues/trigger-digest.ts"
+    "queue:digest:trigger": "tsx lib/queues/trigger-digest.ts",
+    "db:push": "tsx src/db/migrate.ts",
+    "db:seed": "tsx src/db/seed-catalog.ts"
   },
   "dependencies": {
     "bullmq": "^5.76.6",
