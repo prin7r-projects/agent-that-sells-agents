@@ -5,9 +5,12 @@
 
 import postgres from "postgres";
 
-const connectionString =
-  process.env.DATABASE_URL ??
-  "postgres://postgres:postgres@localhost:5432/stampedagents";
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error(
+    "DATABASE_URL is required (no dev default; set it in .env or docker-compose)",
+  );
+}
 
 // Isolate this app's tables from the shared `public` schema.
 const SCHEMA = process.env.STAMPED_AGENTS_DB_SCHEMA ?? "stampedagents";
