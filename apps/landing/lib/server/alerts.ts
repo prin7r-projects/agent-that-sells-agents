@@ -51,10 +51,13 @@ export async function sendSlackAlert(params: AlertParams): Promise<void> {
     return;
   }
 
+  // [STAMPED_AGENTS_WAVE2] severity colors retokenized to black/white/neutral-gray.
+  // Slack attachments accept any hex; we now use only ink/obsidian/graphite so
+  // severity reads via weight (filled vs hollow bar) rather than via color.
   const color =
-    params.severity === "critical" ? "#FF0000"
-    : params.severity === "warning" ? "#FFA500"
-    : "#36A64F";
+    params.severity === "critical" ? "#000000"   // obsidian
+    : params.severity === "warning" ? "#1D1D1F"   // ink
+    : "#707070";                                  // graphite (info)
 
   const fieldBlocks = params.fields
     ? Object.entries(params.fields).map(([k, v]) => ({

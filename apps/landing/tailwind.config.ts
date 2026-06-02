@@ -23,8 +23,10 @@ const config: Config = {
         graphite: "#707070",
         ash: "#8F8F8F",
         obsidian: "#000000",
+        // [STAMPED_AGENTS_WAVE2] azure is now a *micro-accent* only (focus rings,
+        // selection highlight, ≤6px status dots). It is NOT used for primary
+        // CTAs, badges, lead-capture, pricing, or state colors. See DESIGN.md §4.
         azure: "#0071E3",
-        "azure-2": "#3387EA",
         "cobalt-link": "#0066CC",
         vellum: "#FAFAF8",
         night: "#0E0D0B",
@@ -34,9 +36,9 @@ const config: Config = {
         "ink-2": "#2C2925",
         brass: "#1D1D1F",
         "brass-2": "#707070",
+        // [STAMPED_AGENTS_WAVE2] `signal` retained as an azure alias for the
+        // focus-ring utility; not used for fills, badges, or states.
         signal: "#0071E3",
-        "signal-2": "#3387EA",
-        vermilion: "#B5331A",
         wax: "#F5F5F7"
       },
       fontFamily: {

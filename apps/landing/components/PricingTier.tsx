@@ -39,11 +39,14 @@ export function PricingTierCard({ tier }: { tier: Tier }) {
       <CheckoutButton
         tierId={tier.id}
         label={tier.ctaLabel}
+        // [STAMPED_AGENTS_WAVE2] CTA retokenized to ink/obsidian (black) on
+        // the highlighted tier and white-on-ink on the others. Azure is no
+        // longer used for primary CTA fills.
         className={cn(
           "text-[15px] font-medium px-6 py-3 rounded-full transition-opacity",
           tier.highlight
-            ? "bg-azure text-snow hover:opacity-88"
-            : "bg-snow text-ink hover:opacity-88",
+            ? "bg-ink text-snow hover:opacity-88"
+            : "bg-snow text-ink border border-ink hover:opacity-88",
         )}
       />
       <p

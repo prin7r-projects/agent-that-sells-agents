@@ -1,0 +1,57 @@
+PRI-3525 Wave 2 color audit — landing, sales funnel, admin
+==========================================================
+
+A) Rendered HTML grep audit (post-build, served at :3457 via .next/standalone):
+
+  Page          azure  vermilion  amber  coral  orange  purple  red-  bg-ink  bg-snow+text-ink+border-ink
+  /             2      0          0      0      0       0       0     21      4
+  /admin        0      0          0      0      0       0       0     n/a    n/a
+  /changelog    0      0          0      0      0       0       0     n/a    n/a
+
+The 2 azure occurrences on / are 8px Concierge status dots in the mobile
+collapse bar and the desktop header — documented micro-accents
+(see DESIGN.md §4 "Status-indicator color rule"). All primary CTAs, badges,
+lead-capture buttons, pricing buttons, error states, and input borders
+are now black/white/neutral-gray (ink / snow / obsidian / fog / silver-mist).
+
+B) Build / typecheck / lint / unit-test exit codes (all from the project root):
+
+  pnpm exec tsc --noEmit       → exit 0
+  pnpm test (vitest)            → 53/53 passed, exit 0
+  pnpm build (next build)       → compiled, 17/17 pages generated, exit 0
+                                  includes lint + typecheck
+
+C) HTTP route smoke (against the standalone .next/standalone/server.js on :3457):
+
+  GET  /                                 → HTTP 200 (73 844 bytes)
+  GET  /admin                            → HTTP 200  (8 541 bytes)
+  POST /api/checkout/nowpayments         → HTTP 503 stub (NOWPAYMENTS_API_KEY unset, as designed)
+  POST /api/webhooks/nowpayments (no sig)→ HTTP 200
+  GET  /api/catalog/agents               → HTTP 200 (2 166 bytes)
+  GET  /changelog                        → HTTP 500 — pre-existing Postgres requirement
+                                            (relation "orders" does not exist), unrelated
+                                            to color retokenization.
+
+D) Playwright e2e:
+  22 / 22 non-browser specs pass.
+  12 browser specs (chromium-* / *.browser.spec.ts) all fail at
+  `browserType.launch: Executable doesn't exist at .../chrome-headless-shell`.
+  This is an environment constraint: libglib2.0-0 / libnss3 are not installed
+  in the container, and Playwright requires them to launch the bundled
+  Chromium. The README's "Run tests" section already calls this out
+  ("browser tests need libglib on host"). No code change in this PR
+  affects the browser-spec outcomes; a follow-up issue should track the
+  libglib install on the host.
+
+E) MetaMask / Reown / WalletConnect presence:
+  No references in the codebase (`rg -i 'metamask|reown|walletconnect|wagmi|rainbowkit'`
+  → no matches). The v1 rail is NOWPayments only
+  (`/api/checkout/nowpayments` + `/api/webhooks/nowpayments` + `/api/internal/ipn`).
+  Documented in DESIGN.md §8 and §9.
+
+F) Token removals from tailwind.config.ts:
+  - vermilion: "#B5331A"      — DELETED
+  - azure-2:   "#3387EA"      — DELETED
+  - signal-2:  "#3387EA"      — DELETED
+  - azure:     "#0071E3"      — RETAINED (micro-accent only, see DESIGN.md §4)
+  - signal:    "#0071E3"      — RETAINED (azure legacy alias, micro-accent only)

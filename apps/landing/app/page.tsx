@@ -42,13 +42,15 @@ function Hero() {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#catalog"
-              className="bg-azure text-snow text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full hover:opacity-88 transition-opacity"
+              // [STAMPED_AGENTS_WAVE2] primary CTA retokenized to ink (black).
+              // Azure is no longer used for CTA fills — see DESIGN.md §4.
+              className="bg-ink text-snow text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full hover:opacity-88 transition-opacity"
             >
               Browse the catalog
             </a>
             <a
               href="#concierge"
-              className="text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full border border-silver-mist text-ink hover:bg-fog transition-colors"
+              className="text-[16px] font-medium h-12 inline-flex items-center px-6 rounded-full border border-ink text-ink hover:bg-fog transition-colors"
             >
               Talk to the Concierge
             </a>

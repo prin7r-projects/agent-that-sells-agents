@@ -43,11 +43,13 @@ type RevShareEntry = {
 
 type Tab = "orders" | "licenses" | "rev-share";
 
+// [STAMPED_AGENTS_WAVE2] status badges retokenized to black/white/neutral-gray.
+// No azure, no vermilion, no red. See DESIGN.md §4 (neutral-palette rule).
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-ash/20 text-graphite",
-  paid: "bg-azure/10 text-azure",
-  refunded: "bg-vermilion/10 text-vermilion",
-  expired: "bg-ash/20 text-ash",
+  pending: "bg-fog text-graphite border border-silver-mist",
+  paid: "bg-ink text-snow border border-ink",
+  refunded: "bg-snow text-ink border border-ink",
+  expired: "bg-snow text-ash border border-silver-mist",
 };
 
 function formatCurrency(n: number) {
@@ -191,14 +193,17 @@ export default function AdminPage() {
                 type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                className="w-full rounded-lg border border-silver-mist bg-white px-3 py-2 text-sm text-ink placeholder:text-ash focus:outline-none focus:ring-2 focus:ring-azure"
+                // [STAMPED_AGENTS_WAVE2] focus ring switched to ink (azure is
+                // a global micro-accent, kept on :focus-visible via globals.css).
+                className="w-full rounded-lg border border-ink bg-white px-3 py-2 text-sm text-ink placeholder:text-ash focus:outline-none focus:ring-2 focus:ring-ink"
                 placeholder="Bearer token"
                 required
               />
             </div>
             <button
               type="submit"
-              className="w-full rounded-full bg-azure px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
+              // [STAMPED_AGENTS_WAVE2] CTA retokenized to ink (black).
+              className="w-full rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 transition-opacity"
             >
               Sign in
             </button>
@@ -228,7 +233,8 @@ export default function AdminPage() {
 
       <div className="mx-auto max-w-content px-6 py-8">
         {error && (
-          <div className="mb-6 rounded-lg border border-vermilion/30 bg-vermilion/5 px-4 py-3 text-sm text-vermilion">
+          // [STAMPED_AGENTS_WAVE2] error state retokenized to ink (no red).
+          <div className="mb-6 rounded-lg border border-ink bg-fog px-4 py-3 text-sm text-ink">
             {error}
           </div>
         )}
@@ -247,9 +253,10 @@ export default function AdminPage() {
             <button
               key={t}
               onClick={() => setTab(t)}
+              // [STAMPED_AGENTS_WAVE2] active tab retokenized to ink.
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                 tab === t
-                  ? "border-azure text-azure"
+                  ? "border-ink text-ink"
                   : "border-transparent text-graphite hover:text-ink"
               }`}
             >
@@ -300,7 +307,8 @@ export default function AdminPage() {
                       {o.status === "paid" && (
                         <button
                           onClick={() => handleRefund(o.orderId)}
-                          className="text-xs text-vermilion hover:underline"
+                          // [STAMPED_AGENTS_WAVE2] destructive action retokenized to ink underline.
+                          className="text-xs text-ink underline underline-offset-2 hover:opacity-80"
                         >
                           Refund
                         </button>
@@ -343,12 +351,14 @@ export default function AdminPage() {
                       <td className="py-3 pr-4 capitalize">{l.tier}</td>
                       <td className="py-3 pr-4 text-graphite">{formatDate(l.validUntil)}</td>
                       <td className="py-3">
+                        {/* [STAMPED_AGENTS_WAVE2] license status badge retokenized
+                            to black/white/neutral-gray. */}
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                           isRevoked
-                            ? "bg-vermilion/10 text-vermilion"
+                            ? "bg-ink text-snow"
                             : isExpired
-                            ? "bg-ash/20 text-ash"
-                            : "bg-azure/10 text-azure"
+                            ? "bg-snow text-ash border border-silver-mist"
+                            : "bg-fog text-ink border border-silver-mist"
                         }`}>
                           {isRevoked ? "Revoked" : isExpired ? "Expired" : "Active"}
                         </span>
@@ -385,7 +395,7 @@ export default function AdminPage() {
                   <tr key={`${r.orderId}-${i}`}>
                     <td className="py-3 pr-4 font-mono text-xs">{r.orderId}</td>
                     <td className="py-3 pr-4 font-mono text-xs">{r.referralCode}</td>
-                    <td className={`py-3 pr-4 font-medium ${r.amountUsd < 0 ? "text-vermilion" : "text-ink"}`}>
+                    <td className={`py-3 pr-4 font-medium ${r.amountUsd < 0 ? "text-ink" : "text-ink"}`}>
                       {formatCurrency(r.amountUsd)}
                     </td>
                     <td className="py-3 pr-4 text-graphite">{r.bps / 100}%</td>

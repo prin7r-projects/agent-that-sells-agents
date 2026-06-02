@@ -105,10 +105,11 @@ describe("sendSlackAlert", () => {
     const body = JSON.parse(init.body as string);
     expect(body.text).toContain("[CRITICAL] CPU on fire");
     expect(body.attachments).toBeDefined();
-    expect(body.attachments[0].color).toBe("#FF0000");
+    // [STAMPED_AGENTS_WAVE2] severity colors retokenized to obsidian/ink/graphite.
+    expect(body.attachments[0].color).toBe("#000000");
   });
 
-  it("uses orange color for warning severity", async () => {
+  it("uses ink color for warning severity", async () => {
     stubSlackUrl();
 
     await sendSlackAlert({
@@ -119,10 +120,11 @@ describe("sendSlackAlert", () => {
 
     const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     const body = JSON.parse(init.body as string);
-    expect(body.attachments[0].color).toBe("#FFA500");
+    // [STAMPED_AGENTS_WAVE2] no orange — warning severity is ink.
+    expect(body.attachments[0].color).toBe("#1D1D1F");
   });
 
-  it("uses green color for info severity", async () => {
+  it("uses graphite color for info severity", async () => {
     stubSlackUrl();
 
     await sendSlackAlert({
@@ -132,8 +134,9 @@ describe("sendSlackAlert", () => {
     });
 
     const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    // [STAMPED_AGENTS_WAVE2] no green — info severity is graphite.
     const body = JSON.parse(init.body as string);
-    expect(body.attachments[0].color).toBe("#36A64F");
+    expect(body.attachments[0].color).toBe("#707070");
   });
 
   it("handles Slack webhook returning non-200 without throwing", async () => {

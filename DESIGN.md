@@ -39,25 +39,31 @@ We follow the **Prin7r Component Library Baseline: ShadCN-first**. Components ar
 
 ## 4. Color tokens
 
-After the 2026-05-08 Apple-gallery refresh: an Apple-aligned scale (canvas → fog → snow → silver-mist → ink scale) plus a singular azure CTA. The brass and wax warm-paper accents are retired — StampedAgents is now a pure-white gallery, not a kraft catalog.
+After the 2026-05-08 Apple-gallery refresh, StampedAgents is a pure-white gallery: an Apple-aligned neutral scale (canvas → fog → snow → silver-mist → ink scale), with `obsidian` and `ink` doing the work that the singular azure CTA used to do.
+
+After the **2026-06-02 Wave 2 retokenization** (PRI-3525, see §15), all CTAs, lead-capture, pricing/payment, badges, and state colors are black/white/neutral-gray. The orange/coral/purple/red palette is purged. Azure is now a **tiny documented micro-accent only** (focus ring, `::selection`, ≤8px status dots in the Concierge rail). No primary button, badge, error, or status indicator uses a colored hue.
 
 | Token              | Hex        | Role                                                                       |
 |--------------------|------------|----------------------------------------------------------------------------|
 | `canvas`           | `#FFFFFF`  | Page background, default surface.                                          |
-| `fog`              | `#F5F5F7`  | Section bands (Outcomes, ribbon row), recessed wells.                      |
+| `fog`              | `#F5F5F7`  | Section bands (Outcomes, ribbon row), recessed wells, error well.          |
 | `snow`             | `#FFFFFF`  | Card surfaces on dark stages, raised wells.                                |
 | `silver-mist`      | `#E8E8ED`  | Hairline borders, card outlines, FAQ rules, button-ghost border.           |
-| `ink`              | `#1D1D1F`  | All headline + body text; primary nav labels; section divider.             |
+| `ink`              | `#1D1D1F`  | All headline + body text; primary nav labels; section divider; **primary CTA fill** (was azure). |
 | `slate`            | `#474747`  | 17px body copy; agent blurb; FAQ answers.                                  |
 | `graphite`         | `#707070`  | Lot labels; ribbon text; meta data; suggested-question text.               |
 | `ash`              | `#8F8F8F`  | Disabled state; fine-grain icon strokes.                                   |
-| `obsidian`         | `#000000`  | Dark stage (StampedAgents + Pricing sections); maximum-contrast wells.        |
-| `azure`            | `#0071E3`  | Singular CTA fill ("Browse the catalog", "Buy Trial"); selection highlight; focus ring. |
-| `cobalt-link`      | `#0066CC`  | Inline text links only (not button fills).                                 |
+| `obsidian`         | `#000000`  | Dark stage (StampedAgents + Pricing sections); maximum-contrast wells; **highest-weight CTA** (was azure). |
+| `azure`            | `#0071E3`  | **Micro-accent only** — focus ring (`:focus-visible`), `::selection`, ≤8px status dots in the Concierge rail. **Not** used for CTA fills, badges, lead-capture, pricing, or state colors. |
+| `cobalt-link`      | `#0066CC`  | Reserved (legacy inline-link token; current code uses `ink` underline).    |
 | `vellum`           | `#FAFAF8`  | Manuscript-like raised card surface (Concierge rail, agent cards).         |
 | `night`            | `#0E0D0B`  | Reserved (legacy alias for `obsidian`).                                    |
 
-**Legacy aliases preserved.** `paper`, `brass`, `brass-2`, `signal`, `signal-2`, `wax` still resolve in Tailwind (paper→canvas, brass/brass-2→ink/graphite, signal/signal-2→azure, wax→fog) so existing classnames don't break.
+**Neutral-palette rule (Wave 2, PRI-3525).** No orange, coral, purple, or red anywhere on the surface. No vermilion, no amber, no warm-paper tokens are defined or referenced. Drift-watch and drift-alert states are signalled by surface (`fog` for watch, `obsidian/[0.04]` for alert), not by hue. Error states use `ink` text on a `fog` well, with a 1px `ink` border. Badges use the ink/snow/silver-mist scale only — paid = `bg-ink text-snow`, pending = `bg-fog text-graphite border-silver-mist`, expired = `bg-snow text-ash border-silver-mist`.
+
+**Status-indicator color rule.** When a small color cue is needed (e.g. a 6-8px "online" dot), azure is the only chromatic option and only at ≤8px. Larger status surfaces use ink/graphite, not azure.
+
+**Legacy aliases preserved.** `paper`, `brass`, `brass-2`, `signal`, `wax` still resolve in Tailwind (paper→canvas, brass/brass-2→ink/graphite, signal→azure, wax→fog) so existing classnames don't break. `signal-2`, `vermilion`, and `azure-2` are removed from `tailwind.config.ts`; any code still referencing them will fail typecheck/build and must be updated.
 
 Dark mode is reserved for the `StampedAgents` and `Pricing` sections; the rest of the page is light. We do not flip the entire site.
 
@@ -101,7 +107,7 @@ Dark mode is reserved for the `StampedAgents` and `Pricing` sections; the rest o
 
 ## 8. Component catalog
 
-**`AgentCard`** — the unit of the catalog. Header: agent name + role (e.g., "Anders / SDR"). Body: a 4-row provenance table (`Trained by`, `Deployed since`, `30-day outcomes`, `References`). Footer: "Demo" (secondary) + "Buy" (primary signal CTA) + lot number in mono. Borders are 1px ink/12%; no hover lift, only border color change to `signal/30`.
+**`AgentCard`** — the unit of the catalog. Header: agent name + role (e.g., "Anders / SDR"). Body: a 4-row provenance table (`Trained by`, `Deployed since`, `30-day outcomes`, `References`). Footer: "Demo" (secondary) + "Buy" (primary ink-fill CTA) + lot number in mono. Borders are 1px ink/12%; no hover lift, only border color change to `ink/35` (azure-free; the prior `signal/30` is retired by the Wave 2 neutral-palette rule).
 
 **`ConciergeRail`** — sticky right rail on the hero. A single-column "agent talking" UI with a typing indicator and three suggested questions ("How do I price the SDR?", "Can I keep the model in our VPC?", "What's the rev-share?"). Pretends to be live; actually scripted.
 
@@ -171,3 +177,4 @@ If a section of the design changes, the screenshots are re-captured and committe
 - **2026-05-08** — v0.1. Initial spec drafted alongside the v1 landing build. All 15 sections decisions made; no `TBD` left.
 - **2026-05-08 design refresh — `apple` (Gallery wall)**. Lifted Apple's MacBook product-page direction. Hero pushed from 44-68px to **96-112px** at `-0.022em` tracking; section headings 64-80px. Brass `#A88646` and wax `#E9E0CF` warm-paper accents retired — palette swapped to Apple-aligned canvas/fog/snow/silver-mist scale. Signal blue re-pointed to Apple azure `#0071E3` for the singular CTA; rounded-square buttons swapped to **999px pills** with opacity-only hover. Card radius `10px → 28px` (Apple feature card); zero shadows (color-only elevation). StampedAgents + Pricing dark stage swapped to obsidian `#000000`. Catalog filter chips swapped to pill geometry. Section pads bumped to `py-24 lg:py-32`. Reference: `/Users/keer/projects/prin7r/design-references/apple.md`. Touched files: `apps/landing/app/{globals.css,page.tsx}`, `apps/landing/tailwind.config.ts`, `apps/landing/components/{SectionHeading,AgentCard,SiteHeader,SiteFooter,PricingTier,ConciergeRail,StampTable}.tsx`, `DESIGN.md` §1, §4, §5, §15.
 - **2026-05-08 critical rebrand — Provenance → StampedAgents (FAIL on live getprovenance.dev collision)**. The legacy brand "Provenance" collided with `getprovenance.dev` ("Provenance — Find, Verify and Hire AI Agents"), an active same-sector SaaS with the identical pitch. Renamed brand → **StampedAgents** (new domain `stampedagents.com`, verified available). Replaced wordmark + monogram (`P` → `S`); renamed `ProvenanceTable.tsx` → `StampTable.tsx`; section anchor `#provenance` → `#stamp`, label `PROVENANCE` → `STAMP`; nav copy "Provenance" → "Stamp"; debug tags `[PROVENANCE_*]` → `[STAMPED_AGENTS_*]`; checkout order prefix `prov_` → `stmp_`; Slack channels `#alerts-provenance` / `#orders-provenance` → `#alerts-stampedagents` / `#orders-stampedagents`; agency partner subdomain `partner.provenance.run` → `partner.stampedagents.com`. Common-noun "provenance" (e.g. "provenance record", "provenance-ribbon", "provenance the way fine art does") preserved as catalog metaphor — same lineage-of-origin family as "stamp." Container/repo slug unchanged (`agent-that-sells-agents`).
+- **2026-06-02 Wave 2 retokenization — purge orange/coral/purple/red; azure demoted to micro-accent (PRI-3525)**. From the PRI-3517 Opus matrix the heaviest banned-color load across the design system was orange, purple, coral, and red. The retokenization rules the project now follows: (a) **CTAs** ("Browse the catalog", "Buy Trial", "Buy Pro", "Sign in", concierge "Send", demo "Start", "Skip to end", admin "Sign in") are all `bg-ink text-snow` or `bg-snow text-ink border-ink` — never azure, never a chromatic color. (b) **Lead-capture** (concierge "Try a demo" inline CTAs, the input field focus border) is ink/obsidian only. (c) **Pricing/payment** (all three tiers, the inline footer note) is ink/obsidian only. (d) **Badges** (admin status badges — pending / paid / refunded / expired — and license status — active / expired / revoked) are all on the ink / snow / fog / silver-mist scale. (e) **States** (errors, drift watch, drift alert, refund actions, sparkline colors, Slack severity colors) are all neutral. (f) **Azure is now a micro-accent**: focus ring (`:focus-visible`), `::selection`, ≤8px Concierge status dots only. Removed tokens: `vermilion`, `azure-2`, `signal-2`. Touched files: `apps/landing/tailwind.config.ts`, `apps/landing/app/globals.css`, `apps/landing/app/page.tsx`, `apps/landing/app/admin/page.tsx`, `apps/landing/app/changelog/page.tsx`, `apps/landing/components/{AgentCard,CheckoutButton,CatalogGrid,ConciergeRail,DemoSheet,EvalLogModal,PricingTier}.tsx`, `apps/landing/lib/server/alerts.ts`, `apps/landing/__tests__/alerts.test.ts`, `DESIGN.md` §4, §15.

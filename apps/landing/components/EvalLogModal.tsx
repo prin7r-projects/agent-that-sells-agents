@@ -28,10 +28,14 @@ function formatBps(bps: number): string {
 }
 
 function scoreColor(bps: number, baseline: number): string {
-  if (bps >= baseline + 200) return "#0071E3"; // azure — exceeding baseline
-  if (bps >= baseline) return "#34C759"; // green — meeting baseline (status indicator, retained)
-  if (bps >= baseline - 300) return "#707070"; // graphite — borderline (neutral-palette rule: orange forbidden)
-  return "#B5331A"; // vermilion — falling (DESIGN.md palette token)
+  // [STAMPED_AGENTS_WAVE2] retokenized to black/white/neutral-gray.
+  // Exceeding baseline = ink (full black); at baseline = obsidian (black);
+  // borderline = graphite (gray); below = ash (lightest gray). No azure,
+  // no green, no red, no orange.
+  if (bps >= baseline + 200) return "#000000"; // obsidian — exceeding baseline
+  if (bps >= baseline) return "#1D1D1F";      // ink — meeting baseline
+  if (bps >= baseline - 300) return "#707070"; // graphite — borderline
+  return "#8F8F8F";                            // ash — falling
 }
 
 /** Tiny inline sparkline bar chart */
@@ -121,7 +125,8 @@ export function EvalLogModal({ agentId, agentName, open, onClose }: Props) {
 
         {/* Error */}
         {error && (
-          <div className="text-vermilion text-[14px] font-mono p-4 border border-vermilion/30 rounded-[16px]">
+          // [STAMPED_AGENTS_WAVE2] error state retokenized to ink (no red).
+          <div className="text-ink text-[14px] font-mono p-4 border border-ink rounded-[16px] bg-fog">
             {error}
           </div>
         )}

@@ -48,7 +48,8 @@ export function CheckoutButton({ tierId, agentLot, label, className, upgradeFrom
         {pending ? "Opening invoice…" : label}
       </button>
       {error ? (
-        <span role="alert" className="text-[11px] text-vermilion font-mono max-w-[16rem] text-right">
+        // [STAMPED_AGENTS_WAVE2] error state retokenized to ink (no red).
+        <span role="alert" className="text-[11px] text-ink font-mono max-w-[16rem] text-right border-b border-ink/40">
           {error}
         </span>
       ) : null}

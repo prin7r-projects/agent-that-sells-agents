@@ -119,7 +119,8 @@ export default async function ChangelogPage() {
               {events.map((ev, idx) => (
                 <li
                   key={idx}
-                  className="flex gap-4 items-start bg-canvas rounded-[10px] p-5 border border-silver-mist transition-colors hover:border-azure/35"
+                  // [STAMPED_AGENTS_WAVE2] hover state retokenized to ink (no azure).
+                  className="flex gap-4 items-start bg-canvas rounded-[10px] p-5 border border-silver-mist transition-colors hover:border-ink/35"
                 >
                   <span className="inline-block px-2.5 py-0.5 rounded-[6px] text-[11px] font-mono font-medium uppercase tracking-[0.18em] shrink-0 mt-0.5 bg-fog text-graphite border border-silver-mist">
                     {typeLabel[ev.type]}

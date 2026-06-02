@@ -86,21 +86,23 @@ export function ConciergeRail() {
               <button
                 type="button"
                 onClick={() => startDemo("lot-042")}
-                className="text-[13px] font-medium text-azure hover:underline"
+                // [STAMPED_AGENTS_WAVE2] lead-capture inline CTAs retokenized
+                // to ink (no azure). Underline on hover to keep the affordance.
+                className="text-[13px] font-medium text-ink hover:underline underline-offset-4"
               >
                 Anders (SDR) →
               </button>
               <button
                 type="button"
                 onClick={() => startDemo("lot-047")}
-                className="text-[13px] font-medium text-azure hover:underline"
+                className="text-[13px] font-medium text-ink hover:underline underline-offset-4"
               >
                 Hatfield (Support) →
               </button>
               <button
                 type="button"
                 onClick={() => startDemo("lot-051")}
-                className="text-[13px] font-medium text-azure hover:underline"
+                className="text-[13px] font-medium text-ink hover:underline underline-offset-4"
               >
                 Vance (Research) →
               </button>
@@ -131,7 +133,8 @@ export function ConciergeRail() {
                 id="concierge-input"
                 type="text"
                 placeholder="What does your week look like?"
-                className="flex-1 bg-snow border border-silver-mist rounded-full px-4 py-2 text-[14px] focus:border-azure focus:outline-none"
+                // [STAMPED_AGENTS_WAVE2] focus border retokenized to ink.
+                className="flex-1 bg-snow border border-silver-mist rounded-full px-4 py-2 text-[14px] focus:border-ink focus:outline-none"
               />
               <button
                 type="button"

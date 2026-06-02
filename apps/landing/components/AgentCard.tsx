@@ -20,13 +20,26 @@ export interface AgentCardProps {
 }
 
 const DRIFT_CONFIG: Record<string, { label: string; classes: string }> = {
+  // [STAMPED_AGENTS_WAVE2] drift states retokenized to neutral gray (no amber/red).
+  // "watch" uses the fog surface; "alert" uses the obsidian surface for the
+  // strongest available contrast within the black/white/neutral-gray rule.
+  watch: {
+    label: "Drift watch — eval variance detected",
+    classes: "bg-fog border-silver-mist text-graphite",
+  },
+  alert: {
+    label: "Drift alert — performance below threshold",
+    classes: "bg-obsidian/[0.04] border-ink text-ink",
+  },
+  // Back-compat: legacy keys ("yellow", "red") are mapped to the new neutral
+  // tokens so any persisted data carrying the old names still renders cleanly.
   yellow: {
     label: "Drift watch — eval variance detected",
-    classes: "bg-amber-50 border-amber-200 text-amber-800",
+    classes: "bg-fog border-silver-mist text-graphite",
   },
   red: {
     label: "Drift alert — performance below threshold",
-    classes: "bg-vermilion/5 border-vermilion/20 text-vermilion",
+    classes: "bg-obsidian/[0.04] border-ink text-ink",
   },
 };
 
@@ -89,7 +102,9 @@ export function AgentCard({ agent, compact = false }: { agent: AgentCardProps; c
           <CheckoutButton
             tierId="trial"
             agentLot={agent.lot}
-            className="text-[14px] font-medium bg-azure text-snow hover:opacity-88 transition-opacity px-4 py-2 rounded-full"
+            // [STAMPED_AGENTS_WAVE2] primary CTA retokenized to ink (black) per
+            // black/white/neutral-gray rule; azure is no longer used for fills.
+            className="text-[14px] font-medium bg-ink text-snow hover:opacity-88 transition-opacity px-4 py-2 rounded-full"
             label="Buy Trial"
           />
         </footer>

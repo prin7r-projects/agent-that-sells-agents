@@ -97,7 +97,9 @@ export function CatalogGrid() {
         )}
 
         {error && (
-          <div className="text-vermilion text-[15px] font-mono p-6 border border-vermilion/30 rounded-[20px]">
+          // [STAMPED_AGENTS_WAVE2] error state retokenized to obsidian/ink
+          // (no red). Mirrors the neutral-palette rule from DESIGN.md §4.
+          <div className="text-ink text-[15px] font-mono p-6 border border-ink rounded-[20px] bg-fog">
             {error}
           </div>
         )}

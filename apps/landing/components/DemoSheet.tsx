@@ -75,7 +75,7 @@ function LeadCard({ data }: { data: Record<string, unknown> }) {
       <div className="text-[20px] font-semibold">{String(data.name ?? "")}</div>
       <div className="text-[15px] text-graphite">{String(data.title ?? "")}</div>
       <div className="text-[14px] text-slate">{String(data.company ?? "")}</div>
-      <div className="text-[13px] font-mono text-azure mt-2">{String(data.recentTrigger ?? "")}</div>
+      <div className="text-[13px] font-mono text-graphite mt-2">{String(data.recentTrigger ?? "")}</div>
     </div>
   );
 }
@@ -122,7 +122,7 @@ function Summary({ data }: { data: Record<string, unknown> }) {
       <ul className="space-y-2">
         {actions.map((a, i) => (
           <li key={i} className="text-[14px] text-slate flex gap-2">
-            <span className="text-azure shrink-0">✓</span>
+            <span className="text-ink shrink-0">✓</span>
             {a}
           </li>
         ))}
@@ -146,10 +146,12 @@ function ProgressDots({ total, current }: { total: number; current: number }) {
   return (
     <div className="flex gap-2 justify-center">
       {Array.from({ length: total }).map((_, i) => (
+        // [STAMPED_AGENTS_WAVE2] progress dots retokenized to ink/obsidian/silver-mist.
+        // Micro-accents (≤8px) are reserved for focus rings and ::selection only.
         <div
           key={i}
           className={`w-2 h-2 rounded-full transition-colors ${
-            i < current ? "bg-azure" : i === current ? "bg-ink" : "bg-silver-mist"
+            i < current ? "bg-ink" : i === current ? "bg-obsidian" : "bg-silver-mist"
           }`}
         />
       ))}
@@ -211,7 +213,8 @@ export function DemoSheet({ agentId, label = "Demo in your data", className = ""
           <button
             type="button"
             onClick={() => dispatch({ type: "START" })}
-            className="bg-azure text-snow text-[15px] font-medium h-11 inline-flex items-center px-6 rounded-full hover:opacity-88 transition-opacity"
+            // [STAMPED_AGENTS_WAVE2] primary CTA retokenized to ink (black).
+            className="bg-ink text-snow text-[15px] font-medium h-11 inline-flex items-center px-6 rounded-full hover:opacity-88 transition-opacity"
           >
             {label}
           </button>
@@ -259,7 +262,8 @@ export function DemoSheet({ agentId, label = "Demo in your data", className = ""
               tierId="trial"
               agentLot={lotNum}
               label="Buy Trial — $99/mo"
-              className="bg-azure text-snow text-[14px] font-medium h-11 inline-flex items-center px-5 rounded-full hover:opacity-88 transition-opacity"
+              // [STAMPED_AGENTS_WAVE2] CTA retokenized to ink (black).
+              className="bg-ink text-snow text-[14px] font-medium h-11 inline-flex items-center px-5 rounded-full hover:opacity-88 transition-opacity"
             />
             <button
               type="button"
@@ -275,7 +279,8 @@ export function DemoSheet({ agentId, label = "Demo in your data", className = ""
       {/* Error state */}
       {state.phase === "error" && (
         <div className="text-center py-6">
-          <div className="text-vermilion text-[14px] font-mono">{state.error}</div>
+          {/* [STAMPED_AGENTS_WAVE2] error state retokenized to ink (no red). */}
+          <div className="text-ink text-[14px] font-mono">{state.error}</div>
           <p className="text-[13px] text-slate mt-2">Demo scripts are available for Lots 042, 047, 051.</p>
         </div>
       )}

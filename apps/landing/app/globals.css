@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 /* ---------------------------------------------------------------------------
-   [STAMPED_AGENTS_GLOBALS] Apple-gallery refresh — 2026-05-08
-   The catalog is a gallery: pure-white canvas, museum-piece treatment per
-   agent (28px-radius cards, no shadow), enormous display type. Color enters
-   only as the agent's outcome data and the singular azure CTA.
-   See DESIGN.md §1, §4, §5, §15.
+   [STAMPED_AGENTS_GLOBALS] Apple-gallery refresh — 2026-05-08.
+   Wave 2 retokenization — 2026-06-02 (PRI-3525): all CTA, lead-capture,
+   pricing/payment, badges, and state colors are black/white/neutral-gray.
+   Azure is restricted to a *micro-accent*: focus ring, ::selection, ≤6px
+   status dots. No orange / coral / purple / red, no vermilion, no amber.
+   See DESIGN.md §4 (color tokens) and §15 (changelog).
    --------------------------------------------------------------------------- */
 
 @layer base {
@@ -26,7 +27,9 @@
 
     /* Accents */
     --obsidian: #000000;
-    --azure: #0071E3;        /* singular CTA accent */
+    /* [STAMPED_AGENTS_WAVE2] azure is a micro-accent only — focus ring,
+       ::selection, ≤6px status dots. Not used for CTA fills, badges, or states. */
+    --azure: #0071E3;
     --cobalt-link: #0066CC;  /* inline links only */
     --vellum: #FAFAF8;       /* manuscript-like raised surface for cards */
     --night: #0E0D0B;        /* dark-stage section background */
@@ -35,7 +38,7 @@
     --paper: #FFFFFF;
     --ink-2: #2C2925;
     --brass: #1D1D1F;        /* re-pointed: brass label colour now reads as ink */
-    --signal: #0071E3;
+    --signal: #0071E3;        /* [STAMPED_AGENTS_WAVE2] legacy azure alias — micro-accent only */
     --wax: #F5F5F7;          /* ribbon row remapped to fog */
   }
 
