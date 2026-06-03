@@ -5,7 +5,9 @@
 
 import postgres from "postgres";
 
-const connectionString = process.env.DATABASE_URL;
+// `?? ""` keeps the declared type `string` so the narrowing survives into
+// runMigrations() below; the guard still throws on an unset/empty value.
+const connectionString: string = process.env.DATABASE_URL ?? "";
 if (!connectionString) {
   throw new Error(
     "DATABASE_URL is required (no dev default; set it in .env or docker-compose)",

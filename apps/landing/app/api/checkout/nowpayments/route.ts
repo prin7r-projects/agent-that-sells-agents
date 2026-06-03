@@ -30,8 +30,25 @@ export async function POST(request: Request) {
 
   const apiKey = process.env.NOWPAYMENTS_API_KEY?.trim();
   if (!apiKey) {
+    // Safe fallback: live payment is disabled until the deploy env is restored.
+    // Surface an actionable 503 so the on-call (or the Concierge) can fix it via
+    // docs/runbooks/restore-nowpayments-key.md. Do not silently stub to a fake URL.
+    console.error(
+      "[STAMPED_AGENTS_CHECKOUT] NOWPAYMENTS_API_KEY missing — checkout disabled. " +
+        "See docs/runbooks/restore-nowpayments-key.md.",
+    );
     return NextResponse.json(
-      { ok: false, mode: "stub", message: "NOWPAYMENTS_API_KEY is not set on the server." },
+      {
+        ok: false,
+        mode: "disabled",
+        code: "missing_env",
+        env: "NOWPAYMENTS_API_KEY",
+        envFile: "/opt/prin7r-deploys/agent-that-sells-agents/.env",
+        runbook: "docs/runbooks/restore-nowpayments-key.md",
+        message:
+          "Live checkout is temporarily disabled. The NOWPAYMENTS_API_KEY is not " +
+          "set on the deployed container. Restore it per the runbook to re-enable.",
+      },
       { status: 503 },
     );
   }

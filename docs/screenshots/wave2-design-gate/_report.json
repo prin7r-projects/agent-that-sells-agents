@@ -1,0 +1,46 @@
+{
+  "baseUrl": "http://localhost:3571/",
+  "outDir": "/paperclip/instances/default/workspaces/agent-that-sells-agents/docs/screenshots/wave2-design-gate",
+  "checks": {
+    "desktop": {
+      "scrollW": 1440,
+      "clientW": 1440,
+      "heads": [
+        {
+          "t": "A vetted shelf of working AI agents.",
+          "w": 1024,
+          "cw": 1024
+        },
+        {
+          "t": "CATALOG",
+          "w": 1104,
+          "cw": 1104
+        },
+        {
+          "t": "How they're built — with names attached.",
+          "w": 822,
+          "cw": 822
+        }
+      ]
+    },
+    "mobile": {
+      "scrollW": 435,
+      "clientW": 390,
+      "horizScroll": true
+    },
+    "payment": {
+      "ctaText": "Subscription is the headline. Outcome pricing — per meeting,",
+      "mode": "fullPage"
+    },
+    "accent": {
+      "x": 865,
+      "y": 826.734375,
+      "w": 8,
+      "h": 8,
+      "tag": "SPAN",
+      "area": 64,
+      "color": "rgb(29, 29, 31)",
+      "bg": "rgb(0, 113, 227)"
+    }
+  }
+}

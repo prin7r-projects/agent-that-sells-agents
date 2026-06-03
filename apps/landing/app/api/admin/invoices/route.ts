@@ -20,7 +20,17 @@ export async function POST(request: Request) {
   const apiKey = process.env.NOWPAYMENTS_API_KEY?.trim();
   if (!apiKey) {
     return NextResponse.json(
-      { error: { code: "missing_env", message: "NOWPAYMENTS_API_KEY is not set." } },
+      {
+        error: {
+          code: "missing_env",
+          env: "NOWPAYMENTS_API_KEY",
+          envFile: "/opt/prin7r-deploys/agent-that-sells-agents/.env",
+          runbook: "docs/runbooks/restore-nowpayments-key.md",
+          message:
+            "Admin invoice creation is temporarily disabled. The NOWPAYMENTS_API_KEY " +
+            "is not set on the deployed container. Restore it per the runbook.",
+        },
+      },
       { status: 503 },
     );
   }
