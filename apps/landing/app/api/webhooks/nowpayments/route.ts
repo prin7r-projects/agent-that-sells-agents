@@ -51,19 +51,27 @@ export async function POST(request: Request) {
   if (verified && (status === "finished" || status === "confirmed")) {
     try {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? request.url.replace(/\/api\/webhooks\/.*/, "");
-      const internalRes = await fetch(`${baseUrl}/api/internal/ipn`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          orderId,
-          paymentStatus: status,
-          priceAmountUsd: typeof payload.price_amount === "number" ? payload.price_amount : undefined,
-        }),
-      });
-      const internalBody = await internalRes.json().catch(() => ({}));
-      console.log(
-        `[STAMPED_AGENTS_WEBHOOK] internal_ipn call order=${orderId} status=${internalRes.status} ok=${(internalBody as Record<string,unknown>).ok}`,
-      );
+      const internalSecret = process.env.INTERNAL_IPN_SECRET?.trim();
+      if (!internalSecret) {
+        console.error("[STAMPED_AGENTS_WEBHOOK] INTERNAL_IPN_SECRET not set — skipping fulfillment");
+      } else {
+        const internalRes = await fetch(`${baseUrl}/api/internal/ipn`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "authorization": `Bearer ${internalSecret}`,
+          },
+          body: JSON.stringify({
+            orderId,
+            paymentStatus: status,
+            priceAmountUsd: typeof payload.price_amount === "number" ? payload.price_amount : undefined,
+          }),
+        });
+        const internalBody = await internalRes.json().catch(() => ({}));
+        console.log(
+          `[STAMPED_AGENTS_WEBHOOK] internal_ipn call order=${orderId} status=${internalRes.status} ok=${(internalBody as Record<string,unknown>).ok}`,
+        );
+      }
     } catch (e) {
       console.error(`[STAMPED_AGENTS_WEBHOOK] internal_ipn failed for order=${orderId}:`, e);
       // Don't fail the webhook response — NOWPayments should still get 200

@@ -8,6 +8,7 @@ import { agents as staticAgents } from "@/lib/agents";
 import { redactedLog } from "@/lib/server/log-redact";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/src/db/index";
+import crypto from "node:crypto";
 
 async function getAgentName(agentId: string | undefined): Promise<string> {
   if (!agentId) return "your agent";
@@ -18,10 +19,39 @@ async function getAgentName(agentId: string | undefined): Promise<string> {
 }
 
 // Internal IPN endpoint — called by the NOWPayments webhook handler
-// after HMAC verification. Not exposed to public internet (no Traefik route).
+// after HMAC verification. Requires INTERNAL_IPN_SECRET for authentication.
 export const runtime = "nodejs";
 
+function validateInternalIpnAuth(authHeader: string | null): boolean {
+  const secret = process.env.INTERNAL_IPN_SECRET?.trim();
+  if (!secret) {
+    console.error("[INTERNAL_IPN] INTERNAL_IPN_SECRET not set — rejecting all requests");
+    return false;
+  }
+  if (!authHeader) return false;
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7).trim()
+    : authHeader.trim();
+  if (!token) return false;
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(token),
+      Buffer.from(secret),
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  if (!validateInternalIpnAuth(authHeader)) {
+    console.warn("[INTERNAL_IPN] unauthorized request rejected");
+    return NextResponse.json(
+      { error: { code: "unauthorized", message: "Invalid or missing authentication" } },
+      { status: 401 },
+    );
+  }
   const body = await request.json().catch(() => ({})) as {
     orderId?: string;
     paymentStatus?: string;
